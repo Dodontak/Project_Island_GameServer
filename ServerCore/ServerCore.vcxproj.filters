@@ -1,23 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Main">
-      <UniqueIdentifier>{61de47ec-42e9-44ce-9220-4d81b85ff5af}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utils">
-      <UniqueIdentifier>{f04aa83c-e972-451c-b27d-0dfa27666408}</UniqueIdentifier>
+      <UniqueIdentifier>{1bc5f54b-8500-4a75-be03-01429f6f734c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameServer.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="CorePch.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="CorePch.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
