@@ -1,7 +1,6 @@
 ﻿#include "pch.h"
-#include <iostream>
 
 int main()
 {
-	HelloWorld();
+	SocketUtils::Init();
 }
