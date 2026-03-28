@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "SocketUtils.h"
+#include "NetAddress.h"
 
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "mswsock.lib")
@@ -38,12 +39,14 @@ void SocketUtils::CloseSocket(SOCKET sock)
 	sock = INVALID_SOCKET;
 }
 
-int SocketUtils::BindSocket(int sock)
+bool SocketUtils::BindSocket(int sock, NetAddress address)
 {
-	return 0;
+	if (SOCKET_ERROR == bind(sock, (const sockaddr*)&address.GetAddr(), sizeof(address.GetAddr())))
+		return false;
+	return true;
 }
 
-int SocketUtils::ListenSocket(int sock)
+bool SocketUtils::ListenSocket(int sock)
 {
 	return 0;
 }

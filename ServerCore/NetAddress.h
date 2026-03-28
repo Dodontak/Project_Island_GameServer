@@ -7,9 +7,9 @@ public:
 	NetAddress(const NetAddress& addr);
 	~NetAddress();
 
-	const SOCKADDR_IN& GetAddr() { return _sockAddr; }
-	string GetIp();
-	int16 GetPort() { return ::ntohs(_sockAddr.sin_port); }
+	const SOCKADDR_IN&	GetAddr() { return _sockAddr; }
+	string				GetIp();
+	int16				GetPort() { return ::ntohs(_sockAddr.sin_port); }
 private:
 	SOCKADDR_IN _sockAddr;
 };

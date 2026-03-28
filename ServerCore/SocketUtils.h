@@ -3,6 +3,8 @@
 #include <winsock2.h>
 #include <mswsock.h>
 
+class NetAddress;
+
 class SocketUtils
 {
 public:
@@ -16,8 +18,8 @@ public:
 
 	static SOCKET CreateSocket();
 	static void CloseSocket(SOCKET sock);
-	static int BindSocket(int sock);
-	static int ListenSocket(int sock);
+	static bool BindSocket(int sock, NetAddress address);
+	static bool ListenSocket(int sock);
 	static bool SetReuseAddress(SOCKET socket, bool flag);
 	static bool SetTcpNoDelay(SOCKET socket, bool flag);
 
