@@ -1,6 +1,7 @@
 #pragma once
 
 #include <winsock2.h>
+#include <winsock.h>
 #include <mswsock.h>
 
 class NetAddress;
@@ -11,17 +12,18 @@ public:
 	static LPFN_CONNECTEX ConnectEx;
 	static LPFN_DISCONNECTEX DisconnectEx;
 	static LPFN_ACCEPTEX AcceptEx;
-
+	static LPFN_GETACCEPTEXSOCKADDRS GetAcceptExSockaddrs;
 public:
 	static bool Init();
 	static void Clear();
 
 	static SOCKET CreateSocket();
 	static void CloseSocket(SOCKET sock);
-	static bool BindSocket(int sock, NetAddress address);
-	static bool ListenSocket(int sock);
+	static bool BindSocket(SOCKET sock, NetAddress address);
+	static bool ListenSocket(SOCKET sock, int32 backlog);
 	static bool SetReuseAddress(SOCKET socket, bool flag);
 	static bool SetTcpNoDelay(SOCKET socket, bool flag);
+	static bool SetUpdateAcceptSocket(SOCKET socket, SOCKET listenSocket);
 
 private:
 	static int32 LoadExtensionFunction(GUID guid, LPVOID* func);

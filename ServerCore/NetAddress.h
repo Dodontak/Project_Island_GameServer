@@ -3,9 +3,13 @@
 class NetAddress
 {
 public:
+	NetAddress() = default;
 	NetAddress(string ip, int port);
 	NetAddress(const NetAddress& addr);
+	NetAddress(SOCKADDR_IN addr);
 	~NetAddress();
+
+	void SetAddr(const NetAddress& addr) { _sockAddr = addr._sockAddr; }
 
 	const SOCKADDR_IN&	GetAddr() { return _sockAddr; }
 	string				GetIp();
@@ -13,4 +17,3 @@ public:
 private:
 	SOCKADDR_IN _sockAddr;
 };
-

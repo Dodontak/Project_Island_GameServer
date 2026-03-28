@@ -15,6 +15,11 @@ NetAddress::NetAddress(const NetAddress& addr)
 	_sockAddr = addr._sockAddr;
 }
 
+NetAddress::NetAddress(SOCKADDR_IN addr)
+{
+	_sockAddr = addr;
+}
+
 NetAddress::~NetAddress()
 {
 }
@@ -22,5 +27,5 @@ NetAddress::~NetAddress()
 string NetAddress::GetIp()
 {
 	char buff[INET_ADDRSTRLEN];
-	return ::inet_ntop(AF_INET, &_sockAddr.sin_addr, buff, sizeof(buff));
+	return string(::inet_ntop(AF_INET, &_sockAddr.sin_addr, buff, sizeof(buff)));
 }

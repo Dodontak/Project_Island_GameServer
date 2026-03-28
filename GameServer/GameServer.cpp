@@ -1,10 +1,11 @@
 ﻿#include "pch.h"
+#include "IocpCore.h"
 #include "NetAddress.h"
+#include "Listener.h"
+#include "Service.h"
 
 int main()
 {
-	SocketUtils::Init();
-
-	NetAddress addr("127.0.0.1", 7777);
-	cout << addr.GetIp() << ":" << addr.GetPort() << endl;
+	ServiceRef service = make_shared<Service>(NetAddress("0.0.0.0", 9000));
+	service->Start();
 }
