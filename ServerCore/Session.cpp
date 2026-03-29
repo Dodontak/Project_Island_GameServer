@@ -57,14 +57,14 @@ void Session::ProcessRecv(int32 numOfBytes, RecvEvent* recvEvent)
 	RegisterRecv(recvEvent);
 }
 
-bool Session::SetAddressFromAcceptBuffer()
+bool Session::SetAddressFromAcceptBuffer(BYTE* buffer)
 {
 	SOCKADDR_IN* serverAddr = nullptr;
 	SOCKADDR_IN* clientAddr = nullptr;
 	int32 serverAddrLen = 0;
 	int32 clientAddrLen = 0;
 	SocketUtils::GetAcceptExSockaddrs(
-		_recvBuffer,
+		buffer,
 		0,
 		sizeof(SOCKADDR_IN) + 16,
 		sizeof(SOCKADDR_IN) + 16,

@@ -24,7 +24,7 @@ void Listener::Dispatch(int32 numOfBytes, IocpEvent* event)
 	AcceptEvent* acceptEvent = static_cast<AcceptEvent*>(event);
 	SessionRef session = acceptEvent->GetSession();
 
-	ProcessAccept(session);
+	ProcessAccept(session, acceptEvent);
 	RegisterAccept(acceptEvent);
 }
 
@@ -65,7 +65,7 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 		CRASH("Failed to create accept event");
 	acceptEvent->SetSession(session);
 
-	if (false == SocketUtils::AcceptEx(_listenSocket, clientSocket, session->GetRecvBuffer(), 0,
+	if (false == SocketUtils::AcceptEx(_listenSocket, clientSocket, acceptEvent->GetAcceptBuffer(), 0,
 		sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, NULL, static_cast<LPOVERLAPPED>(acceptEvent)))
 	{
 		if (WSAGetLastError() != ERROR_IO_PENDING)
@@ -75,12 +75,12 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 	}
 }
 
-void Listener::ProcessAccept(SessionRef session)
+void Listener::ProcessAccept(SessionRef session, AcceptEvent* acceptEvent)
 {
 	if (SocketUtils::SetUpdateAcceptSocket(session->_socket, _listenSocket) == false)
 		return;
-	
-	if (session->SetAddressFromAcceptBuffer() == false)
+
+	if (session->SetAddressFromAcceptBuffer(acceptEvent->GetAcceptBuffer()) == false)
 		return;
 
 	if (_service->GetIocpCore()->RegisterHandle(session->GetHandle()) == false)

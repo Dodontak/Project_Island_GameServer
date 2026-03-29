@@ -27,8 +27,10 @@ public:
 	AcceptEvent(IocpObjectRef iocpObject) : IocpEvent(iocpObject, EventType::Accept) {}
 	void SetSession(SessionRef session) { _session = session; }
 	SessionRef GetSession() { return _session; }
+	BYTE* GetAcceptBuffer() { return _acceptBuffer; }
 private:
 	SessionRef _session;
+	BYTE _acceptBuffer[(sizeof(SOCKADDR_IN) + 16) * 2] = {0};
 };
 
 class RecvEvent : public IocpEvent

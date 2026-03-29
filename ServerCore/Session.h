@@ -21,10 +21,11 @@ public:
 	void RegisterRecv(IocpEvent* recvEvent);
 	void ProcessRecv(int32 numOfBytes, RecvEvent* recvEvent);
 
-	bool SetAddressFromAcceptBuffer();
+	bool SetAddressFromAcceptBuffer(BYTE* buffer);
 
 	BYTE* GetRecvBuffer() { return _recvBuffer; }
 	BYTE* GetSendBuffer() { return _sendBuffer; }
+	NetAddress GetAddr() { return _address; }
 private:
 	SOCKET _socket = INVALID_SOCKET;
 	NetAddress _address;

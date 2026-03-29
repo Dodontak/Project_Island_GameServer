@@ -19,9 +19,7 @@ public:
 	bool StartAccept();
 
 	void RegisterAccept(AcceptEvent* acceptEvent);
-	void ProcessAccept(SessionRef session);
-private:
-
+	void ProcessAccept(SessionRef session, AcceptEvent* acceptEvent);
 
 private:
 	SOCKET _listenSocket = INVALID_SOCKET;

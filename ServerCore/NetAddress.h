@@ -13,7 +13,7 @@ public:
 
 	const SOCKADDR_IN&	GetAddr() { return _sockAddr; }
 	string				GetIp();
-	int16				GetPort() { return ::ntohs(_sockAddr.sin_port); }
+	uint16				GetPort() { return ::ntohs(_sockAddr.sin_port); }
 private:
 	SOCKADDR_IN _sockAddr;
 };
