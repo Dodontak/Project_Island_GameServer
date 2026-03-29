@@ -21,6 +21,7 @@ bool IocpCore::Dispatch()
 
 	bool result = GetQueuedCompletionStatus(_iocpHandle, &numOfBytes, &completionKey,
 		reinterpret_cast<LPOVERLAPPED*>(&event), INFINITE);
+
 	if (result != 0) // 정상적으로 이벤트가 발생한 경우
 	{
 		IocpObjectRef owner = event->GetOwner();
@@ -33,9 +34,9 @@ bool IocpCore::Dispatch()
 	return true;
 }
 
-bool IocpCore::RegisterHandle(HANDLE newHandle)
+bool IocpCore::RegisterHandle(IocpObjectRef iocpObject)
 {
-	if (CreateIoCompletionPort(newHandle, _iocpHandle, 0, 0) == nullptr)
+	if (CreateIoCompletionPort(iocpObject->GetHandle(), _iocpHandle, 0, 0) == nullptr)
 		return false;
 	return true;
 }

@@ -12,9 +12,17 @@ public:
 
 	void Start();
 
+	SessionRef CreateSession();
+
 	IocpCoreRef GetIocpCore() { return _iocpCore; }
 	NetAddress GetListenerAddr() { return _listenerAddr; }
+
+	void broad_cast_test(SendBufferRef sendBuffer);
+	void AddSession(SessionRef session) { _sessions.insert(session); }
+	void RemoveSession(SessionRef session) { _sessions.erase(session); }
 private:
 	IocpCoreRef _iocpCore;
 	NetAddress _listenerAddr;
+
+	set<SessionRef> _sessions;
 };

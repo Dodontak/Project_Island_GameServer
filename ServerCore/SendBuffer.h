@@ -1,0 +1,27 @@
+#pragma once
+
+#include "Types.h"
+#include <vector>
+
+class SendBuffer : public enable_shared_from_this<SendBuffer>
+{
+public:
+	SendBuffer(BYTE* buffer, uint16 dataLen);
+	SendBuffer(uint16 dataLen);//for AppendBuffer
+	~SendBuffer();
+
+public: //use at fill buffer
+	bool	AppendBuffer(BYTE* buffer, uint16 dataLen);
+	BYTE*	GetCopyBuffer() { return &_buffer[_copyPos]; }
+
+public: //use at write
+	BYTE*	GetBuffer() { return &_buffer[_writePos]; }
+	int		GetDataLen() { return _allocSize - _writePos; }
+	bool	UpdateWritePos(int writeLen);
+
+private:
+	int					_writePos;
+	int					_copyPos;
+	int					_allocSize;
+	vector<BYTE>	_buffer;
+};

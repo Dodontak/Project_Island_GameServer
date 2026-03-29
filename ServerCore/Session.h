@@ -1,15 +1,18 @@
 #pragma once
 
+#include <queue>
 #include "Types.h"
 #include "IocpCore.h"
 #include "NetAddress.h"
-
-class RecvEvent;
+#include "IocpEvent.h"
+#include "RecvBuffer.h"
+#include "SendBuffer.h"
 
 class Session : public IocpObject
 {
+	enum { BUFFER_SIZE = 0x10000 };// 64KB
 	friend class Listener;
-	enum { BUFFER_SIZE = 1024 };
+	friend class Service;
 public:
 	Session(SOCKET socket);
 	virtual ~Session();
@@ -18,19 +21,30 @@ public:
 	virtual void Dispatch(int32 numOfBytes, IocpEvent* event) override;
 
 public:
-	void RegisterRecv(IocpEvent* recvEvent);
-	void ProcessRecv(int32 numOfBytes, RecvEvent* recvEvent);
+	void RegisterRecv();
+	void ProcessRecv(int32 numOfBytes);
+
+	void RegisterSend();
+	void ProcessSend(int32 numOfBytes);
+
+	void RegisterDisconnect();
+	void ProcessDisconnect();
 
 	bool SetAddressFromAcceptBuffer(BYTE* buffer);
 
-	BYTE* GetRecvBuffer() { return _recvBuffer; }
-	BYTE* GetSendBuffer() { return _sendBuffer; }
 	NetAddress GetAddr() { return _address; }
 private:
+	weak_ptr<Service> _service;
 	SOCKET _socket = INVALID_SOCKET;
 	NetAddress _address;
 
-	BYTE _recvBuffer[BUFFER_SIZE];
-	BYTE _sendBuffer[BUFFER_SIZE];
+	RecvBuffer _recvBuffer;
+	queue<SendBufferRef> _sendBuffers;
+
+private:
+	RecvEvent _recvEvent;
+	SendEvent _sendEvent;
+	ConnectEvent _connectEvent;
+	DisconnectEvent _disconnectEvent;
 };
 

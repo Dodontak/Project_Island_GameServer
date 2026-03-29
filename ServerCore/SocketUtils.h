@@ -18,7 +18,7 @@ public:
 	static void Clear();
 
 	static SOCKET CreateSocket();
-	static void CloseSocket(SOCKET sock);
+	static void CloseSocket(SOCKET& sock);
 	static bool BindSocket(SOCKET sock, NetAddress address);
 	static bool ListenSocket(SOCKET sock, int32 backlog);
 	static bool SetReuseAddress(SOCKET socket, bool flag);

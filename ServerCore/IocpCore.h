@@ -17,7 +17,7 @@ public:
 
 	bool Dispatch();
 
-	bool RegisterHandle(HANDLE newHandle);
+	bool RegisterHandle(IocpObjectRef iocpObject);
 private:
 	HANDLE _iocpHandle;
 };

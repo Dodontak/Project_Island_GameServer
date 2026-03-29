@@ -42,10 +42,10 @@ bool Listener::StartAccept()
 	if (SocketUtils::ListenSocket(_listenSocket, SOMAXCONN) == false)
 		CRASH("Failed to listen on listen socket");
 
-	if (_service->GetIocpCore()->RegisterHandle(GetHandle()) == false)
+	if (_service->GetIocpCore()->RegisterHandle(shared_from_this()) == false)
 		CRASH("Failed to register listen socket to IOCP");
 
-	AcceptEvent* acceptEvent = new AcceptEvent(shared_from_this());
+	AcceptEvent* acceptEvent = new AcceptEvent();
 	if (acceptEvent == nullptr)
 		CRASH("Failed to create accept event");
 
@@ -56,16 +56,14 @@ bool Listener::StartAccept()
 
 void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 {
-	SOCKET clientSocket = SocketUtils::CreateSocket();
-	if (clientSocket == INVALID_SOCKET)
-		return;
-
-	SessionRef session = make_shared<Session>(clientSocket);
-	if (acceptEvent == nullptr)
-		CRASH("Failed to create accept event");
+	acceptEvent->Init();
+	acceptEvent->SetOwner(shared_from_this());
+	SessionRef session = _service->CreateSession();
+	if (session == nullptr)
+		CRASH("Failed to create session for accept event");
 	acceptEvent->SetSession(session);
 
-	if (false == SocketUtils::AcceptEx(_listenSocket, clientSocket, acceptEvent->GetAcceptBuffer(), 0,
+	if (false == SocketUtils::AcceptEx(_listenSocket, session->_socket, acceptEvent->GetAcceptBuffer(), 0,
 		sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, NULL, static_cast<LPOVERLAPPED>(acceptEvent)))
 	{
 		if (WSAGetLastError() != ERROR_IO_PENDING)
@@ -77,20 +75,20 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 
 void Listener::ProcessAccept(SessionRef session, AcceptEvent* acceptEvent)
 {
+	acceptEvent->Clear();
+
 	if (SocketUtils::SetUpdateAcceptSocket(session->_socket, _listenSocket) == false)
 		return;
 
 	if (session->SetAddressFromAcceptBuffer(acceptEvent->GetAcceptBuffer()) == false)
 		return;
 
-	if (_service->GetIocpCore()->RegisterHandle(session->GetHandle()) == false)
+	if (_service->GetIocpCore()->RegisterHandle(session) == false)
 		return;
 
-	RecvEvent* recvEvent = new RecvEvent(session);
-	if (recvEvent == nullptr)
-		return;
+	_service->AddSession(session);
 
-	session->RegisterRecv(recvEvent);
+	session->RegisterRecv();
 }
 
 

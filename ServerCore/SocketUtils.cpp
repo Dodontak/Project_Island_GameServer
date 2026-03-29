@@ -57,7 +57,7 @@ SOCKET SocketUtils::CreateSocket()
 	return WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 }
 
-void SocketUtils::CloseSocket(SOCKET sock)
+void SocketUtils::CloseSocket(SOCKET& sock)
 {
 	if (sock == INVALID_SOCKET)
 		return;
