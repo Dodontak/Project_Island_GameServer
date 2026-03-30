@@ -2,6 +2,7 @@
 
 #include "IocpCore.h"
 #include "NetAddress.h"
+#include <mutex>
 #include <memory>
 
 class Service : public std::enable_shared_from_this<Service>
@@ -18,9 +19,10 @@ public:
 	NetAddress GetListenerAddr() { return _listenerAddr; }
 
 	void broad_cast_test(SendBufferRef sendBuffer);
-	void AddSession(SessionRef session) { _sessions.insert(session); }
-	void RemoveSession(SessionRef session) { _sessions.erase(session); }
+	void AddSession(SessionRef session);
+	void RemoveSession(SessionRef session);
 private:
+	mutex _m;
 	IocpCoreRef _iocpCore;
 	NetAddress _listenerAddr;
 

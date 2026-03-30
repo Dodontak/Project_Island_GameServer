@@ -2,7 +2,7 @@
 #include "RecvBuffer.h"
 #include <cstring>
 
-RecvBuffer::RecvBuffer(int bufferSize) : _bufferSize(bufferSize)
+RecvBuffer::RecvBuffer(uint32 bufferSize) : _bufferSize(bufferSize)
 {
 	_capacity = bufferSize * BUFFER_COUNT;
 	_buffer.resize(_capacity);
@@ -31,7 +31,7 @@ void	RecvBuffer::Clean()
 	}
 }
 
-bool	RecvBuffer::OnRead(int numOfBytes)
+bool	RecvBuffer::OnRead(uint32 numOfBytes)
 {
 	if (numOfBytes > DataSize())
 		return false;
@@ -39,7 +39,7 @@ bool	RecvBuffer::OnRead(int numOfBytes)
 	return true;
 }
 
-bool	RecvBuffer::OnWrite(int numOfBytes)
+bool	RecvBuffer::OnWrite(uint32 numOfBytes)
 {
 	if (numOfBytes > FreeSize())
 		return false;

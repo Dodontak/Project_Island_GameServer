@@ -29,7 +29,7 @@ bool IocpCore::Dispatch()
 	}
 	else // 오류가 발생한 경우
 	{
-
+		cout << "error" << endl;
 	}
 	return true;
 }

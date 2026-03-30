@@ -9,6 +9,9 @@ enum class EventType : uint8
 	Send
 };
 
+/*----------------------------------------------------------------------------*\
+|                                 IocpEvent                                    |
+\*----------------------------------------------------------------------------*/
 class IocpEvent : public OVERLAPPED
 {
 public:
@@ -26,6 +29,9 @@ protected:
 	EventType _eventType;
 };
 
+/*----------------------------------------------------------------------------*\
+|                                AcceptEvent                                   |
+\*----------------------------------------------------------------------------*/
 class AcceptEvent : public IocpEvent
 {
 public:
@@ -41,6 +47,9 @@ private:
 	BYTE _acceptBuffer[(sizeof(SOCKADDR_IN) + 16) * 2] = { 0 };
 };
 
+/*----------------------------------------------------------------------------*\
+|                                 RecvEvent                                    |
+\*----------------------------------------------------------------------------*/
 class RecvEvent : public IocpEvent
 {
 public:
@@ -50,6 +59,9 @@ public:
 	void Clear();
 };
 
+/*----------------------------------------------------------------------------*\
+|                                 SendEvent                                    |
+\*----------------------------------------------------------------------------*/
 class SendEvent : public IocpEvent
 {
 public:
@@ -57,10 +69,19 @@ public:
 	SendEvent(IocpObjectRef iocpObject) : IocpEvent(EventType::Send) {}
 	void Clear();
 
-	void Push(SendBufferRef sendBuffer) { _sendBuffers.push_back(sendBuffer); }
-	vector<SendBufferRef> _sendBuffers;
+	void PushBack(SendBufferRef sendBuffer);
+	void PushFront(SendBufferRef sendBuffer);
+	deque<SendBufferRef>& GetSendBuffers() { return _sendBuffers; }
+	int32 GetWantSendBytes() { return _wantSendBytes; }
+
+private:
+	deque<SendBufferRef> _sendBuffers;
+	int32 _wantSendBytes;
 };
 
+/*----------------------------------------------------------------------------*\
+|                               ConnectEvent                                   |
+\*----------------------------------------------------------------------------*/
 class ConnectEvent : public IocpEvent
 {
 public:
@@ -68,6 +89,9 @@ public:
 	ConnectEvent(IocpObjectRef iocpObject) : IocpEvent(EventType::Connect) {}
 };
 
+/*----------------------------------------------------------------------------*\
+|                              DisconnectEvent                                 |
+\*----------------------------------------------------------------------------*/
 class DisconnectEvent : public IocpEvent
 {
 public:

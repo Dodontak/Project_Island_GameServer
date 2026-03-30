@@ -4,7 +4,10 @@
 #include "Service.h"
 #include "SendBuffer.h"
 
-Session::Session(SOCKET socket) : _socket(socket), _recvBuffer(BUFFER_SIZE) {}
+Session::Session(SOCKET socket) : _socket(socket), _recvBuffer(BUFFER_SIZE)
+{
+	cout << "Session " << _socket << " constructed" << endl;
+}
 
 Session::~Session()
 {
@@ -61,10 +64,12 @@ void Session::ProcessRecv(int32 numOfBytes)
 		ProcessDisconnect();
 		return;
 	}
+
 	_recvBuffer.OnWrite(numOfBytes);
 	SendBufferRef sendBuffer = make_shared<SendBuffer>(_recvBuffer.ReadPos(), numOfBytes);
 	_recvBuffer.OnRead(numOfBytes);
 	_recvBuffer.Clean();
+
 	if (ServiceRef service = _service.lock())
 	{
 		service->broad_cast_test(sendBuffer);
@@ -73,26 +78,44 @@ void Session::ProcessRecv(int32 numOfBytes)
 	RegisterRecv();
 }
 
+void Session::Send(SendBufferRef sendBuffer)
+{
+	{
+		lock_guard<mutex> lock(_m);
+		_sendBuffers.push(sendBuffer);
+	}
+
+	bool expected = false;
+	if (_sendRegistered.compare_exchange_strong(expected, true))
+	{
+		RegisterSend();
+	}
+}
+
 void Session::RegisterSend()
 {
 	_sendEvent.Init();
 	_sendEvent.SetOwner(shared_from_this());
 
-	while (!_sendBuffers.empty())
 	{
-		SendBufferRef sendBuffer = _sendBuffers.front();
-		_sendBuffers.pop();
-		_sendEvent.Push(sendBuffer);
+		lock_guard<mutex> lock(_m);
+		while (!_sendBuffers.empty())
+		{
+			SendBufferRef sendBuffer = _sendBuffers.front();
+			_sendBuffers.pop();
+			_sendEvent.PushBack(sendBuffer);
+		}
 	}
 
 	vector<WSABUF> wsaBufs;
-	for (auto sendBuffer : _sendEvent._sendBuffers)
+	for (auto& sendBuffer : _sendEvent.GetSendBuffers())
 	{
 		WSABUF wsaBuf;
 		wsaBuf.buf = reinterpret_cast<char*>(sendBuffer->GetBuffer());
 		wsaBuf.len = sendBuffer->GetDataLen();
 		wsaBufs.push_back(wsaBuf);
 	}
+
 	DWORD numOfBytes = 0;
 	if (SOCKET_ERROR == WSASend(_socket, wsaBufs.data(), static_cast<DWORD>(wsaBufs.size()),
 		OUT & numOfBytes, 0, (LPWSAOVERLAPPED)&_sendEvent, nullptr))
@@ -107,8 +130,43 @@ void Session::RegisterSend()
 
 void Session::ProcessSend(int32 numOfBytes)
 {
+	// 보낸 바이트 수 < 보내려 했던 바이트 일 경우 처리.
+	if (numOfBytes < _sendEvent.GetWantSendBytes())
+	{
+		uint32 sendedBytes = numOfBytes;
+		deque<SendBufferRef>& sendBuffers = _sendEvent.GetSendBuffers();
+		while (!sendBuffers.empty())
+		{
+			if (sendedBytes >= sendBuffers.front()->GetDataLen())
+			{
+				sendedBytes -= sendBuffers.front()->GetDataLen();
+				sendBuffers.pop_front();
+			}
+			else
+			{
+				BYTE* pos = sendBuffers.front()->GetPosPtr(sendedBytes);
+				int32 dataLen = sendBuffers.front()->GetDataLen() - sendedBytes;
+
+				SendBufferRef newone = make_shared<SendBuffer>(pos, dataLen);
+				sendBuffers.pop_front();
+				_sendEvent.PushFront(newone);
+				RegisterSend();
+				return;
+			}
+		}
+		return;
+	}
 	_sendEvent.Clear();
 
+	{
+		lock_guard<mutex> lock(_m);
+		if (_sendBuffers.empty())
+		{
+			_sendRegistered.store(false);
+			return;
+		}
+	}
+	RegisterSend();
 }
 
 void Session::RegisterDisconnect()

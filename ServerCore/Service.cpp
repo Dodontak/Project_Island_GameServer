@@ -19,11 +19,6 @@ void Service::Start()
 	ListenerRef listener = make_shared<Listener>(shared_from_this());
 
 	listener->StartAccept();
-
-	while (true)
-	{
-		_iocpCore->Dispatch();
-	}
 }
 
 SessionRef Service::CreateSession()
@@ -44,10 +39,22 @@ SessionRef Service::CreateSession()
 
 void Service::broad_cast_test(SendBufferRef sendBuffer)
 {
+	lock_guard<mutex> lock(_m);
 	for (auto iocpObject : _sessions)
 	{
 		SessionRef session = static_pointer_cast<Session>(iocpObject);
-		session->_sendBuffers.push(sendBuffer);
-		session->RegisterSend();
+		session->Send(sendBuffer);
 	}
+}
+
+void Service::AddSession(SessionRef session)
+{
+	lock_guard<mutex> lock(_m);
+	_sessions.insert(session);
+}
+
+void Service::RemoveSession(SessionRef session)
+{
+	lock_guard<mutex> lock(_m);
+	_sessions.erase(session);
 }

@@ -39,13 +39,19 @@
     <ClCompile Include="Session.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="Service.cpp">
-      <Filter>Network</Filter>
-    </ClCompile>
     <ClCompile Include="RecvBuffer.cpp">
       <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="SendBuffer.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreTLS.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadManager.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Service.cpp">
       <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,13 +89,19 @@
     <ClInclude Include="Session.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="Service.h">
-      <Filter>Network</Filter>
-    </ClInclude>
     <ClInclude Include="RecvBuffer.h">
       <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="SendBuffer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreTLS.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadManager.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Service.h">
       <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>

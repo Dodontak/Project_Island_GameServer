@@ -1,6 +1,7 @@
 #pragma once
 
 #include <queue>
+#include <mutex>
 #include "Types.h"
 #include "IocpCore.h"
 #include "NetAddress.h"
@@ -24,6 +25,7 @@ public:
 	void RegisterRecv();
 	void ProcessRecv(int32 numOfBytes);
 
+	void Send(SendBufferRef sendBuffer);
 	void RegisterSend();
 	void ProcessSend(int32 numOfBytes);
 
@@ -34,6 +36,9 @@ public:
 
 	NetAddress GetAddr() { return _address; }
 private:
+	mutex _m;
+	atomic<bool> _sendRegistered = false;
+
 	weak_ptr<Service> _service;
 	SOCKET _socket = INVALID_SOCKET;
 	NetAddress _address;
