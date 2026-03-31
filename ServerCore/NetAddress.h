@@ -3,7 +3,7 @@
 class NetAddress
 {
 public:
-	NetAddress() = default;
+	NetAddress();
 	NetAddress(string ip, int port);
 	NetAddress(const NetAddress& addr);
 	NetAddress(SOCKADDR_IN addr);

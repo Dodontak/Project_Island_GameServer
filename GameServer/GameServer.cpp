@@ -28,4 +28,7 @@ int main()
 			}
 		);
 	}
+
+	this_thread::sleep_for(chrono::seconds(10));
+	service->didconnect_all_test();
 }

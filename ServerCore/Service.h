@@ -19,6 +19,8 @@ public:
 	NetAddress GetListenerAddr() { return _listenerAddr; }
 
 	void broad_cast_test(SendBufferRef sendBuffer);
+	void didconnect_all_test();
+
 	void AddSession(SessionRef session);
 	void RemoveSession(SessionRef session);
 private:

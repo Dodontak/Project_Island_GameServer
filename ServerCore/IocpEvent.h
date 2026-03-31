@@ -24,6 +24,8 @@ public:
 
 	IocpObjectRef GetOwner() { return _owner; }
 	EventType GetEventType() { return _eventType; }
+
+	virtual void Clear();
 protected:
 	IocpObjectRef _owner;
 	EventType _eventType;
@@ -38,7 +40,7 @@ public:
 	AcceptEvent() : IocpEvent(EventType::Accept) {}
 	void SetSession(SessionRef session) { _session = session; }
 
-	void Clear();
+	virtual void Clear() override;
 
 	SessionRef GetSession() { return _session; }
 	BYTE* GetAcceptBuffer() { return _acceptBuffer; }
@@ -55,8 +57,6 @@ class RecvEvent : public IocpEvent
 public:
 	RecvEvent() : IocpEvent(EventType::Recv) {}
 	RecvEvent(IocpObjectRef iocpObject) : IocpEvent(EventType::Recv) {}
-
-	void Clear();
 };
 
 /*----------------------------------------------------------------------------*\
@@ -67,7 +67,7 @@ class SendEvent : public IocpEvent
 public:
 	SendEvent() : IocpEvent(EventType::Send) {}
 	SendEvent(IocpObjectRef iocpObject) : IocpEvent(EventType::Send) {}
-	void Clear();
+	virtual void Clear() override;
 
 	void PushBack(SendBufferRef sendBuffer);
 	void PushFront(SendBufferRef sendBuffer);

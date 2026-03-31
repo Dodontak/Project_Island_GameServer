@@ -76,7 +76,6 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 void Listener::ProcessAccept(SessionRef session, AcceptEvent* acceptEvent)
 {
 	acceptEvent->Clear();
-
 	if (SocketUtils::SetUpdateAcceptSocket(session->_socket, _listenSocket) == false)
 		return;
 
@@ -86,9 +85,7 @@ void Listener::ProcessAccept(SessionRef session, AcceptEvent* acceptEvent)
 	if (_service->GetIocpCore()->RegisterHandle(session) == false)
 		return;
 
-	_service->AddSession(session);
-
-	session->RegisterRecv();
+	session->ProcessConnect();
 }
 
 

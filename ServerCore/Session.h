@@ -29,6 +29,9 @@ public:
 	void RegisterSend();
 	void ProcessSend(int32 numOfBytes);
 
+	void RegisterConnect();
+	void ProcessConnect();
+
 	void RegisterDisconnect();
 	void ProcessDisconnect();
 
@@ -38,6 +41,7 @@ public:
 private:
 	mutex _m;
 	atomic<bool> _sendRegistered = false;
+	atomic<bool> _isConnected = false;
 
 	weak_ptr<Service> _service;
 	SOCKET _socket = INVALID_SOCKET;

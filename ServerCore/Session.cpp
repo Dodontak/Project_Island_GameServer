@@ -21,8 +21,10 @@ void Session::Dispatch(int32 numOfBytes, IocpEvent* event)
 	switch (event->GetEventType())
 	{
 	case EventType::Connect:
+		ProcessConnect();
 		break;
 	case EventType::Disconnect:
+		ProcessDisconnect();
 		break;
 	case EventType::Send:
 		ProcessSend(numOfBytes);
@@ -37,6 +39,8 @@ void Session::Dispatch(int32 numOfBytes, IocpEvent* event)
 
 void Session::RegisterRecv()
 {
+	if (_isConnected == false)
+		return;
 	_recvEvent.Init();
 	_recvEvent.SetOwner(shared_from_this());
 
@@ -94,6 +98,8 @@ void Session::Send(SendBufferRef sendBuffer)
 
 void Session::RegisterSend()
 {
+	if (_isConnected == false)
+		return;
 	_sendEvent.Init();
 	_sendEvent.SetOwner(shared_from_this());
 
@@ -120,8 +126,7 @@ void Session::RegisterSend()
 	if (SOCKET_ERROR == WSASend(_socket, wsaBufs.data(), static_cast<DWORD>(wsaBufs.size()),
 		OUT & numOfBytes, 0, (LPWSAOVERLAPPED)&_sendEvent, nullptr))
 	{
-		int errorCode = WSAGetLastError();
-		if (errorCode != WSA_IO_PENDING)
+		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
 			//TODO 적절한 처리
 		}
@@ -169,13 +174,62 @@ void Session::ProcessSend(int32 numOfBytes)
 	RegisterSend();
 }
 
+void Session::RegisterConnect()
+{
+	_connectEvent.Init();
+	_connectEvent.SetOwner(shared_from_this());
+
+	if (SocketUtils::BindSocket(_socket, NetAddress()) == false)
+	{
+		cerr << "Failed to bind session socket in Session::RegisterConnect()" << endl;
+		ProcessDisconnect();
+		return;
+	}
+
+	DWORD BytesSent = 0;
+	if (false == SocketUtils::ConnectEx(_socket, (const sockaddr*)&_address.GetAddr(),
+		sizeof(sockaddr), NULL, 0, &BytesSent, &_connectEvent))
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			//TODO 적절한 처리
+		}
+	}
+}
+
+void Session::ProcessConnect()
+{
+	_connectEvent.Clear();
+
+	_isConnected.store(true);
+	if (ServiceRef service = _service.lock())
+	{
+		service->AddSession(static_pointer_cast<Session>(shared_from_this()));
+	}
+	RegisterRecv();
+}
+
 void Session::RegisterDisconnect()
 {
+	bool expected = true;
+	if (false == _isConnected.compare_exchange_strong(expected, false))
+		return;
+	_disconnectEvent.Init();
+	_disconnectEvent.SetOwner(shared_from_this());
 
+	if (false == SocketUtils::DisconnectEx(_socket, &_disconnectEvent, 0, 0))
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			//TODO 적절한 처리
+		}
+	}
 }
 
 void Session::ProcessDisconnect()
 {
+	_disconnectEvent.Clear();
+	_isConnected.store(false);
 	if (ServiceRef service = _service.lock())
 	{
 		service->RemoveSession(static_pointer_cast<Session>(shared_from_this()));

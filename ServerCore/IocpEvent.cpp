@@ -19,6 +19,11 @@ void IocpEvent::Init()
 	OVERLAPPED::OffsetHigh = 0;
 }
 
+void IocpEvent::Clear()
+{
+	_owner = nullptr;
+}
+
 /*----------------------------------------------------------------------------*\
 |                                AcceptEvent                                   |
 \*----------------------------------------------------------------------------*/
@@ -50,12 +55,4 @@ void SendEvent::PushBack(SendBufferRef sendBuffer)
 {
 	_sendBuffers.push_back(sendBuffer);
 	_wantSendBytes += sendBuffer->GetDataLen();
-}
-
-/*----------------------------------------------------------------------------*\
-|                                 RecvEvent                                    |
-\*----------------------------------------------------------------------------*/
-void RecvEvent::Clear()
-{
-	_owner = nullptr;
 }

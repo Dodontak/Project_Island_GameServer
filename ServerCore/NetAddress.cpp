@@ -2,6 +2,14 @@
 #include "NetAddress.h"
 #include <ws2tcpip.h>
 
+NetAddress::NetAddress()
+{
+	::memset(&_sockAddr, 0, sizeof(_sockAddr));
+	_sockAddr.sin_family = AF_INET;
+	_sockAddr.sin_addr.s_addr = INADDR_ANY;
+	_sockAddr.sin_port = 0;
+}
+
 NetAddress::NetAddress(string ip, int port)
 {
 	::memset(&_sockAddr, 0, sizeof(_sockAddr));

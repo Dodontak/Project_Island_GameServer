@@ -17,19 +17,20 @@ bool IocpCore::Dispatch()
 {
 	DWORD numOfBytes = 0;
 	ULONG_PTR completionKey;
-	IocpEvent* event = nullptr;
+	OVERLAPPED* overlapped = nullptr;
 
 	bool result = GetQueuedCompletionStatus(_iocpHandle, &numOfBytes, &completionKey,
-		reinterpret_cast<LPOVERLAPPED*>(&event), INFINITE);
+		&overlapped, INFINITE);
 
 	if (result != 0) // 정상적으로 이벤트가 발생한 경우
 	{
-		IocpObjectRef owner = event->GetOwner();
-		owner->Dispatch(numOfBytes, event);
+		IocpEvent* iocpEvent = static_cast<IocpEvent*>(overlapped);
+		IocpObjectRef owner = iocpEvent->GetOwner();
+		owner->Dispatch(numOfBytes, iocpEvent);
 	}
-	else // 오류가 발생한 경우
+	else // TODO 오류가 발생한 경우
 	{
-		cout << "error" << endl;
+		cerr << "error" << endl;
 	}
 	return true;
 }

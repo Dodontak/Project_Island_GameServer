@@ -47,6 +47,16 @@ void Service::broad_cast_test(SendBufferRef sendBuffer)
 	}
 }
 
+void Service::didconnect_all_test()
+{
+	lock_guard<mutex> lock(_m);
+	for (auto it = _sessions.begin(); it != _sessions.end();)
+	{
+		(*it)->RegisterDisconnect();
+		it = _sessions.erase(it);
+	}
+}
+
 void Service::AddSession(SessionRef session)
 {
 	lock_guard<mutex> lock(_m);

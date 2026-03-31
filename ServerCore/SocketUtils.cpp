@@ -34,6 +34,7 @@ LPFN_DISCONNECTEX	SocketUtils::DisconnectEx = nullptr;
 //	[in]  LPOVERLAPPED lpOverlapped
 //);
 LPFN_ACCEPTEX		SocketUtils::AcceptEx = nullptr;
+
 LPFN_GETACCEPTEXSOCKADDRS SocketUtils::GetAcceptExSockaddrs = nullptr;
 bool SocketUtils::Init()
 {
