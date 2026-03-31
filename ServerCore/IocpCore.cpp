@@ -6,6 +6,7 @@ IocpCore::IocpCore()
 {
 	_iocpHandle = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	ASSERT_CRASH(_iocpHandle != INVALID_HANDLE_VALUE);
+	cout << "IocpCore constucted" << endl;
 }
 
 IocpCore::~IocpCore()
@@ -22,16 +23,23 @@ bool IocpCore::Dispatch()
 	bool result = GetQueuedCompletionStatus(_iocpHandle, &numOfBytes, &completionKey,
 		&overlapped, INFINITE);
 
-	if (result != 0) // 정상적으로 이벤트가 발생한 경우
+
+	if (result != 0)
 	{
 		IocpEvent* iocpEvent = static_cast<IocpEvent*>(overlapped);
 		IocpObjectRef owner = iocpEvent->GetOwner();
 		owner->Dispatch(numOfBytes, iocpEvent);
 	}
-	else // TODO 오류가 발생한 경우
+	else
 	{
-		cerr << "error" << endl;
+		int32 errCode = ::WSAGetLastError();
+		cout << Utils::GetErrorMessage(errCode);
+
+		IocpEvent* iocpEvent = static_cast<IocpEvent*>(overlapped);
+		IocpObjectRef owner = iocpEvent->GetOwner();
+		owner->Dispatch(numOfBytes, iocpEvent);
 	}
+
 	return true;
 }
 

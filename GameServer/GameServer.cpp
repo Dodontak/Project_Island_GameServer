@@ -11,14 +11,14 @@ void WorkerThread(ServiceRef service)
 	while (1)
 	{
 		service->GetIocpCore()->Dispatch();
-		cout << "Worker thread " << LThreadId << " processed an I/O event" << endl;
 	}
 }
 
 int main()
 {
+	cout << "=== GameServer ===" << endl;
 	ThreadManager threadManager;
-	ServiceRef service = make_shared<Service>(NetAddress("0.0.0.0", 9000));
+	ServiceRef service = make_shared<ServerService>(NetAddress("0.0.0.0", 7777));
 	service->Start();
 
 	for (int i = 0; i < 5; i++)
@@ -28,7 +28,4 @@ int main()
 			}
 		);
 	}
-
-	this_thread::sleep_for(chrono::seconds(10));
-	service->didconnect_all_test();
 }

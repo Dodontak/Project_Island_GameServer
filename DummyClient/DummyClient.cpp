@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "Session.h"
 #include "Service.h"
+#include "SendBuffer.h"
 #include "ThreadManager.h"
 
 void WorkerThread(ServiceRef service)
@@ -13,13 +14,29 @@ void WorkerThread(ServiceRef service)
 
 int main()
 {
-	ServiceRef service = make_shared<Service>(NetAddress("127.0.0.1", 7777));
-	service->CreateSession();
-
+	cout << "=== DummyClient ===" << endl;
+	this_thread::sleep_for(chrono::seconds(1));
 	ThreadManager tManager;
-
-	tManager.Launch([service]() {
-		WorkerThread(service);
-		}
+	ClientServiceRef service = make_shared<ClientService>(
+		NetAddress("127.0.0.1", 7777),
+		10
 	);
+
+	service->Start();
+
+	for (int i = 0; i < 5; i++)
+	{
+		tManager.Launch([service]() {
+			WorkerThread(service);
+			}
+		);
+	}
+	while (true)
+	{
+		this_thread::sleep_for(chrono::seconds(1));
+		string msg = "Hello Iocp Server!";
+
+		SendBufferRef sendBuffer = make_shared<SendBuffer>((BYTE*)msg.c_str(), msg.length());
+		service->broad_cast_test(sendBuffer);
+	}
 }

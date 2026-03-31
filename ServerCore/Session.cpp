@@ -37,6 +37,9 @@ void Session::Dispatch(int32 numOfBytes, IocpEvent* event)
 	}
 }
 
+/*----------------------------------------------------------------------------*\
+|                                  Recv                                        |
+\*----------------------------------------------------------------------------*/
 void Session::RegisterRecv()
 {
 	if (_isConnected == false)
@@ -65,7 +68,7 @@ void Session::ProcessRecv(int32 numOfBytes)
 	_recvEvent.Clear();
 	if (numOfBytes == 0) // 클라이언트가 정상적으로 연결을 종료한 경우
 	{
-		ProcessDisconnect();
+		RegisterDisconnect();
 		return;
 	}
 
@@ -73,6 +76,14 @@ void Session::ProcessRecv(int32 numOfBytes)
 	SendBufferRef sendBuffer = make_shared<SendBuffer>(_recvBuffer.ReadPos(), numOfBytes);
 	_recvBuffer.OnRead(numOfBytes);
 	_recvBuffer.Clean();
+
+	if (nullptr == dynamic_pointer_cast<ServerService>(_service.lock()))
+	{//더미 클라이언트 서비스라면.
+		string str((char*)sendBuffer->GetBuffer(), sendBuffer->GetDataLen());
+		cout << "recv : " << str << endl;
+		RegisterRecv();
+		return;
+	}
 
 	if (ServiceRef service = _service.lock())
 	{
@@ -82,11 +93,20 @@ void Session::ProcessRecv(int32 numOfBytes)
 	RegisterRecv();
 }
 
-void Session::Send(SendBufferRef sendBuffer)
+/*----------------------------------------------------------------------------*\
+|                                  Send                                        |
+\*----------------------------------------------------------------------------*/
+void	 Session::Send(SendBufferRef sendBuffer)
 {
 	{
 		lock_guard<mutex> lock(_m);
 		_sendBuffers.push(sendBuffer);
+	}
+
+	if (nullptr == dynamic_pointer_cast<ServerService>(_service.lock()))
+	{//더미 클라이언트 서비스라면.
+		string str((char*)sendBuffer->GetBuffer(), sendBuffer->GetDataLen());
+		cout << "send : " << str << endl;
 	}
 
 	bool expected = false;
@@ -135,6 +155,11 @@ void Session::RegisterSend()
 
 void Session::ProcessSend(int32 numOfBytes)
 {
+	if (numOfBytes == 0)
+	{
+		RegisterDisconnect();
+		return;
+	}
 	// 보낸 바이트 수 < 보내려 했던 바이트 일 경우 처리.
 	if (numOfBytes < _sendEvent.GetWantSendBytes())
 	{
@@ -174,6 +199,9 @@ void Session::ProcessSend(int32 numOfBytes)
 	RegisterSend();
 }
 
+/*----------------------------------------------------------------------------*\
+|                                  Connect                                     |
+\*----------------------------------------------------------------------------*/
 void Session::RegisterConnect()
 {
 	_connectEvent.Init();
@@ -209,6 +237,9 @@ void Session::ProcessConnect()
 	RegisterRecv();
 }
 
+/*----------------------------------------------------------------------------*\
+|                                  Disconnect                                  |
+\*----------------------------------------------------------------------------*/
 void Session::RegisterDisconnect()
 {
 	bool expected = true;

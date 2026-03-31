@@ -7,6 +7,7 @@
     <BuildDependency Project="ServerCore/ServerCore.vcxproj" />
   </Project>
   <Project Path="DummyClient/DummyClient.vcxproj" Id="6cee72a8-029c-42d1-94f1-eff49ec13b31">
+    <BuildDependency Project="D:/Projects/Project_Island/GameServer/GameServer.vcxproj" />
     <BuildDependency Project="ServerCore/ServerCore.vcxproj" />
   </Project>
   <Project Path="ServerCore/ServerCore.vcxproj" Id="72ba9031-c7a6-466a-916a-a4de514066d4" />

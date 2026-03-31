@@ -29,7 +29,6 @@ void IocpEvent::Clear()
 \*----------------------------------------------------------------------------*/
 void AcceptEvent::Clear()
 {
-	Init();
 	_owner = nullptr;
 	_session = nullptr;
 	memset(_acceptBuffer, 0, sizeof(_acceptBuffer));
@@ -40,8 +39,8 @@ void AcceptEvent::Clear()
 \*----------------------------------------------------------------------------*/
 void SendEvent::Clear()
 {
-	_owner = nullptr;
 	_sendBuffers.clear();
+	_owner = nullptr;
 	_wantSendBytes = 0;
 }
 

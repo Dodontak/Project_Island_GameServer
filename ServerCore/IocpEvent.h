@@ -1,6 +1,6 @@
 #pragma once
 
-enum class EventType : uint8
+enum EventType : uint8
 {
 	Connect,
 	Disconnect,

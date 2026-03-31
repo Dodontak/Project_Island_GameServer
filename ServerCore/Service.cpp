@@ -3,7 +3,11 @@
 #include "Listener.h"
 #include "Session.h"
 
-Service::Service(NetAddress listenerAddr) : _listenerAddr(listenerAddr)
+/*----------------------------------------------------------------------------*\
+|                                  Service                                     |
+\*----------------------------------------------------------------------------*/
+
+Service::Service(NetAddress netAddr) : _netAddress(netAddr)
 {
 	_iocpCore = make_shared<IocpCore>();
 }
@@ -12,24 +16,15 @@ Service::~Service()
 {
 }
 
-void Service::Start()
-{
-	SocketUtils::Init();
-
-	ListenerRef listener = make_shared<Listener>(shared_from_this());
-
-	listener->StartAccept();
-}
-
 SessionRef Service::CreateSession()
 {
-	SOCKET clientSocket = SocketUtils::CreateSocket();
-	if (clientSocket == INVALID_SOCKET)
+	SOCKET socket = SocketUtils::CreateSocket();
+	if (socket == INVALID_SOCKET)
 		return nullptr;
-	SessionRef session = make_shared<Session>(clientSocket);
+	SessionRef session = make_shared<Session>(socket);
 	if (session == nullptr)
 	{
-		SocketUtils::CloseSocket(clientSocket);
+		SocketUtils::CloseSocket(socket);
 		return nullptr;
 	}
 	session->_service = shared_from_this();
@@ -67,4 +62,44 @@ void Service::RemoveSession(SessionRef session)
 {
 	lock_guard<mutex> lock(_m);
 	_sessions.erase(session);
+}
+
+/*----------------------------------------------------------------------------*\
+|                               ServerService                                  |
+\*----------------------------------------------------------------------------*/
+ServerService::ServerService(NetAddress listenerAddr) : Service(listenerAddr)
+{
+}
+
+void ServerService::Start()
+{
+	SocketUtils::Init();
+
+	ListenerRef listener = make_shared<Listener>(shared_from_this());
+
+	listener->StartAccept();
+}
+
+
+
+/*----------------------------------------------------------------------------*\
+|                               ClientService                                  |
+\*----------------------------------------------------------------------------*/
+ClientService::ClientService(NetAddress serverAddr, int32 clientCount)
+	: Service(serverAddr), _clientCount(clientCount) {}
+
+void ClientService::Start()
+{
+	SocketUtils::Init();
+
+	for (int32 i = 0; i < _clientCount; i++)
+	{
+		SessionRef session = CreateSession();
+
+		_iocpCore->RegisterHandle(session);
+
+		session->SetAddr(_netAddress);
+
+		session->RegisterConnect();
+	}
 }

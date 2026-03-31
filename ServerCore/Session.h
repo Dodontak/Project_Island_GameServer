@@ -37,6 +37,7 @@ public:
 
 	bool SetAddressFromAcceptBuffer(BYTE* buffer);
 
+	void SetAddr(const NetAddress& address) { _address = address; }
 	NetAddress GetAddr() { return _address; }
 private:
 	mutex _m;
