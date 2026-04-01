@@ -2,6 +2,8 @@
 #include <windows.h>
 #include "Utils.h"
 
+mutex Utils::m;
+
 int Utils::HandleError(const char* errstr)
 {
 	cerr << errstr << endl;

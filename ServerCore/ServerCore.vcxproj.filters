@@ -54,6 +54,9 @@
     <ClCompile Include="Service.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="CoreGlobal.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Types.h">
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="Service.h">
       <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreGlobal.h">
+      <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

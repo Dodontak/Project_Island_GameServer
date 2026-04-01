@@ -19,4 +19,4 @@ using namespace std;
 #include "CoreMacro.h"
 #include "SocketUtils.h"
 #include "Utils.h"
-
+#include "CoreGlobal.h"

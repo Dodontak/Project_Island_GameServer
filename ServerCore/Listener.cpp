@@ -69,6 +69,7 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 		if (WSAGetLastError() != ERROR_IO_PENDING)
 		{
 			//TODO 적절한 처리
+			RegisterAccept(acceptEvent);
 		}
 	}
 }

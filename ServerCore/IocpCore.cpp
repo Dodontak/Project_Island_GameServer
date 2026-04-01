@@ -33,7 +33,9 @@ bool IocpCore::Dispatch()
 	else
 	{
 		int32 errCode = ::WSAGetLastError();
-		cout << Utils::GetErrorMessage(errCode);
+		string errStr = Utils::GetErrorMessage(errCode);
+		errStr.pop_back();
+		Utils::LockPrint(errStr);
 
 		IocpEvent* iocpEvent = static_cast<IocpEvent*>(overlapped);
 		IocpObjectRef owner = iocpEvent->GetOwner();

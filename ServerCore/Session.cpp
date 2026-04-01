@@ -6,12 +6,12 @@
 
 Session::Session(SOCKET socket) : _socket(socket), _recvBuffer(BUFFER_SIZE)
 {
-	cout << "Session " << _socket << " constructed" << endl;
+	Utils::LockPrint("Session ", _socket, " constructed");
 }
 
 Session::~Session()
 {
-	cout << "Session " << _socket << " distructed" << endl;
+	Utils::LockPrint("Session ", _socket, " distructed");
 	if (_socket != INVALID_SOCKET)
 		SocketUtils::CloseSocket(_socket);
 }
@@ -59,6 +59,7 @@ void Session::RegisterRecv()
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
 			//TODO 적절한 처리
+			_recvBuffer.Clean();
 		}
 	}
 }
@@ -74,13 +75,14 @@ void Session::ProcessRecv(int32 numOfBytes)
 
 	_recvBuffer.OnWrite(numOfBytes);
 	SendBufferRef sendBuffer = make_shared<SendBuffer>(_recvBuffer.ReadPos(), numOfBytes);
+	
 	_recvBuffer.OnRead(numOfBytes);
 	_recvBuffer.Clean();
 
 	if (nullptr == dynamic_pointer_cast<ServerService>(_service.lock()))
 	{//더미 클라이언트 서비스라면.
 		string str((char*)sendBuffer->GetBuffer(), sendBuffer->GetDataLen());
-		cout << "recv : " << str << endl;
+		Utils::LockPrint("recv from server : ", str);
 		RegisterRecv();
 		return;
 	}
@@ -106,7 +108,7 @@ void	 Session::Send(SendBufferRef sendBuffer)
 	if (nullptr == dynamic_pointer_cast<ServerService>(_service.lock()))
 	{//더미 클라이언트 서비스라면.
 		string str((char*)sendBuffer->GetBuffer(), sendBuffer->GetDataLen());
-		cout << "send : " << str << endl;
+		Utils::LockPrint("send : ", str);
 	}
 
 	bool expected = false;
@@ -122,7 +124,6 @@ void Session::RegisterSend()
 		return;
 	_sendEvent.Init();
 	_sendEvent.SetOwner(shared_from_this());
-
 	{
 		lock_guard<mutex> lock(_m);
 		while (!_sendBuffers.empty())
@@ -149,6 +150,7 @@ void Session::RegisterSend()
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
 			//TODO 적절한 처리
+			_sendEvent.Clear();
 		}
 	}
 }
@@ -186,7 +188,6 @@ void Session::ProcessSend(int32 numOfBytes)
 		}
 		return;
 	}
-	_sendEvent.Clear();
 
 	{
 		lock_guard<mutex> lock(_m);
@@ -221,6 +222,7 @@ void Session::RegisterConnect()
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
 			//TODO 적절한 처리
+			_connectEvent.Clear();
 		}
 	}
 }
@@ -253,6 +255,7 @@ void Session::RegisterDisconnect()
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
 			//TODO 적절한 처리
+			_disconnectEvent.Clear();
 		}
 	}
 }
@@ -264,7 +267,7 @@ void Session::ProcessDisconnect()
 	if (ServiceRef service = _service.lock())
 	{
 		service->RemoveSession(static_pointer_cast<Session>(shared_from_this()));
-		service->broad_cast_test(make_shared<SendBuffer>((BYTE*)"A client has disconnected\n", 28));
+		service->broad_cast_test(make_shared<SendBuffer>((BYTE*)"A client has disconnected", 27));
 	}
 }
 

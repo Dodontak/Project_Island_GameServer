@@ -5,7 +5,7 @@
 /*----------------------------------------------------------------------------*\
 |                                 IocpEvent                                    |
 \*----------------------------------------------------------------------------*/
-IocpEvent::IocpEvent(EventType eventType) : _eventType(eventType)
+IocpEvent::IocpEvent(EventType eventType) : _eventType(eventType), _owner(nullptr)
 {
 	Init();
 }
