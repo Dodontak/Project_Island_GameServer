@@ -75,11 +75,10 @@ void Session::ProcessRecv(int32 numOfBytes)
 
 	_recvBuffer.OnWrite(numOfBytes);
 	SendBufferRef sendBuffer = make_shared<SendBuffer>(_recvBuffer.ReadPos(), numOfBytes);
-	
 	_recvBuffer.OnRead(numOfBytes);
 	_recvBuffer.Clean();
 
-	if (nullptr == dynamic_pointer_cast<ServerService>(_service.lock()))
+	if (dynamic_pointer_cast<ClientService>(_service.lock()))
 	{//더미 클라이언트 서비스라면.
 		string str((char*)sendBuffer->GetBuffer(), sendBuffer->GetDataLen());
 		Utils::LockPrint("recv from server : ", str);
@@ -105,7 +104,7 @@ void	 Session::Send(SendBufferRef sendBuffer)
 		_sendBuffers.push(sendBuffer);
 	}
 
-	if (nullptr == dynamic_pointer_cast<ServerService>(_service.lock()))
+	if (dynamic_pointer_cast<ClientService>(_service.lock()))
 	{//더미 클라이언트 서비스라면.
 		string str((char*)sendBuffer->GetBuffer(), sendBuffer->GetDataLen());
 		Utils::LockPrint("send : ", str);
@@ -157,11 +156,14 @@ void Session::RegisterSend()
 
 void Session::ProcessSend(int32 numOfBytes)
 {
+	//Send 0
 	if (numOfBytes == 0)
 	{
+		_sendEvent.Clear();
 		RegisterDisconnect();
 		return;
 	}
+
 	// 보낸 바이트 수 < 보내려 했던 바이트 일 경우 처리.
 	if (numOfBytes < _sendEvent.GetWantSendBytes())
 	{
@@ -189,6 +191,7 @@ void Session::ProcessSend(int32 numOfBytes)
 		return;
 	}
 
+	_sendEvent.Clear();
 	{
 		lock_guard<mutex> lock(_m);
 		if (_sendBuffers.empty())

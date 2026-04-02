@@ -19,7 +19,7 @@ int main()
 	ThreadManager tManager;
 	ClientServiceRef service = make_shared<ClientService>(
 		NetAddress("127.0.0.1", 7777),
-		10
+		2
 	);
 
 	service->Start();
@@ -31,12 +31,12 @@ int main()
 			}
 		);
 	}
-	while (true)
-	{
+	//while (true)
+	//{
 		this_thread::sleep_for(chrono::seconds(1));
 		string msg = "Hello Iocp Server!";
 
 		SendBufferRef sendBuffer = make_shared<SendBuffer>((BYTE*)msg.c_str(), msg.length());
 		service->broad_cast_test(sendBuffer);
-	}
+	//}
 }
