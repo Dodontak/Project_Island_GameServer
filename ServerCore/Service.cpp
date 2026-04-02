@@ -6,8 +6,8 @@
 /*----------------------------------------------------------------------------*\
 |                                  Service                                     |
 \*----------------------------------------------------------------------------*/
-
-Service::Service(NetAddress netAddr) : _netAddress(netAddr)
+Service::Service(NetAddress netAddr, SessionFactory sessionFactory) :
+	_netAddress(netAddr), _sessionFactory(sessionFactory)
 {
 	_iocpCore = make_shared<IocpCore>();
 }
@@ -21,7 +21,7 @@ SessionRef Service::CreateSession()
 	SOCKET socket = SocketUtils::CreateSocket();
 	if (socket == INVALID_SOCKET)
 		return nullptr;
-	SessionRef session = make_shared<Session>(socket);
+	SessionRef session = _sessionFactory(socket);
 	if (session == nullptr)
 	{
 		SocketUtils::CloseSocket(socket);
@@ -67,7 +67,8 @@ void Service::RemoveSession(SessionRef session)
 /*----------------------------------------------------------------------------*\
 |                               ServerService                                  |
 \*----------------------------------------------------------------------------*/
-ServerService::ServerService(NetAddress listenerAddr) : Service(listenerAddr)
+ServerService::ServerService(NetAddress listenerAddr, SessionFactory sessionFactory)
+	: Service(listenerAddr, sessionFactory)
 {
 }
 
@@ -83,8 +84,9 @@ void ServerService::Start()
 /*----------------------------------------------------------------------------*\
 |                               ClientService                                  |
 \*----------------------------------------------------------------------------*/
-ClientService::ClientService(NetAddress serverAddr, int32 clientCount)
-	: Service(serverAddr), _clientCount(clientCount) {}
+ClientService::ClientService(NetAddress serverAddr, SessionFactory sessionFactory, int32 clientCount)
+	: Service(serverAddr, sessionFactory), _clientCount(clientCount) {
+}
 
 void ClientService::Start()
 {

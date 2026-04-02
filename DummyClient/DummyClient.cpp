@@ -3,6 +3,7 @@
 #include "Service.h"
 #include "SendBuffer.h"
 #include "ThreadManager.h"
+#include "ServerSession.h"
 
 void WorkerThread(ServiceRef service)
 {
@@ -19,7 +20,10 @@ int main()
 	ThreadManager tManager;
 	ClientServiceRef service = make_shared<ClientService>(
 		NetAddress("127.0.0.1", 7777),
-		2
+		[](SOCKET socket) {
+			return make_shared<ServerSession>(socket);
+		},
+		10
 	);
 
 	service->Start();
@@ -33,10 +37,8 @@ int main()
 	}
 	//while (true)
 	//{
-		this_thread::sleep_for(chrono::seconds(1));
-		string msg = "Hello Iocp Server!";
-
-		SendBufferRef sendBuffer = make_shared<SendBuffer>((BYTE*)msg.c_str(), msg.length());
-		service->broad_cast_test(sendBuffer);
+	this_thread::sleep_for(chrono::seconds(1));
+	string msg = "Hello Iocp Server!";
+	service->broad_cast_test(Utils::MakeChatSendBuffer(0, (BYTE*)msg.data(), msg.length()));
 	//}
 }

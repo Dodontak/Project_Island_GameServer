@@ -74,22 +74,9 @@ void Session::ProcessRecv(int32 numOfBytes)
 	}
 
 	_recvBuffer.OnWrite(numOfBytes);
-	SendBufferRef sendBuffer = make_shared<SendBuffer>(_recvBuffer.ReadPos(), numOfBytes);
-	_recvBuffer.OnRead(numOfBytes);
+	int processLen = OnRecv(_recvBuffer.ReadPos(), _recvBuffer.DataSize());
+	_recvBuffer.OnRead(processLen);
 	_recvBuffer.Clean();
-
-	if (dynamic_pointer_cast<ClientService>(_service.lock()))
-	{//더미 클라이언트 서비스라면.
-		string str((char*)sendBuffer->GetBuffer(), sendBuffer->GetDataLen());
-		Utils::LockPrint("recv from server : ", str);
-		RegisterRecv();
-		return;
-	}
-
-	if (ServiceRef service = _service.lock())
-	{
-		service->broad_cast_test(sendBuffer);
-	}
 
 	RegisterRecv();
 }
@@ -292,4 +279,33 @@ bool Session::SetAddressFromAcceptBuffer(BYTE* buffer)
 		return false;
 	_address.SetAddr(*clientAddr);
 	return true;
+}
+
+/*----------------------------------------------------------------------------*\
+|                                                                              |
+|                                PacketSession                                 |
+|                                                                              |
+\*----------------------------------------------------------------------------*/
+PacketSession::PacketSession(SOCKET socket) : Session(socket) {}
+
+PacketSession::~PacketSession() {}
+
+uint32 PacketSession::OnRecv(BYTE* buffer, uint32 len)
+{
+	uint32 processLen = 0;
+	while (true)
+	{
+		uint32 dataLen = len - processLen;
+		if (dataLen < sizeof(PacketHeader))
+			break;
+
+		PacketHeader* header = reinterpret_cast<PacketHeader*>(&buffer[processLen]);
+		if (dataLen < header->size)
+			break;
+
+		OnRecvPacket(&buffer[processLen], header->size);
+
+		processLen += header->size;
+	}
+	return processLen;
 }

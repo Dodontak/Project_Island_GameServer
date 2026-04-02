@@ -4,11 +4,14 @@
 #include "NetAddress.h"
 #include <mutex>
 #include <memory>
+#include <functional>
+
+using SessionFactory = function<SessionRef(SOCKET)>;
 
 class Service : public std::enable_shared_from_this<Service>
 {
 public:
-	Service(NetAddress netAddr);
+	Service(NetAddress netAddr, SessionFactory sessionFactory);
 	~Service();
 
 	virtual void Start() abstract;
@@ -29,12 +32,13 @@ protected:
 	NetAddress _netAddress;
 
 	set<SessionRef> _sessions;
+	SessionFactory _sessionFactory;
 };
 
 class ServerService : public Service
 {
 public:
-	ServerService(NetAddress listenerAddr);
+	ServerService(NetAddress listenerAddr, SessionFactory sessionFactory);
 	virtual void Start() override;
 
 };
@@ -42,7 +46,7 @@ public:
 class ClientService : public Service
 {
 public:
-	ClientService(NetAddress serverAddr, int32 clientCount);
+	ClientService(NetAddress serverAddr, SessionFactory sessionFactory, int32 clientCount);
 
 	virtual void Start() override;
 private:

@@ -5,6 +5,7 @@
 #include "Service.h"
 #include "ThreadManager.h"
 #include "CoreTLS.h"
+#include "GameSession.h"
 
 void WorkerThread(ServiceRef service)
 {
@@ -18,7 +19,12 @@ int main()
 {
 	cout << "=== GameServer ===" << endl;
 	ThreadManager threadManager;
-	ServiceRef service = make_shared<ServerService>(NetAddress("0.0.0.0", 7777));
+	ServiceRef service = make_shared<ServerService>(
+		NetAddress("0.0.0.0", 7777),
+		[](SOCKET socket) {
+			return make_shared<GameSession>(socket);
+		}
+		);
 	service->Start();
 
 	for (int i = 0; i < 10; i++)

@@ -9,6 +9,11 @@
 #include "RecvBuffer.h"
 #include "SendBuffer.h"
 
+/*----------------------------------------------------------------------------*\
+|                                                                              |
+|                                   Session                                    |
+|                                                                              |
+\*----------------------------------------------------------------------------*/
 class Session : public IocpObject
 {
 	enum { BUFFER_SIZE = 0x10000 };// 64KB
@@ -17,6 +22,8 @@ class Session : public IocpObject
 public:
 	Session(SOCKET socket);
 	virtual ~Session();
+
+	virtual uint32 OnRecv(BYTE* buffer, uint32 len) abstract;
 public:
 	virtual HANDLE GetHandle() override { return (HANDLE)_socket; }
 	virtual void Dispatch(int32 numOfBytes, IocpEvent* event) override;
@@ -39,7 +46,7 @@ public:
 
 	void SetAddr(const NetAddress& address) { _address = address; }
 	NetAddress GetAddr() { return _address; }
-private:
+protected:
 	mutex _m;
 	atomic<bool> _sendRegistered = false;
 	atomic<bool> _isConnected = false;
@@ -51,10 +58,30 @@ private:
 	RecvBuffer _recvBuffer;
 	queue<SendBufferRef> _sendBuffers;
 
-private:
+protected:
 	RecvEvent _recvEvent;
 	SendEvent _sendEvent;
 	ConnectEvent _connectEvent;
 	DisconnectEvent _disconnectEvent;
 };
 
+/*----------------------------------------------------------------------------*\
+|                                                                              |
+|                                PacketSession                                 |
+|                                                                              |
+\*----------------------------------------------------------------------------*/
+struct PacketHeader
+{
+	uint16 id;
+	uint16 size;
+};
+
+class PacketSession : public Session
+{
+public:
+	PacketSession(SOCKET socket);
+	virtual ~PacketSession();
+
+	virtual uint32 OnRecv(BYTE* buffer, uint32 len) sealed;
+	virtual void OnRecvPacket(BYTE* buffer, uint32 size) abstract;
+};
