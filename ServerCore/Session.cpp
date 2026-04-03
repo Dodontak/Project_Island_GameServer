@@ -286,10 +286,6 @@ bool Session::SetAddressFromAcceptBuffer(BYTE* buffer)
 |                                PacketSession                                 |
 |                                                                              |
 \*----------------------------------------------------------------------------*/
-PacketSession::PacketSession(SOCKET socket) : Session(socket) {}
-
-PacketSession::~PacketSession() {}
-
 uint32 PacketSession::OnRecv(BYTE* buffer, uint32 len)
 {
 	uint32 processLen = 0;

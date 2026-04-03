@@ -79,8 +79,8 @@ struct PacketHeader
 class PacketSession : public Session
 {
 public:
-	PacketSession(SOCKET socket);
-	virtual ~PacketSession();
+	PacketSession(SOCKET socket) : Session(socket) {}
+	virtual ~PacketSession() {}
 
 	virtual uint32 OnRecv(BYTE* buffer, uint32 len) sealed;
 	virtual void OnRecvPacket(BYTE* buffer, uint32 size) abstract;

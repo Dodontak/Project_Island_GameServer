@@ -71,23 +71,23 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Protobuf;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Protobuf;$(SolutionDir)Libraries\Include;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Libraries\$(Configuration);$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Protobuf;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Protobuf;$(SolutionDir)Libraries\Include;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Libraries\$(Configuration);$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -103,6 +103,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -120,6 +121,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -135,6 +137,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,9 +155,14 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Protobuf\test.pb.cc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameSession.cpp" />
     <ClCompile Include="pch.cpp">
@@ -169,8 +177,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Protobuf\test.pb.h" />
     <ClInclude Include="GameSession.h" />
     <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Protobuf\test.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

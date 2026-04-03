@@ -6,6 +6,7 @@
 #include "ThreadManager.h"
 #include "CoreTLS.h"
 #include "GameSession.h"
+#include "test.pb.h"
 
 void WorkerThread(ServiceRef service)
 {
@@ -24,7 +25,7 @@ int main()
 		[](SOCKET socket) {
 			return make_shared<GameSession>(socket);
 		}
-		);
+	);
 	service->Start();
 
 	for (int i = 0; i < 10; i++)

@@ -7,6 +7,9 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{4a0dc78d-046f-4029-bd14-5293dd3a7dc4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Protocol">
+      <UniqueIdentifier>{e52d7447-065c-4b33-849d-1c1d83c8ca96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DummyClient.cpp">
@@ -18,6 +21,9 @@
     <ClCompile Include="ServerSession.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="..\Protobuf\test.pb.cc">
+      <Filter>Protocol</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -26,5 +32,13 @@
     <ClInclude Include="ServerSession.h">
       <Filter>Main</Filter>
     </ClInclude>
+    <ClInclude Include="..\Protobuf\test.pb.h">
+      <Filter>Protocol</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Protobuf\test.proto">
+      <Filter>Protocol</Filter>
+    </None>
   </ItemGroup>
 </Project>
