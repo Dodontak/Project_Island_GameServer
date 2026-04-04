@@ -1,0 +1,15 @@
+syntax = "proto3";
+package Protocol;
+
+import "Enum.proto";
+import "Struct.proto";
+
+message C_CHAT {
+  int32 user_id = 1;
+  string msg = 2;
+}
+
+message S_CHAT {
+  int32 user_id = 1;
+  string msg = 2;
+}

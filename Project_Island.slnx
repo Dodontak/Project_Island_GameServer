@@ -3,6 +3,24 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Folder Name="/Protocol/">
+    <File Path="Protocol/Enum.proto" />
+    <File Path="Protocol/GenPacket.bat" />
+    <File Path="Protocol/Protocol.proto" />
+    <File Path="Protocol/Struct.proto" />
+  </Folder>
+  <Folder Name="/Protocol/Templates/">
+    <File Path="Protocol/Templates/PacketHandler.h" />
+  </Folder>
+  <Folder Name="/Tools/" />
+  <Folder Name="/Tools/PacketGenerator/">
+    <File Path="Tools/PacketGenerator/GenPacketMaker.bat" />
+    <File Path="Tools/PacketGenerator/PacketGenerator.py" />
+    <File Path="Tools/PacketGenerator/ProtoParser.py" />
+  </Folder>
+  <Folder Name="/솔루션 항목/">
+    <File Path=".gitignore" />
+  </Folder>
   <Project Path="D:/Projects/Project_Island/GameServer/GameServer.vcxproj" Id="b2d7ef04-e4e8-4efe-bf0b-c06f1c80947e">
     <BuildDependency Project="ServerCore/ServerCore.vcxproj" />
   </Project>

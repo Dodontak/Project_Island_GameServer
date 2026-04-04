@@ -6,7 +6,6 @@
 #include "ThreadManager.h"
 #include "CoreTLS.h"
 #include "GameSession.h"
-#include "test.pb.h"
 
 void WorkerThread(ServiceRef service)
 {
