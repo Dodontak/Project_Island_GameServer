@@ -18,7 +18,7 @@ enum : uint16
 bool	Handle_INVALID(function<void()>& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len);
 void	Handle_S_CHAT(const PacketSessionRef& session, const Protocol::S_CHAT& pkt);
 
-class ClientPacketHandler
+class ServerPacketHandler
 {
 public:
 	static void	Init()

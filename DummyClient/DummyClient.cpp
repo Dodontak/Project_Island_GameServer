@@ -4,6 +4,7 @@
 #include "SendBuffer.h"
 #include "ThreadManager.h"
 #include "ServerSession.h"
+#include "ServerPacketHandler.h"
 
 void WorkerThread(ServiceRef service)
 {
@@ -38,6 +39,8 @@ int main()
 	//while (true)
 	//{
 	this_thread::sleep_for(chrono::seconds(1));
+	ServerPacketHandler::Init();
+
 	string msg = "Hello Iocp Server!";
 	service->broad_cast_test(Utils::MakeChatSendBuffer(0, (BYTE*)msg.data(), msg.length()));
 	//}

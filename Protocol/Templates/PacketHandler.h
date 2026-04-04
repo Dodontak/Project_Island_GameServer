@@ -21,7 +21,7 @@ bool	Handle_INVALID(function<void()>& outFunc, PacketSessionRef& session, BYTE* 
 void	Handle_{{pkt.name}}(const PacketSessionRef& session, const Protocol::{{pkt.name}}& pkt);
 {%- endfor %}
 
-class ClientPacketHandler
+class {{ output }}
 {
 public:
 	static void	Init()
