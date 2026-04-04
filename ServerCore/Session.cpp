@@ -91,12 +91,6 @@ void	 Session::Send(SendBufferRef sendBuffer)
 		_sendBuffers.push(sendBuffer);
 	}
 
-	if (dynamic_pointer_cast<ClientService>(_service.lock()))
-	{//더미 클라이언트 서비스라면.
-		string str((char*)sendBuffer->GetBuffer(), sendBuffer->GetDataLen());
-		Utils::LockPrint("send : ", str);
-	}
-
 	bool expected = false;
 	if (_sendRegistered.compare_exchange_strong(expected, true))
 	{

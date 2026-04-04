@@ -8,5 +8,8 @@ public:
 	~GameSession() {}
 
 	virtual void OnRecvPacket(BYTE* buffer, uint32 size) override;
+
+public:
+	void broad_cast_test(SendBufferRef sendBuffer);
 };
 

@@ -5,7 +5,7 @@
 #include "Service.h"
 #include "ThreadManager.h"
 #include "CoreTLS.h"
-#include "GameSession.h"
+#include "ClientPacketHandler.h"
 
 void WorkerThread(ServiceRef service)
 {
@@ -18,6 +18,7 @@ void WorkerThread(ServiceRef service)
 int main()
 {
 	cout << "=== GameServer ===" << endl;
+	ClientPacketHandler::Init();
 	ThreadManager threadManager;
 	ServiceRef service = make_shared<ServerService>(
 		NetAddress("0.0.0.0", 7777),

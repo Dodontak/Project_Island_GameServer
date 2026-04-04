@@ -10,5 +10,5 @@ bool	Handle_INVALID(function<void()>& outFunc, PacketSessionRef& session, BYTE* 
 
 void	Handle_S_CHAT(const PacketSessionRef& session, const Protocol::S_CHAT& pkt)
 {
-
+	Utils::LockPrint("recv from server : ", pkt.msg());
 }
