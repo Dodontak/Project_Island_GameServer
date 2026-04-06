@@ -402,3 +402,5 @@ FodyWeavers.xsd
 
 #
 GenPackets.exe
+server.key
+server.crt

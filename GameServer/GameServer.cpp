@@ -6,6 +6,7 @@
 #include "ThreadManager.h"
 #include "CoreTLS.h"
 #include "ClientPacketHandler.h"
+#include "GameSession.h"
 
 void WorkerThread(ServiceRef service)
 {
@@ -24,7 +25,9 @@ int main()
 		NetAddress("0.0.0.0", 7777),
 		[](SOCKET socket) {
 			return make_shared<GameSession>(socket);
-		}
+		},
+		R"(SSL\server.crt)",
+		R"(SSL\server.key)"
 	);
 	service->Start();
 

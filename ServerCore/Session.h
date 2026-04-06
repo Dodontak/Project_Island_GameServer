@@ -2,6 +2,8 @@
 
 #include <queue>
 #include <mutex>
+#include <openssl/ssl.h>
+#include <openssl/bio.h>
 #include "Types.h"
 #include "IocpCore.h"
 #include "NetAddress.h"
@@ -16,14 +18,16 @@
 \*----------------------------------------------------------------------------*/
 class Session : public IocpObject
 {
-	enum { BUFFER_SIZE = 0x10000 };// 64KB
 	friend class Listener;
 	friend class Service;
+protected:
+	enum { BUFFER_SIZE = 0x10000 };// 64KB
+
 public:
 	Session(SOCKET socket);
 	virtual ~Session();
 
-	virtual uint32 OnRecv(BYTE* buffer, uint32 len) abstract;
+	virtual uint32 OnRecv(BYTE* buffer, uint32 len) { return len; }
 public:
 	virtual HANDLE GetHandle() override { return (HANDLE)_socket; }
 	virtual void Dispatch(int32 numOfBytes, IocpEvent* event) override;
@@ -57,12 +61,35 @@ protected:
 
 	RecvBuffer _recvBuffer;
 	queue<SendBufferRef> _sendBuffers;
+	RecvBuffer& GetDecRecvBuffer() { return _recvBuffer; }
+	virtual RecvBuffer& GetEncRecvBuffer() { return _recvBuffer; }
+	virtual int32 OnDecrypt(RecvBuffer& encrypt, RecvBuffer& decrypt);
+	virtual bool HasPendingData() { return false; }
 
 protected:
 	RecvEvent _recvEvent;
 	SendEvent _sendEvent;
 	ConnectEvent _connectEvent;
 	DisconnectEvent _disconnectEvent;
+};
+
+/*----------------------------------------------------------------------------*\
+|                                                                              |
+|                                 TLSSession                                   |
+|                                                                              |
+\*----------------------------------------------------------------------------*/
+class TLSSession : public Session
+{
+public:
+	TLSSession(SOCKET socket);
+protected:
+	SSL* _ssl = nullptr;
+	BIO* _rbio = nullptr;
+	BIO* _wbio = nullptr;
+	RecvBuffer _encryptedRecvBuffer;
+	virtual RecvBuffer& GetEncRecvBuffer() sealed { return _encryptedRecvBuffer; }
+	virtual int32 OnDecrypt(RecvBuffer& encrypt, RecvBuffer& decrypt) sealed;
+	virtual bool HasPendingData() sealed { return SSL_has_pending(_ssl) == 0 ? false : true; }
 };
 
 /*----------------------------------------------------------------------------*\

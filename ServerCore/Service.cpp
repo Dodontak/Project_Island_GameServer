@@ -12,9 +12,7 @@ Service::Service(NetAddress netAddr, SessionFactory sessionFactory) :
 	_iocpCore = make_shared<IocpCore>();
 }
 
-Service::~Service()
-{
-}
+Service::~Service() {}
 
 SessionRef Service::CreateSession()
 {
@@ -30,6 +28,11 @@ SessionRef Service::CreateSession()
 	session->_service = shared_from_this();
 
 	return session;
+}
+
+SSL* Service::CreateSSL()
+{
+	return SSL_new(_ctx);
 }
 
 void Service::broad_cast_test(SendBufferRef sendBuffer)
@@ -67,9 +70,20 @@ void Service::RemoveSession(SessionRef session)
 /*----------------------------------------------------------------------------*\
 |                               ServerService                                  |
 \*----------------------------------------------------------------------------*/
-ServerService::ServerService(NetAddress listenerAddr, SessionFactory sessionFactory)
+ServerService::ServerService(NetAddress listenerAddr, SessionFactory sessionFactory,
+	const char* certFile, const char* keyFile)
 	: Service(listenerAddr, sessionFactory)
 {
+	const SSL_METHOD* method = TLS_server_method();
+	_ctx = SSL_CTX_new(method);
+	if (!_ctx)
+		Utils::HandleError("Failed to create SSL_CTX in ServerService constructor");
+
+	if (SSL_CTX_use_certificate_file(_ctx, certFile, SSL_FILETYPE_PEM) <= 0)
+		Utils::HandleError("SSL_CTX_use_certificate_file error");
+
+	if (SSL_CTX_use_PrivateKey_file(_ctx, keyFile, SSL_FILETYPE_PEM) <= 0)
+		Utils::HandleError("SSL_CTX_use_PrivateKey_file error");
 }
 
 void ServerService::Start()
@@ -85,7 +99,12 @@ void ServerService::Start()
 |                               ClientService                                  |
 \*----------------------------------------------------------------------------*/
 ClientService::ClientService(NetAddress serverAddr, SessionFactory sessionFactory, int32 clientCount)
-	: Service(serverAddr, sessionFactory), _clientCount(clientCount) {
+	: Service(serverAddr, sessionFactory), _clientCount(clientCount)
+{
+	const SSL_METHOD* method = TLS_client_method();
+	_ctx = SSL_CTX_new(method);
+	if (!_ctx)
+		Utils::HandleError("Failed to create SSL_CTX in ServerService constructor");
 }
 
 void ClientService::Start()
