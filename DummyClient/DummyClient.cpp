@@ -26,12 +26,12 @@ int main()
 		[](SOCKET socket) {
 			return make_shared<ServerSession>(socket);
 		},
-		3
+		1
 	);
 
 	service->Start();
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		tManager.Launch([service]() {
 			WorkerThread(service);

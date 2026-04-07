@@ -6,6 +6,7 @@
 #include "ThreadManager.h"
 #include "CoreTLS.h"
 #include "ClientPacketHandler.h"
+#include "GameSession.h"
 
 void WorkerThread(ServiceRef service)
 {
@@ -28,7 +29,7 @@ int main()
 	);
 	service->Start();
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		threadManager.Launch([&service]() {
 			WorkerThread(service);
