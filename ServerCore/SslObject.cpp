@@ -51,7 +51,7 @@ SslStatus SslObject::Connect()
 }
 
 // rbio에 적힌 데이터를 복호화 하는 함수
-SslStatus SslObject::Recv(BYTE* buffer, size_t readSize, size_t* readLen)
+SslStatus SslObject::Read(BYTE* buffer, size_t readSize, size_t* readLen)
 {
 	int32 ret = SSL_read_ex(_ssl, buffer, readSize, readLen);
 	if (ret == 0) // 실패
@@ -68,19 +68,11 @@ SslStatus SslObject::Recv(BYTE* buffer, size_t readSize, size_t* readLen)
 }
 
 // wbio에 데이터를 암호화 해서 쓰는 함수
-SslStatus SslObject::Send(BYTE* buffer, size_t dataLen, size_t* writtenLen)
+SslStatus SslObject::Write(BYTE* buffer, size_t dataLen, size_t* writtenLen)
 {
 	int32 ret = SSL_write_ex(_ssl, buffer, dataLen, writtenLen);
-	if (ret == 0) // 실패
-	{
-		int32 err = SSL_get_error(_ssl, ret);
-		if (err == SSL_ERROR_WANT_WRITE) // wbio 공간 부족
-			return SslStatus::WantWrite;
-		else if (err == SSL_ERROR_ZERO_RETURN)
-			return SslStatus::Shutdown;
-		else
-			return SslStatus::Fail;
-	}
+	if (ret == 0) // 실패 사실상 발생하지 않음.
+		return SslStatus::Fail;
 	return SslStatus::Ok;
 }
 
@@ -91,12 +83,12 @@ uint32 SslObject::HasSslPending()
 	return SSL_has_pending(_ssl);
 }
 
-uint32 SslObject::HasRBioPending()
+uint32 SslObject::GetRBioPendingSize()
 {
 	return BIO_pending(_rbio);
 }
 
-uint32 SslObject::HasWBioPending()
+uint32 SslObject::GetWBioPendingSize()
 {
 	return BIO_pending(_wbio);
 }

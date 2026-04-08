@@ -18,7 +18,7 @@ void WorkerThread(ServiceRef service)
 
 int main()
 {
-	cout << "=== GameServer ===" << endl;
+	cout << "=== Server ===" << endl;
 	ClientPacketHandler::Init();
 	ThreadManager threadManager;
 	ServiceRef service = make_shared<ServerService>(

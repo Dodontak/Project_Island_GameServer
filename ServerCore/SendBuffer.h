@@ -6,6 +6,7 @@
 class SendBuffer : public enable_shared_from_this<SendBuffer>
 {
 public:
+	SendBuffer() = default;
 	SendBuffer(BYTE* buffer, uint32 dataLen);
 	SendBuffer(uint32 dataLen);//for AppendBuffer
 	~SendBuffer();
@@ -22,7 +23,7 @@ public: //use at write
 	bool OnWrite(uint32 dataLen);
 
 private:
-	uint32			_writePos;
-	uint32			_allocSize;
+	uint32			_writePos = 0;
+	uint32			_allocSize = 0;
 	vector<BYTE>	_buffer;
 };

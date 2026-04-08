@@ -21,12 +21,12 @@ public:
 
 	SslStatus Accept();
 	SslStatus Connect();
-	SslStatus Recv(BYTE* buffer, size_t readSize, size_t* readLen);
-	SslStatus Send(BYTE* buffer, size_t dataLen, size_t* writtenLen);
+	SslStatus Read(BYTE* buffer, size_t readSize, size_t* readLen);
+	SslStatus Write(BYTE* buffer, size_t dataLen, size_t* writtenLen);
 
 	uint32 HasSslPending();
-	uint32 HasRBioPending();
-	uint32 HasWBioPending();
+	uint32 GetRBioPendingSize();
+	uint32 GetWBioPendingSize();
 
 	uint32 ReadRBio(BYTE* buffer, int32 readSize);
 	uint32 WriteRBio(BYTE* buffer, int32 readSize);

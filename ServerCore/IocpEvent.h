@@ -6,7 +6,9 @@ enum class EventType : uint8
 	Disconnect,
 	Accept,
 	Recv,
-	Send
+	Send,
+	TLSHandshakeAcceptRecv,
+	TLSHandshakeConnectRecv,
 };
 
 /*----------------------------------------------------------------------------*\

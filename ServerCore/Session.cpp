@@ -35,6 +35,12 @@ void Session::Dispatch(int32 numOfBytes, IocpEvent* event)
 	case EventType::Recv:
 		ProcessRecv(numOfBytes);
 		break;
+	case EventType::TLSHandshakeAcceptRecv:
+		ProcessTLSHandshakeAcceptRecv(numOfBytes);
+		break;
+	case EventType::TLSHandshakeConnectRecv:
+		ProcessTLSHandshakeConnectRecv(numOfBytes);
+		break;
 	default:
 		return;
 	}
@@ -70,35 +76,53 @@ void Session::RegisterRecv()
 void Session::ProcessRecv(int32 numOfBytes)
 {
 	_recvEvent.Clear();
-	GetEncRecvBuffer().OnWrite(numOfBytes);
 	if (numOfBytes == 0) // 클라이언트가 정상적으로 연결을 종료한 경우
 	{
 		RegisterDisconnect();
 		return;
 	}
 
-	int processLen = OnRecv(GetDecRecvBuffer().ReadPos(), GetDecRecvBuffer().DataSize());
-	GetDecRecvBuffer().OnRead(processLen);
+	RecvBuffer& encBuffer = GetEncRecvBuffer();
+	RecvBuffer& decBuffer = GetDecRecvBuffer();
 
-	GetEncRecvBuffer().Clean();
-	GetDecRecvBuffer().Clean();
+	encBuffer.OnWrite(numOfBytes);
+
+	// enc의 데이터를 복호화 해서 dec로 이동
+	// encBuffer.OnRead, decBuffer.OnWrite는 내부에서 호출해줌
+	do {
+		uint8 ret = Decrypt(encBuffer, decBuffer);
+		switch (ret)
+		{
+		case 0: // 성공
+			break;
+		case 1: // 상대가 shutdown. shutdown 호출 가능
+			//TODO shutdown 정상종료
+			break;
+		case 2: // 에러. shutdown 호출 불가능.
+			RegisterDisconnect();
+			break;
+		}
+	} while (HasSslPendingData());
+
+	int processLen = OnRecv(decBuffer.ReadPos(), decBuffer.DataSize());
+	decBuffer.OnRead(processLen);
+
+	encBuffer.Clean();
+	decBuffer.Clean();
 
 	RegisterRecv();
 }
-
-/*----------------------------------------------------------------------------*\
-|                              TLSHandShake                                    |
-\*----------------------------------------------------------------------------*/
-
 
 /*----------------------------------------------------------------------------*\
 |                                  Send                                        |
 \*----------------------------------------------------------------------------*/
 void	 Session::Send(SendBufferRef sendBuffer)
 {
+	SendBufferRef encBuffer;
+	bool isSuccess = Encrypt(sendBuffer, encBuffer);
 	{
 		lock_guard<mutex> lock(_m);
-		_sendBuffers.push(sendBuffer);
+		_sendBuffers.push(encBuffer);
 	}
 
 	bool expected = false;
@@ -154,7 +178,6 @@ void Session::ProcessSend(int32 numOfBytes)
 		RegisterDisconnect();
 		return;
 	}
-
 	// 보낸 바이트 수 < 보내려 했던 바이트 일 경우 처리.
 	if (numOfBytes < _sendEvent.GetWantSendBytes())
 	{
@@ -224,13 +247,12 @@ void Session::RegisterConnect()
 void Session::ProcessConnect()
 {
 	_connectEvent.Clear();
+
 	_isConnected.store(true);
 	if (ServiceRef service = _service.lock())
-	{
 		service->AddSession(static_pointer_cast<Session>(shared_from_this()));
-	}
 
-	RegisterRecv();
+	TLSConnect();
 }
 
 /*----------------------------------------------------------------------------*\
@@ -285,6 +307,32 @@ bool Session::SetAddressFromAcceptBuffer(BYTE* buffer)
 	return true;
 }
 
+void Session::ProcessTLSHandshakeAcceptRecv(int32 numOfBytes)
+{
+	CRASH("Session::ProcessTLS called in NOT TLS Session");
+}
+
+void Session::ProcessTLSHandshakeConnectRecv(int32 numOfBytes)
+{
+	CRASH("Session::ProcessTLS called in NOT TLS Session");
+}
+
+void Session::TLSAccept()
+{
+	RegisterRecv();
+}
+
+void Session::TLSConnect()
+{
+	RegisterRecv();
+}
+
+bool Session::Encrypt(SendBufferRef& decBuffer, SendBufferRef& encBuffer)
+{
+	encBuffer = decBuffer;
+	return true;
+}
+
 /*----------------------------------------------------------------------------*\
 |                                                                              |
 |                                 TLSSession                                   |
@@ -293,8 +341,191 @@ bool Session::SetAddressFromAcceptBuffer(BYTE* buffer)
 TLSSession::TLSSession(ServiceRef service) : Session(service)
 {
 	if (ServiceRef service = _service.lock())
-	{
 		_ssl.Init(service->GetSSLContext());
+}
+
+void TLSSession::TLSAccept()
+{
+	SslStatus status = _ssl.Accept();
+	uint32 pendingDataSize;
+
+	switch (status)
+	{
+	case SslStatus::Ok:
+		cout << "OK" << endl;
+		_recvEvent.SetEventType(EventType::Recv);
+		RegisterRecv();
+		break;
+	case SslStatus::WantRead:
+		//wbio에 보낼 데이터가 생겼으면 보내고 recv 등록
+		_recvEvent.SetEventType(EventType::TLSHandshakeAcceptRecv);
+		pendingDataSize = _ssl.GetWBioPendingSize();
+		if (pendingDataSize > 0)
+		{
+			SendBufferRef sendBuffer = make_shared<SendBuffer>(pendingDataSize);
+			uint32 readLen = _ssl.ReadWBio(sendBuffer->GetBuffer(), pendingDataSize);
+			sendBuffer->OnWrite(readLen);
+			HandshakeSend(sendBuffer);
+		}
+		RegisterRecv();
+		break;
+	case SslStatus::WantWrite:
+		//wbio가 꽉 차서 Accept가 진행되지 못한 경우. wbio에 있는 데이터를 Send한다.
+		pendingDataSize = _ssl.GetWBioPendingSize();
+		if (pendingDataSize > 0)
+		{
+			SendBufferRef sendBuffer = make_shared<SendBuffer>(pendingDataSize);
+			uint32 readLen = _ssl.ReadWBio(sendBuffer->GetBuffer(), pendingDataSize);
+			sendBuffer->OnWrite(readLen);
+			HandshakeSend(sendBuffer);
+		}
+		break;
+	default:
+		// 에러 발생함. 연결 종료.
+		RegisterDisconnect();
+		break;
+	}
+}
+
+void TLSSession::TLSConnect()
+{
+	SslStatus status = _ssl.Connect();
+	uint32 pendingDataSize;
+
+	switch (status)
+	{
+	case SslStatus::Ok:
+		cout << "OK" << endl;
+		pendingDataSize = _ssl.GetWBioPendingSize();
+		if (pendingDataSize > 0)
+		{
+			SendBufferRef sendBuffer = make_shared<SendBuffer>(pendingDataSize);
+			uint32 readLen = _ssl.ReadWBio(sendBuffer->GetBuffer(), pendingDataSize);
+			sendBuffer->OnWrite(readLen);
+			HandshakeSend(sendBuffer);
+		}
+		_recvEvent.SetEventType(EventType::Recv);
+		RegisterRecv();
+		break;
+	case SslStatus::WantRead:
+		//wbio에 보낼 데이터가 생겼으면 보내고 recv 등록
+		_recvEvent.SetEventType(EventType::TLSHandshakeConnectRecv);
+		pendingDataSize = _ssl.GetWBioPendingSize();
+		if (pendingDataSize > 0)
+		{
+			SendBufferRef sendBuffer = make_shared<SendBuffer>(pendingDataSize);
+			uint32 readLen = _ssl.ReadWBio(sendBuffer->GetBuffer(), pendingDataSize);
+			sendBuffer->OnWrite(readLen);
+			HandshakeSend(sendBuffer);
+		}
+		RegisterRecv();
+		break;
+	case SslStatus::WantWrite:
+		//wbio가 꽉 차서 Accept가 진행되지 못한 경우. wbio에 있는 데이터를 Send한다.
+		pendingDataSize = _ssl.GetWBioPendingSize();
+		if (pendingDataSize > 0)
+		{
+			SendBufferRef sendBuffer = make_shared<SendBuffer>(pendingDataSize);
+			uint32 readLen = _ssl.ReadWBio(sendBuffer->GetBuffer(), pendingDataSize);
+			sendBuffer->OnWrite(readLen);
+			HandshakeSend(sendBuffer);
+		}
+		break;
+	default:
+		// 에러 발생함. 연결 종료.
+		RegisterDisconnect();
+		break;
+	}
+}
+
+// 
+void TLSSession::ProcessTLSHandshakeAcceptRecv(int32 numOfBytes)
+{
+	_recvEvent.Clear();
+	if (numOfBytes == 0) // 클라이언트가 정상적으로 연결을 종료한 경우
+	{
+		RegisterDisconnect();
+		return;
+	}
+	RecvBuffer& encBuffer = GetEncRecvBuffer();
+	encBuffer.OnWrite(numOfBytes);
+
+	uint32 wlen = _ssl.WriteRBio(encBuffer.ReadPos(), numOfBytes);
+	encBuffer.OnRead(wlen);
+	encBuffer.Clean();
+
+	TLSAccept();
+}
+
+void TLSSession::ProcessTLSHandshakeConnectRecv(int32 numOfBytes)
+{
+	_recvEvent.Clear();
+	if (numOfBytes == 0) // 서버가 정상적으로 연결을 종료한 경우
+	{
+		RegisterDisconnect();
+		return;
+	}
+	RecvBuffer& encBuffer = GetEncRecvBuffer();
+	encBuffer.OnWrite(numOfBytes);
+
+	uint32 wlen = _ssl.WriteRBio(encBuffer.ReadPos(), numOfBytes);
+	encBuffer.OnRead(wlen);
+	encBuffer.Clean();
+
+	TLSConnect();
+}
+
+// enc버퍼의 암호문을 복호화 해서 dec버퍼에 넣는 함수.
+// 리턴 0 성공. 1 shutdown, 2 에러
+uint8 TLSSession::Decrypt(RecvBuffer& encBuffer, RecvBuffer& decBuffer)
+{
+	uint32 wlen = _ssl.WriteRBio(encBuffer.ReadPos(), encBuffer.DataSize());
+	encBuffer.OnRead(wlen);
+
+	size_t recvSize;
+	SslStatus status = _ssl.Read(decBuffer.ReadPos(), decBuffer.FreeSize(), &recvSize);
+	switch (status)
+	{
+	case SslStatus::Ok:
+		decBuffer.OnWrite(recvSize);
+		return 0;
+	case SslStatus::WantRead://복호화 하기에 데이터 부족함.
+		return 0;
+	case SslStatus::Shutdown://상대가 shutdown함. shutdown 호출 가능.
+		return 1;
+	default:// 에러 발생. shutdown 호출 불가.
+		return 2;
+	}
+}
+
+// dec버퍼의 평문을 암호화 해서 enc버퍼에 넣는 함수.
+bool TLSSession::Encrypt(SendBufferRef& decBuffer, SendBufferRef& encBuffer)
+{
+	size_t writtenLen;
+	SslStatus status = _ssl.Write(decBuffer->GetBuffer(), decBuffer->GetDataLen(), &writtenLen);
+	if (status == SslStatus::Fail)
+		return false;
+	uint32 pendingSize = _ssl.GetWBioPendingSize();
+	if (pendingSize == 0)
+		return false;
+	SendBufferRef sendBuffer = make_shared<SendBuffer>(pendingSize);
+	uint32 rlen = _ssl.ReadWBio(sendBuffer->GetBuffer(), pendingSize);
+	sendBuffer->OnWrite(rlen);
+	encBuffer = sendBuffer;
+	return true;
+}
+
+void TLSSession::HandshakeSend(SendBufferRef sendBuffer)
+{
+	{
+		lock_guard<mutex> lock(_m);
+		_sendBuffers.push(sendBuffer);
+	}
+
+	bool expected = false;
+	if (_sendRegistered.compare_exchange_strong(expected, true))
+	{
+		RegisterSend();
 	}
 }
 

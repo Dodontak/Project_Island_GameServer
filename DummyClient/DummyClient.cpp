@@ -16,7 +16,7 @@ void WorkerThread(ServiceRef service)
 
 int main()
 {
-	cout << "=== DummyClient ===" << endl;
+	cout << "=== Client ===" << endl;
 
 	this_thread::sleep_for(chrono::seconds(1));
 	ServerPacketHandler::Init();
@@ -42,7 +42,7 @@ int main()
 	{
 		this_thread::sleep_for(chrono::seconds(1));
 		Protocol::C_CHAT pkt;
-		pkt.set_msg("Hello Iocp Server!");
+		pkt.set_msg("Hello Server!");
 		service->broad_cast_test(ServerPacketHandler::MakeSendBuffer(pkt));
 	}
 }
