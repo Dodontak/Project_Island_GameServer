@@ -7,7 +7,7 @@
 #include <functional>
 #include <openssl/ssl.h>
 
-using SessionFactory = function<SessionRef(SOCKET)>;
+using SessionFactory = function<SessionRef(ServiceRef)>;
 
 class Service : public std::enable_shared_from_this<Service>
 {
@@ -28,6 +28,8 @@ public:
 
 	void AddSession(SessionRef session);
 	void RemoveSession(SessionRef session);
+
+	SSL_CTX* GetSSLContext() { return _ctx; }
 protected:
 	mutex _m;
 	IocpCoreRef _iocpCore;

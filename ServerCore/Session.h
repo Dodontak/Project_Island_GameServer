@@ -10,6 +10,7 @@
 #include "IocpEvent.h"
 #include "RecvBuffer.h"
 #include "SendBuffer.h"
+#include "SslObject.h"
 
 /*----------------------------------------------------------------------------*\
 |                                                                              |
@@ -24,7 +25,7 @@ protected:
 	enum { BUFFER_SIZE = 0x10000 };// 64KB
 
 public:
-	Session(SOCKET socket);
+	Session(ServiceRef service);
 	virtual ~Session();
 
 	virtual uint32 OnRecv(BYTE* buffer, uint32 len) { return len; }
@@ -61,10 +62,9 @@ protected:
 
 	RecvBuffer _recvBuffer;
 	queue<SendBufferRef> _sendBuffers;
+
 	RecvBuffer& GetDecRecvBuffer() { return _recvBuffer; }
 	virtual RecvBuffer& GetEncRecvBuffer() { return _recvBuffer; }
-	virtual int32 OnDecrypt(RecvBuffer& encrypt, RecvBuffer& decrypt);
-	virtual bool HasPendingData() { return false; }
 
 protected:
 	RecvEvent _recvEvent;
@@ -81,15 +81,9 @@ protected:
 class TLSSession : public Session
 {
 public:
-	TLSSession(SOCKET socket);
+	TLSSession(ServiceRef service);
 protected:
-	SSL* _ssl = nullptr;
-	BIO* _rbio = nullptr;
-	BIO* _wbio = nullptr;
-	RecvBuffer _encryptedRecvBuffer;
-	virtual RecvBuffer& GetEncRecvBuffer() sealed { return _encryptedRecvBuffer; }
-	virtual int32 OnDecrypt(RecvBuffer& encrypt, RecvBuffer& decrypt) sealed;
-	virtual bool HasPendingData() sealed { return SSL_has_pending(_ssl) == 0 ? false : true; }
+	SslObject _ssl;
 };
 
 /*----------------------------------------------------------------------------*\
@@ -103,10 +97,10 @@ struct PacketHeader
 	uint16 size;
 };
 
-class PacketSession : public Session
+class PacketSession : public TLSSession
 {
 public:
-	PacketSession(SOCKET socket) : Session(socket) {}
+	PacketSession(ServiceRef service) : TLSSession(service) {}
 	virtual ~PacketSession() {}
 
 	virtual uint32 OnRecv(BYTE* buffer, uint32 len) sealed;

@@ -16,15 +16,7 @@ Service::~Service() {}
 
 SessionRef Service::CreateSession()
 {
-	SOCKET socket = SocketUtils::CreateSocket();
-	if (socket == INVALID_SOCKET)
-		return nullptr;
-	SessionRef session = _sessionFactory(socket);
-	if (session == nullptr)
-	{
-		SocketUtils::CloseSocket(socket);
-		return nullptr;
-	}
+	SessionRef session = _sessionFactory(shared_from_this());
 	session->_service = shared_from_this();
 
 	return session;

@@ -4,8 +4,11 @@
 #include "Service.h"
 #include "SendBuffer.h"
 
-Session::Session(SOCKET socket) : _socket(socket), _recvBuffer(BUFFER_SIZE)
+Session::Session(ServiceRef service) : _service(service), _recvBuffer(BUFFER_SIZE)
 {
+	_socket = SocketUtils::CreateSocket();
+	if (_socket == INVALID_SOCKET)
+		Utils::HandleError("Failed to create socket in Session constructor");
 	Utils::LockPrint("Session ", _socket, " constructed");
 }
 
@@ -59,7 +62,7 @@ void Session::RegisterRecv()
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
 			//TODO 적절한 처리
-			_recvBuffer.Clean();
+			_recvEvent.Clear();
 		}
 	}
 }
@@ -67,28 +70,26 @@ void Session::RegisterRecv()
 void Session::ProcessRecv(int32 numOfBytes)
 {
 	_recvEvent.Clear();
+	GetEncRecvBuffer().OnWrite(numOfBytes);
 	if (numOfBytes == 0) // 클라이언트가 정상적으로 연결을 종료한 경우
 	{
 		RegisterDisconnect();
 		return;
 	}
-	uint32 decryptedLen = 0;
-	GetEncRecvBuffer().OnWrite(numOfBytes);
-	do
-	{
-		decryptedLen += OnDecrypt(GetEncRecvBuffer(), GetDecRecvBuffer());
-		//EncRecvBuffer OnRead는 OnDecrypt 내부에서 처리함.
-		GetDecRecvBuffer().OnWrite(decryptedLen);
-	} while (HasPendingData());
 
 	int processLen = OnRecv(GetDecRecvBuffer().ReadPos(), GetDecRecvBuffer().DataSize());
 	GetDecRecvBuffer().OnRead(processLen);
-	
+
 	GetEncRecvBuffer().Clean();
 	GetDecRecvBuffer().Clean();
 
 	RegisterRecv();
 }
+
+/*----------------------------------------------------------------------------*\
+|                              TLSHandShake                                    |
+\*----------------------------------------------------------------------------*/
+
 
 /*----------------------------------------------------------------------------*\
 |                                  Send                                        |
@@ -223,12 +224,12 @@ void Session::RegisterConnect()
 void Session::ProcessConnect()
 {
 	_connectEvent.Clear();
-
 	_isConnected.store(true);
 	if (ServiceRef service = _service.lock())
 	{
 		service->AddSession(static_pointer_cast<Session>(shared_from_this()));
 	}
+
 	RegisterRecv();
 }
 
@@ -284,42 +285,17 @@ bool Session::SetAddressFromAcceptBuffer(BYTE* buffer)
 	return true;
 }
 
-int32 Session::OnDecrypt(RecvBuffer& encrypt, RecvBuffer& decrypt)
-{
-	memcpy(decrypt.WritePos(), encrypt.ReadPos(), encrypt.DataSize());
-	encrypt.OnRead(encrypt.DataSize());
-	return encrypt.DataSize();
-}
-
 /*----------------------------------------------------------------------------*\
 |                                                                              |
 |                                 TLSSession                                   |
 |                                                                              |
 \*----------------------------------------------------------------------------*/
-
-TLSSession::TLSSession(SOCKET socket) : Session(socket), _encryptedRecvBuffer(BUFFER_SIZE)
+TLSSession::TLSSession(ServiceRef service) : Session(service)
 {
 	if (ServiceRef service = _service.lock())
 	{
-		_ssl = service->CreateSSL();
-		_rbio = BIO_new(BIO_s_mem());
-		_wbio = BIO_new(BIO_s_mem());
-		if (_rbio == nullptr || _wbio == nullptr)
-			Utils::HandleError("Failed to create BIO in TLSSession constructor");
-		SSL_set_bio(_ssl, _rbio, _wbio);
+		_ssl.Init(service->GetSSLContext());
 	}
-}
-
-int32 TLSSession::OnDecrypt(RecvBuffer& encrypt, RecvBuffer& decrypt)
-{
-	int32 wlen = BIO_write(_rbio, encrypt.ReadPos(), encrypt.DataSize());
-	if (wlen <= 0);
-		//TODO BIO_write 실패 처리
-	encrypt.OnRead(wlen);
-	int32 rlen = SSL_read(_ssl, decrypt.WritePos(), decrypt.FreeSize());
-	if (rlen < 0);
-		//TODO SSL_read 실패 처리
-	return rlen;
 }
 
 /*----------------------------------------------------------------------------*\

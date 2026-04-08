@@ -57,6 +57,9 @@
     <ClCompile Include="CoreGlobal.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="SslObject.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Types.h">
@@ -109,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="CoreGlobal.h">
       <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="SslObject.h">
+      <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,17 +12,17 @@ public:
 
 public: //use at fill buffer
 	bool	AppendBuffer(BYTE* buffer, uint32 dataLen);
-	BYTE*	GetCopyBuffer() { return &_buffer[_copyPos]; }
+	BYTE* GetCopyBuffer() { return &_buffer[_writePos]; }
 
 public: //use at write
-	BYTE*	GetBuffer() { return &_buffer[_writePos]; }
-	BYTE*	GetPosPtr(uint32 pos) { return &_buffer[pos]; }
-	uint32	GetDataLen() { return _allocSize - _writePos; }
-	bool	UpdateWritePos(uint32 writeLen);
+	BYTE* GetBuffer() { return &_buffer[0]; }
+	BYTE* GetPosPtr(uint32 pos) { return &_buffer[pos]; }
+	uint32 GetFreeSize() { return _allocSize - _writePos; }
+	uint32 GetDataLen() { return _writePos; }
+	bool OnWrite(uint32 dataLen);
 
 private:
 	uint32			_writePos;
-	uint32			_copyPos;
 	uint32			_allocSize;
 	vector<BYTE>	_buffer;
 };

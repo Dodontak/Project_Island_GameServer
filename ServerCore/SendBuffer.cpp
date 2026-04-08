@@ -6,13 +6,13 @@
 using namespace std;
 
 SendBuffer::SendBuffer(BYTE* buffer, uint32 dataLen)
-	: _writePos(0), _copyPos(0), _allocSize(dataLen)
+	: _writePos(dataLen), _allocSize(dataLen)
 {
 	_buffer.resize(dataLen);
 	memcpy(&_buffer[0], buffer, dataLen);
 }
 
-SendBuffer::SendBuffer(uint32 dataLen) : _writePos(0), _copyPos(0), _allocSize(dataLen)
+SendBuffer::SendBuffer(uint32 dataLen) : _writePos(0), _allocSize(dataLen)
 {
 	_buffer.resize(dataLen);
 }
@@ -21,15 +21,15 @@ SendBuffer::~SendBuffer() {}
 
 bool	SendBuffer::AppendBuffer(BYTE* buffer, uint32 dataLen)
 {
-	memcpy(&_buffer[_copyPos], buffer, dataLen);
-	_copyPos += dataLen;
+	memcpy(&_buffer[_writePos], buffer, dataLen);
+	_writePos += dataLen;
 	return true;
 }
 
-bool	SendBuffer::UpdateWritePos(uint32 writeLen)
+bool SendBuffer::OnWrite(uint32 dataLen)
 {
-	_writePos += writeLen;
-	if (_allocSize <= _writePos)
+	if (dataLen > GetFreeSize())
 		return false;
+	_writePos += dataLen;
 	return true;
 }

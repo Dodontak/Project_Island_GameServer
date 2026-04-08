@@ -23,15 +23,15 @@ int main()
 	ThreadManager tManager;
 	ClientServiceRef service = make_shared<ClientService>(
 		NetAddress("127.0.0.1", 7777),
-		[](SOCKET socket) {
-			return make_shared<ServerSession>(socket);
+		[](ServiceRef service) {
+			return make_shared<ServerSession>(service);
 		},
-		3
+		1
 	);
 
 	service->Start();
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		tManager.Launch([service]() {
 			WorkerThread(service);
