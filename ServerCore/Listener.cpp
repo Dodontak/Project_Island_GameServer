@@ -87,7 +87,11 @@ void Listener::ProcessAccept(SessionRef session, AcceptEvent* acceptEvent)
 
 	acceptEvent->Clear();
 
-	session->ProcessConnect();
+	session->_isConnected.store(true);
+	
+	_service->AddSession(session);
+
+	session->TLSAccept();
 }
 
 

@@ -6,7 +6,9 @@ enum class EventType : uint8
 	Disconnect,
 	Accept,
 	Recv,
-	Send
+	Send,
+	TLSHandshakeAcceptRecv,
+	TLSHandshakeConnectRecv,
 };
 
 /*----------------------------------------------------------------------------*\
@@ -65,8 +67,8 @@ public:
 class SendEvent : public IocpEvent
 {
 public:
-	SendEvent() : IocpEvent(EventType::Send) {}
-	SendEvent(IocpObjectRef iocpObject) : IocpEvent(EventType::Send) {}
+	SendEvent() : IocpEvent(EventType::Send), _wantSendBytes(0) {}
+	SendEvent(IocpObjectRef iocpObject) : IocpEvent(EventType::Send), _wantSendBytes(0) {}
 	virtual void Clear() override;
 
 	void PushBack(SendBufferRef sendBuffer);

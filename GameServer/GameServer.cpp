@@ -18,14 +18,16 @@ void WorkerThread(ServiceRef service)
 
 int main()
 {
-	cout << "=== GameServer ===" << endl;
+	cout << "=== Server ===" << endl;
 	ClientPacketHandler::Init();
 	ThreadManager threadManager;
 	ServiceRef service = make_shared<ServerService>(
 		NetAddress("0.0.0.0", 7777),
-		[](SOCKET socket) {
-			return make_shared<GameSession>(socket);
-		}
+		[](ServiceRef service) {
+			return make_shared<GameSession>(service);
+		},
+		R"(SSL\server.crt)",
+		R"(SSL\server.key)"
 	);
 	service->Start();
 

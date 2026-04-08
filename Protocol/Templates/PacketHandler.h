@@ -69,6 +69,7 @@ private:
 
 		sendBuffer->AppendBuffer(reinterpret_cast<BYTE*>(&header), headerSize);
 		pkt.SerializeToArray(sendBuffer->GetCopyBuffer(), pktSize);
+		sendBuffer->OnWrite(pktSize);
 		return sendBuffer;
 	}
 };

@@ -16,15 +16,15 @@ void WorkerThread(ServiceRef service)
 
 int main()
 {
-	cout << "=== DummyClient ===" << endl;
+	cout << "=== Client ===" << endl;
 
 	this_thread::sleep_for(chrono::seconds(1));
 	ServerPacketHandler::Init();
 	ThreadManager tManager;
 	ClientServiceRef service = make_shared<ClientService>(
 		NetAddress("127.0.0.1", 7777),
-		[](SOCKET socket) {
-			return make_shared<ServerSession>(socket);
+		[](ServiceRef service) {
+			return make_shared<ServerSession>(service);
 		},
 		1
 	);
@@ -42,7 +42,7 @@ int main()
 	{
 		this_thread::sleep_for(chrono::seconds(1));
 		Protocol::C_CHAT pkt;
-		pkt.set_msg("Hello Iocp Server!");
+		pkt.set_msg("Hello Server!");
 		service->broad_cast_test(ServerPacketHandler::MakeSendBuffer(pkt));
 	}
 }
