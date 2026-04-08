@@ -5,8 +5,9 @@
 #include <mutex>
 #include <memory>
 #include <functional>
+#include <openssl/ssl.h>
 
-using SessionFactory = function<SessionRef(SOCKET)>;
+using SessionFactory = function<SessionRef(ServiceRef)>;
 
 class Service : public std::enable_shared_from_this<Service>
 {
@@ -17,6 +18,7 @@ public:
 	virtual void Start() abstract;
 
 	SessionRef CreateSession();
+	SSL* CreateSSL();
 
 	IocpCoreRef GetIocpCore() { return _iocpCore; }
 	NetAddress GetAddr() { return _netAddress; }
@@ -26,9 +28,12 @@ public:
 
 	void AddSession(SessionRef session);
 	void RemoveSession(SessionRef session);
+
+	SSL_CTX* GetSSLContext() { return _ctx; }
 protected:
 	mutex _m;
 	IocpCoreRef _iocpCore;
+	SSL_CTX* _ctx;
 	NetAddress _netAddress;
 
 	set<SessionRef> _sessions;
@@ -38,7 +43,8 @@ protected:
 class ServerService : public Service
 {
 public:
-	ServerService(NetAddress listenerAddr, SessionFactory sessionFactory);
+	ServerService(NetAddress listenerAddr, SessionFactory sessionFactory,
+		const char* certFile, const char* keyFile);
 	virtual void Start() override;
 
 };
