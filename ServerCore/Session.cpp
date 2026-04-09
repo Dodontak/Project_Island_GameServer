@@ -8,7 +8,7 @@ Session::Session(ServiceRef service) : _service(service), _recvBuffer(BUFFER_SIZ
 {
 	_socket = SocketUtils::CreateSocket();
 	if (_socket == INVALID_SOCKET)
-		Utils::HandleError("Failed to create socket in Session constructor");
+		Utils::ErrorExit("Failed to create socket in Session constructor");
 	Utils::LockPrint("Session ", _socket, " constructed");
 }
 
@@ -503,7 +503,6 @@ void TLSSession::HandshakeSend()
 			RegisterSend();
 		}
 	}
-
 }
 
 /*----------------------------------------------------------------------------*\

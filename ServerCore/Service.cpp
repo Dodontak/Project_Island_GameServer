@@ -69,13 +69,13 @@ ServerService::ServerService(NetAddress listenerAddr, SessionFactory sessionFact
 	const SSL_METHOD* method = TLS_server_method();
 	_ctx = SSL_CTX_new(method);
 	if (!_ctx)
-		Utils::HandleError("Failed to create SSL_CTX in ServerService constructor");
+		Utils::ErrorExit("Failed to create SSL_CTX in ServerService constructor");
 
 	if (SSL_CTX_use_certificate_file(_ctx, certFile, SSL_FILETYPE_PEM) <= 0)
-		Utils::HandleError("SSL_CTX_use_certificate_file error");
+		Utils::ErrorExit("SSL_CTX_use_certificate_file error");
 
 	if (SSL_CTX_use_PrivateKey_file(_ctx, keyFile, SSL_FILETYPE_PEM) <= 0)
-		Utils::HandleError("SSL_CTX_use_PrivateKey_file error");
+		Utils::ErrorExit("SSL_CTX_use_PrivateKey_file error");
 }
 
 void ServerService::Start()
@@ -96,7 +96,7 @@ ClientService::ClientService(NetAddress serverAddr, SessionFactory sessionFactor
 	const SSL_METHOD* method = TLS_client_method();
 	_ctx = SSL_CTX_new(method);
 	if (!_ctx)
-		Utils::HandleError("Failed to create SSL_CTX in ServerService constructor");
+		Utils::ErrorExit("Failed to create SSL_CTX in ServerService constructor");
 }
 
 void ClientService::Start()

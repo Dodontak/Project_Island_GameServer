@@ -5,7 +5,7 @@
 class Utils
 {
 public:
-	static int HandleError(const char* errstr);
+	static int ErrorExit(const char* errstr);
 	static string GetErrorMessage(DWORD errorCode);
 
 	template<typename... Args>

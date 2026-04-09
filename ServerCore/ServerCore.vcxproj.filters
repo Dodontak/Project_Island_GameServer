@@ -10,6 +10,9 @@
     <Filter Include="Main">
       <UniqueIdentifier>{2dc0dd33-26d6-4b8b-9b04-8caee8ce3a04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DB">
+      <UniqueIdentifier>{aed8ba58-91f1-4d35-a9f8-531180e1a7e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils.cpp">
@@ -59,6 +62,15 @@
     </ClCompile>
     <ClCompile Include="SslObject.cpp">
       <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="PGConnection.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="RedisConnection.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="DBConnectionPool.cpp">
+      <Filter>DB</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +127,15 @@
     </ClInclude>
     <ClInclude Include="SslObject.h">
       <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="PGConnection.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="RedisConnection.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="DBConnectionPool.h">
+      <Filter>DB</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

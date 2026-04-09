@@ -5,7 +5,7 @@
 
 mutex Utils::m;
 
-int Utils::HandleError(const char* errstr)
+int Utils::ErrorExit(const char* errstr)
 {
 	cerr << errstr << endl;
 	exit(1);
