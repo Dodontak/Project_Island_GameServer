@@ -120,6 +120,9 @@ void	 Session::Send(SendBufferRef sendBuffer)
 {
 	SendBufferRef encBuffer;
 	bool isSuccess = Encrypt(sendBuffer, encBuffer);
+	if (isSuccess == false)
+		return;
+
 	{
 		lock_guard<mutex> lock(_m);
 		_sendBuffers.push(encBuffer);
@@ -448,7 +451,7 @@ uint8 TLSSession::Decrypt(RecvBuffer& encBuffer, RecvBuffer& decBuffer)
 	encBuffer.OnRead(wlen);
 
 	size_t recvSize;
-	SslStatus status = _ssl.Read(decBuffer.ReadPos(), decBuffer.FreeSize(), &recvSize);
+	SslStatus status = _ssl.Read(decBuffer.WritePos(), decBuffer.FreeSize(), &recvSize);
 	switch (status)
 	{
 	case SslStatus::Ok:

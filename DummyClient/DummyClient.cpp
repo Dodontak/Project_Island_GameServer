@@ -26,12 +26,12 @@ int main()
 		[](ServiceRef service) {
 			return make_shared<ServerSession>(service);
 		},
-		1
+		3
 	);
 
 	service->Start();
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		tManager.Launch([service]() {
 			WorkerThread(service);

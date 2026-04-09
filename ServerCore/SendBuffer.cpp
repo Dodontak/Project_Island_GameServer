@@ -21,6 +21,8 @@ SendBuffer::~SendBuffer() {}
 
 bool	SendBuffer::AppendBuffer(BYTE* buffer, uint32 dataLen)
 {
+	if (_writePos + dataLen > _allocSize)
+		return false;
 	memcpy(&_buffer[_writePos], buffer, dataLen);
 	_writePos += dataLen;
 	return true;

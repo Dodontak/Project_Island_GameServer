@@ -12,8 +12,8 @@ public:
 	~SendBuffer();
 
 public: //use at fill buffer
-	bool	AppendBuffer(BYTE* buffer, uint32 dataLen);
-	BYTE* GetCopyBuffer() { return &_buffer[_writePos]; }
+	bool AppendBuffer(BYTE* buffer, uint32 dataLen);
+	BYTE* WritePos() { return &_buffer[_writePos]; }
 
 public: //use at write
 	BYTE* GetBuffer() { return &_buffer[0]; }

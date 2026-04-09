@@ -93,14 +93,14 @@ class TLSSession : public Session
 public:
 	TLSSession(ServiceRef service);
 
-	virtual void TLSAccept() sealed;
-	virtual void TLSConnect() sealed;
+	virtual void TLSAccept() final;
+	virtual void TLSConnect() final;
 
-	virtual void ProcessTLSHandshakeAcceptRecv(int32 numOfBytes) sealed;
-	virtual void ProcessTLSHandshakeConnectRecv(int32 numOfBytes) sealed;
-	virtual uint8 Decrypt(RecvBuffer& encBuffer, RecvBuffer& decBuffer) sealed;
-	virtual bool Encrypt(SendBufferRef& decBuffer, SendBufferRef& encBuffer) sealed;
-	virtual bool HasSslPendingData() sealed { return _ssl.HasSslPending(); }
+	virtual void ProcessTLSHandshakeAcceptRecv(int32 numOfBytes) final;
+	virtual void ProcessTLSHandshakeConnectRecv(int32 numOfBytes) final;
+	virtual uint8 Decrypt(RecvBuffer& encBuffer, RecvBuffer& decBuffer) final;
+	virtual bool Encrypt(SendBufferRef& decBuffer, SendBufferRef& encBuffer) final;
+	virtual bool HasSslPendingData() final { return _ssl.HasSslPending(); }
 
 	void HandshakeSend();
 protected:
@@ -124,6 +124,6 @@ public:
 	PacketSession(ServiceRef service) : TLSSession(service) {}
 	virtual ~PacketSession() {}
 
-	virtual uint32 OnRecv(BYTE* buffer, uint32 len) sealed;
+	virtual uint32 OnRecv(BYTE* buffer, uint32 len) final;
 	virtual void OnRecvPacket(BYTE* buffer, uint32 size) abstract;
 };
