@@ -283,7 +283,6 @@ void Session::ProcessDisconnect()
 	if (ServiceRef service = _service.lock())
 	{
 		service->RemoveSession(static_pointer_cast<Session>(shared_from_this()));
-		service->broad_cast_test(make_shared<SendBuffer>((BYTE*)"A client has disconnected", 27));
 	}
 }
 
@@ -353,32 +352,19 @@ void TLSSession::TLSAccept()
 	{
 	case SslStatus::Ok:
 		cout << "OK" << endl;
+		HandshakeSend();
 		_recvEvent.SetEventType(EventType::Recv);
 		RegisterRecv();
 		break;
 	case SslStatus::WantRead:
 		//wbio에 보낼 데이터가 생겼으면 보내고 recv 등록
 		_recvEvent.SetEventType(EventType::TLSHandshakeAcceptRecv);
-		pendingDataSize = _ssl.GetWBioPendingSize();
-		if (pendingDataSize > 0)
-		{
-			SendBufferRef sendBuffer = make_shared<SendBuffer>(pendingDataSize);
-			uint32 readLen = _ssl.ReadWBio(sendBuffer->GetBuffer(), pendingDataSize);
-			sendBuffer->OnWrite(readLen);
-			HandshakeSend(sendBuffer);
-		}
+		HandshakeSend();
 		RegisterRecv();
 		break;
 	case SslStatus::WantWrite:
 		//wbio가 꽉 차서 Accept가 진행되지 못한 경우. wbio에 있는 데이터를 Send한다.
-		pendingDataSize = _ssl.GetWBioPendingSize();
-		if (pendingDataSize > 0)
-		{
-			SendBufferRef sendBuffer = make_shared<SendBuffer>(pendingDataSize);
-			uint32 readLen = _ssl.ReadWBio(sendBuffer->GetBuffer(), pendingDataSize);
-			sendBuffer->OnWrite(readLen);
-			HandshakeSend(sendBuffer);
-		}
+		HandshakeSend();
 		break;
 	default:
 		// 에러 발생함. 연결 종료.
@@ -396,40 +382,19 @@ void TLSSession::TLSConnect()
 	{
 	case SslStatus::Ok:
 		cout << "OK" << endl;
-		pendingDataSize = _ssl.GetWBioPendingSize();
-		if (pendingDataSize > 0)
-		{
-			SendBufferRef sendBuffer = make_shared<SendBuffer>(pendingDataSize);
-			uint32 readLen = _ssl.ReadWBio(sendBuffer->GetBuffer(), pendingDataSize);
-			sendBuffer->OnWrite(readLen);
-			HandshakeSend(sendBuffer);
-		}
+		HandshakeSend();
 		_recvEvent.SetEventType(EventType::Recv);
 		RegisterRecv();
 		break;
 	case SslStatus::WantRead:
 		//wbio에 보낼 데이터가 생겼으면 보내고 recv 등록
 		_recvEvent.SetEventType(EventType::TLSHandshakeConnectRecv);
-		pendingDataSize = _ssl.GetWBioPendingSize();
-		if (pendingDataSize > 0)
-		{
-			SendBufferRef sendBuffer = make_shared<SendBuffer>(pendingDataSize);
-			uint32 readLen = _ssl.ReadWBio(sendBuffer->GetBuffer(), pendingDataSize);
-			sendBuffer->OnWrite(readLen);
-			HandshakeSend(sendBuffer);
-		}
+		HandshakeSend();
 		RegisterRecv();
 		break;
 	case SslStatus::WantWrite:
 		//wbio가 꽉 차서 Accept가 진행되지 못한 경우. wbio에 있는 데이터를 Send한다.
-		pendingDataSize = _ssl.GetWBioPendingSize();
-		if (pendingDataSize > 0)
-		{
-			SendBufferRef sendBuffer = make_shared<SendBuffer>(pendingDataSize);
-			uint32 readLen = _ssl.ReadWBio(sendBuffer->GetBuffer(), pendingDataSize);
-			sendBuffer->OnWrite(readLen);
-			HandshakeSend(sendBuffer);
-		}
+		HandshakeSend();
 		break;
 	default:
 		// 에러 발생함. 연결 종료.
@@ -515,18 +480,27 @@ bool TLSSession::Encrypt(SendBufferRef& decBuffer, SendBufferRef& encBuffer)
 	return true;
 }
 
-void TLSSession::HandshakeSend(SendBufferRef sendBuffer)
+void TLSSession::HandshakeSend()
 {
+	uint32 pendingDataSize = _ssl.GetWBioPendingSize();
+	if (pendingDataSize > 0)
 	{
-		lock_guard<mutex> lock(_m);
-		_sendBuffers.push(sendBuffer);
+		SendBufferRef sendBuffer = make_shared<SendBuffer>(pendingDataSize);
+		uint32 readLen = _ssl.ReadWBio(sendBuffer->GetBuffer(), pendingDataSize);
+		sendBuffer->OnWrite(readLen);
+
+		{
+			lock_guard<mutex> lock(_m);
+			_sendBuffers.push(sendBuffer);
+		}
+
+		bool expected = false;
+		if (_sendRegistered.compare_exchange_strong(expected, true))
+		{
+			RegisterSend();
+		}
 	}
 
-	bool expected = false;
-	if (_sendRegistered.compare_exchange_strong(expected, true))
-	{
-		RegisterSend();
-	}
 }
 
 /*----------------------------------------------------------------------------*\

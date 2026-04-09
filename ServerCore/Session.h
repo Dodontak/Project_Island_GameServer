@@ -102,7 +102,7 @@ public:
 	virtual bool Encrypt(SendBufferRef& decBuffer, SendBufferRef& encBuffer) sealed;
 	virtual bool HasSslPendingData() sealed { return _ssl.HasSslPending(); }
 
-	void HandshakeSend(SendBufferRef sendBuffer);
+	void HandshakeSend();
 protected:
 	SslObject _ssl;
 };
