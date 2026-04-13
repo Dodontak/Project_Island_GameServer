@@ -4,6 +4,14 @@ package Protocol;
 import "Enum.proto";
 import "Struct.proto";
 
+message C_LOGIN {
+	string jwt = 1;
+}
+
+message S_LOGIN {
+	bool success = 1;
+}
+
 message C_CHAT {
   int32 user_id = 1;
   string msg = 2;

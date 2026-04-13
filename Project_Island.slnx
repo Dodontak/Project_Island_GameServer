@@ -20,6 +20,8 @@
   </Folder>
   <Folder Name="/솔루션 항목/">
     <File Path=".gitignore" />
+    <File Path="README.md" />
+    <File Path="vcpkg.json" />
   </Folder>
   <Folder Name="/솔루션 항목/SSL/">
     <File Path="SSL/MakeKey.bat" />

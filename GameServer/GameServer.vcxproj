@@ -71,24 +71,40 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Protobuf;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
+    <ExternalIncludePath>C:\vcpkg\installed\x64-windows-static\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)Protobuf;$(SolutionDir)Libraries\Include;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libraries\$(Configuration);$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
+    <ExternalIncludePath>C:\vcpkg\installed\x64-windows-static\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Protobuf;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
+    <ExternalIncludePath>C:\vcpkg\installed\x64-windows-static\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)Protobuf;$(SolutionDir)Libraries\Include;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libraries\$(Configuration);$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
+    <ExternalIncludePath>C:\vcpkg\installed\x64-windows-static\include;$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -101,6 +117,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4251;4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,6 +138,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4251;4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,6 +157,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4251;4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -159,6 +178,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4251;4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

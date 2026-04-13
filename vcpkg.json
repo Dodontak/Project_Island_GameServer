@@ -1,5 +1,8 @@
 {
     "dependencies": [
-        "protobuf"
+        "protobuf",
+        "openssl",
+        "hiredis",
+        "libpq"
     ]
 }

@@ -21,8 +21,8 @@ int main()
 {
 	cout << "=== Server ===" << endl;
 	ClientPacketHandler::Init();
-	GDBConnectionPool->Init(10, "192.168.0.38", 6379, 10,
-		"host=192.168.0.38 user=postgres port=5432 "
+	GDBConnectionPool->Init(10, "192.168.0.39", 6379, 10,
+		"host=192.168.0.39 user=postgres port=5432 "
 		"dbname=postgres password=password "
 		"connect_timeout=3");
 	ThreadManager threadManager;

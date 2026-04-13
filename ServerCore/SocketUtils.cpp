@@ -2,9 +2,6 @@
 #include "SocketUtils.h"
 #include "NetAddress.h"
 
-#pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "mswsock.lib")
-
 WSADATA				SocketUtils::wsaData;
 //BOOL LpfnConnectex(
 //	[in]           SOCKET s,
