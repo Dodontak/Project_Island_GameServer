@@ -96,6 +96,8 @@ public:
 	virtual void TLSAccept() final;
 	virtual void TLSConnect() final;
 
+	virtual RecvBuffer& GetEncRecvBuffer() final { return _encRecvBuffer; }
+
 	virtual void ProcessTLSHandshakeAcceptRecv(int32 numOfBytes) final;
 	virtual void ProcessTLSHandshakeConnectRecv(int32 numOfBytes) final;
 	virtual uint8 Decrypt(RecvBuffer& encBuffer, RecvBuffer& decBuffer) final;
@@ -105,6 +107,7 @@ public:
 	void HandshakeSend();
 protected:
 	SslObject _ssl;
+	RecvBuffer _encRecvBuffer;
 };
 
 /*----------------------------------------------------------------------------*\
