@@ -2,6 +2,7 @@
 #include <windows.h>
 #include "Utils.h"
 #include "Session.h"
+#include <random>
 
 mutex Utils::m;
 
@@ -31,4 +32,11 @@ string Utils::GetErrorMessage(DWORD errorCode)
 	std::string message(buffer ? buffer : "Unknown error");
 	LocalFree(buffer);
 	return message;
+}
+
+int32 Utils::GetRandNum(int32 start, int32 end)
+{
+	::mt19937 rng(random_device{}());
+	::uniform_int_distribution<int32> dist(start, end);
+	return dist(rng);
 }

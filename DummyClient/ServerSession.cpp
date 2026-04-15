@@ -8,7 +8,13 @@ void ServerSession::OnRecvPacket(BYTE* buffer, uint32 size)
 	ServerPacketHandler::PacketHandler(func, static_pointer_cast<PacketSession>(shared_from_this()),
 		buffer, size);
 	func();
-	//uint16 headerSize = sizeof(PacketHeader);
-	//string str((char*)(buffer + headerSize), size - headerSize);
-	//Utils::LockPrint("recv from server : ", str);
+}
+
+void ServerSession::OnConnect()
+{
+	Protocol::C_LOGIN pkt;
+
+	// TODO 인증서버로 부터 받은 jwt를 게임서버로 전달.
+	pkt.set_jwt("pass");
+	Send(ServerPacketHandler::MakeSendBuffer(pkt));
 }

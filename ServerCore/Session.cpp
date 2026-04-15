@@ -326,6 +326,7 @@ void Session::TLSAccept()
 
 void Session::TLSConnect()
 {
+	OnConnect();
 	RegisterRecv();
 }
 
@@ -354,9 +355,10 @@ void TLSSession::TLSAccept()
 	switch (status)
 	{
 	case SslStatus::Ok:
-		cout << "OK" << endl;
+		Utils::LockPrint("TLS Connect OK");
 		HandshakeSend();
 		_recvEvent.SetEventType(EventType::Recv);
+		OnConnect();
 		RegisterRecv();
 		break;
 	case SslStatus::WantRead:
@@ -384,9 +386,10 @@ void TLSSession::TLSConnect()
 	switch (status)
 	{
 	case SslStatus::Ok:
-		cout << "OK" << endl;
+		Utils::LockPrint("TLS Connect OK");
 		HandshakeSend();
 		_recvEvent.SetEventType(EventType::Recv);
+		OnConnect();
 		RegisterRecv();
 		break;
 	case SslStatus::WantRead:

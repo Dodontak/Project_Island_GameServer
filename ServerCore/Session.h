@@ -29,6 +29,7 @@ public:
 	virtual ~Session();
 
 	virtual uint32 OnRecv(BYTE* buffer, uint32 len) { return len; }
+	virtual void OnConnect() {}
 public:
 	virtual HANDLE GetHandle() override { return (HANDLE)_socket; }
 	virtual void Dispatch(int32 numOfBytes, IocpEvent* event) override;
