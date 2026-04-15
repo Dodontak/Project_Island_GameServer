@@ -37,7 +37,6 @@ void Handle_C_ENTER_ROOM(const PacketSessionRef& session, const Protocol::C_ENTE
 {
 	Protocol::S_ENTER_ROOM response;
 
-	pkt.room_id();
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
 
 	Protocol::Player playerInfo;
