@@ -30,6 +30,8 @@
     <BuildDependency Project="GameServer/GameServer.vcxproj" />
     <BuildDependency Project="ServerCore/ServerCore.vcxproj" />
   </Project>
-  <Project Path="GameServer/GameServer.vcxproj" Id="b2d7ef04-e4e8-4efe-bf0b-c06f1c80947e" />
+  <Project Path="GameServer/GameServer.vcxproj" Id="b2d7ef04-e4e8-4efe-bf0b-c06f1c80947e">
+    <BuildDependency Project="ServerCore/ServerCore.vcxproj" />
+  </Project>
   <Project Path="ServerCore/ServerCore.vcxproj" Id="72ba9031-c7a6-466a-916a-a4de514066d4" />
 </Solution>
