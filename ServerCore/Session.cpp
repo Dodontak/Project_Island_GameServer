@@ -340,7 +340,7 @@ bool Session::Encrypt(SendBufferRef& decBuffer, SendBufferRef& encBuffer)
 |                                 TLSSession                                   |
 |                                                                              |
 \*----------------------------------------------------------------------------*/
-TLSSession::TLSSession(ServiceRef service) : Session(service)
+TLSSession::TLSSession(ServiceRef service) : Session(service) , _encRecvBuffer(BUFFER_SIZE)
 {
 	if (ServiceRef service = _service.lock())
 		_ssl.Init(service->GetSSLContext());
