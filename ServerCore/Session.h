@@ -29,6 +29,7 @@ public:
 	virtual ~Session();
 
 	virtual uint32 OnRecv(BYTE* buffer, uint32 len) { return len; }
+	virtual void OnConnect() {}
 public:
 	virtual HANDLE GetHandle() override { return (HANDLE)_socket; }
 	virtual void Dispatch(int32 numOfBytes, IocpEvent* event) override;
@@ -57,7 +58,6 @@ public:
 
 	virtual uint8 Decrypt(RecvBuffer& encBuffer, RecvBuffer& decBuffer) { return 0; }
 	virtual bool Encrypt(SendBufferRef& decBuffer, SendBufferRef& encBuffer);
-	virtual bool HasSslPendingData() { return false; }
 
 	void SetAddr(const NetAddress& address) { _address = address; }
 	NetAddress GetAddr() { return _address; }
@@ -102,7 +102,6 @@ public:
 	virtual void ProcessTLSHandshakeConnectRecv(int32 numOfBytes) final;
 	virtual uint8 Decrypt(RecvBuffer& encBuffer, RecvBuffer& decBuffer) final;
 	virtual bool Encrypt(SendBufferRef& decBuffer, SendBufferRef& encBuffer) final;
-	virtual bool HasSslPendingData() final { return _ssl.HasSslPending(); }
 
 	void HandshakeSend();
 protected:

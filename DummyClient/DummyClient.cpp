@@ -38,11 +38,11 @@ int main()
 			}
 		);
 	}
-	while (true)
-	{
-		this_thread::sleep_for(chrono::seconds(1));
-		Protocol::C_CHAT pkt;
-		pkt.set_msg("Hello Server!");
-		service->broad_cast_test(ServerPacketHandler::MakeSendBuffer(pkt));
-	}
+	//while (true)
+	//{
+	//	this_thread::sleep_for(chrono::seconds(1));
+	//	Protocol::C_CHAT pkt;
+	//	pkt.set_msg("Hello Server!");
+	//	service->broad_cast_test(ServerPacketHandler::MakeSendBuffer(pkt));
+	//}
 }

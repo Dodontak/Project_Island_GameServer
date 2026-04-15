@@ -7,6 +7,7 @@ class Utils
 public:
 	static int ErrorExit(const char* errstr);
 	static string GetErrorMessage(DWORD errorCode);
+	static int32 GetRandNum(int32 start, int32 end);
 
 	template<typename... Args>
 	static void LockPrint(Args&&... args)

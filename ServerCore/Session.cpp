@@ -89,22 +89,30 @@ void Session::ProcessRecv(int32 numOfBytes)
 
 	// enc의 데이터를 복호화 해서 dec로 이동
 	// encBuffer.OnRead, decBuffer.OnWrite는 내부에서 호출해줌
-	do {
+	bool repeat = true;
+	while (repeat)
+	{
 		uint8 ret = Decrypt(encBuffer, decBuffer);
 		switch (ret)
 		{
-		case 0: // 성공
+		case 0: // 성공. 복호화 할 데이터 더 있을 수 있음. 반복해서 복호화 시도.
 			break;
-		case 1: // 상대가 shutdown. shutdown 호출 가능
+		case 1: // 복호화 데이터 부족
+			repeat = false;
+			break;
+		case 2: // 상대가 shutdown. shutdown 호출 가능
 			//TODO shutdown 정상종료
+			repeat = false;
 			break;
-		case 2: // 에러. shutdown 호출 불가능.
+		case 3: // 에러. shutdown 호출 불가능.
 			RegisterDisconnect();
+			repeat = false;
 			break;
 		}
-	} while (HasSslPendingData());
+	}
 
 	int processLen = OnRecv(decBuffer.ReadPos(), decBuffer.DataSize());
+
 	decBuffer.OnRead(processLen);
 
 	encBuffer.Clean();
@@ -326,6 +334,7 @@ void Session::TLSAccept()
 
 void Session::TLSConnect()
 {
+	OnConnect();
 	RegisterRecv();
 }
 
@@ -340,7 +349,7 @@ bool Session::Encrypt(SendBufferRef& decBuffer, SendBufferRef& encBuffer)
 |                                 TLSSession                                   |
 |                                                                              |
 \*----------------------------------------------------------------------------*/
-TLSSession::TLSSession(ServiceRef service) : Session(service) , _encRecvBuffer(BUFFER_SIZE)
+TLSSession::TLSSession(ServiceRef service) : Session(service), _encRecvBuffer(BUFFER_SIZE)
 {
 	if (ServiceRef service = _service.lock())
 		_ssl.Init(service->GetSSLContext());
@@ -354,9 +363,10 @@ void TLSSession::TLSAccept()
 	switch (status)
 	{
 	case SslStatus::Ok:
-		cout << "OK" << endl;
+		Utils::LockPrint("TLS Connect OK");
 		HandshakeSend();
 		_recvEvent.SetEventType(EventType::Recv);
+		OnConnect();
 		RegisterRecv();
 		break;
 	case SslStatus::WantRead:
@@ -384,9 +394,10 @@ void TLSSession::TLSConnect()
 	switch (status)
 	{
 	case SslStatus::Ok:
-		cout << "OK" << endl;
+		Utils::LockPrint("TLS Connect OK");
 		HandshakeSend();
 		_recvEvent.SetEventType(EventType::Recv);
+		OnConnect();
 		RegisterRecv();
 		break;
 	case SslStatus::WantRead:
@@ -444,7 +455,7 @@ void TLSSession::ProcessTLSHandshakeConnectRecv(int32 numOfBytes)
 }
 
 // enc버퍼의 암호문을 복호화 해서 dec버퍼에 넣는 함수.
-// 리턴 0 성공. 1 shutdown, 2 에러
+// 리턴 0 성공. 1 복호화 데이터 부족 2 shutdown, 3 에러
 uint8 TLSSession::Decrypt(RecvBuffer& encBuffer, RecvBuffer& decBuffer)
 {
 	uint32 wlen = _ssl.WriteRBio(encBuffer.ReadPos(), encBuffer.DataSize());
@@ -458,11 +469,11 @@ uint8 TLSSession::Decrypt(RecvBuffer& encBuffer, RecvBuffer& decBuffer)
 		decBuffer.OnWrite(recvSize);
 		return 0;
 	case SslStatus::WantRead://복호화 하기에 데이터 부족함.
-		return 0;
-	case SslStatus::Shutdown://상대가 shutdown함. shutdown 호출 가능.
 		return 1;
-	default:// 에러 발생. shutdown 호출 불가.
+	case SslStatus::Shutdown://상대가 shutdown함. shutdown 호출 가능.
 		return 2;
+	default:// 에러 발생. shutdown 호출 불가.
+		return 3;
 	}
 }
 

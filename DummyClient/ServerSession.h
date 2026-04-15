@@ -9,5 +9,8 @@ public:
 	~ServerSession() {}
 
 	virtual void OnRecvPacket(BYTE* buffer, uint32 size) override;
+	virtual void OnConnect() override;
+
+	uint32 _userId = 0;
 };
 

@@ -68,8 +68,11 @@ private:
 		header.size = headerSize + pktSize;
 
 		sendBuffer->AppendBuffer(reinterpret_cast<BYTE*>(&header), headerSize);
-		pkt.SerializeToArray(sendBuffer->WritePos(), pktSize);
-		sendBuffer->OnWrite(pktSize);
+		if (pktSize > 0)
+		{
+			pkt.SerializeToArray(sendBuffer->WritePos(), pktSize);
+			sendBuffer->OnWrite(pktSize);
+		}
 		return sendBuffer;
 	}
 };

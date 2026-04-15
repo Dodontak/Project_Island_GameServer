@@ -10,6 +10,15 @@ message C_LOGIN {
 
 message S_LOGIN {
 	bool success = 1;
+	uint32 user_id = 2;
+}
+
+message C_ENTER_ROOM {
+	uint32 room_id = 1;
+}
+
+message S_ENTER_ROOM {
+	bool success = 1;
 }
 
 message C_CHAT {

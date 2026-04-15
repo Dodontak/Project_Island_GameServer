@@ -76,13 +76,6 @@ SslStatus SslObject::Write(BYTE* buffer, size_t dataLen, size_t* writtenLen)
 	return SslStatus::Ok;
 }
 
-// rbio에 복호화 할 수 있는 데이터가 남아있는지 확인하는 함수.
-// 1 데이터 있음. 0 데이터 없음.
-uint32 SslObject::HasSslPending()
-{
-	return SSL_has_pending(_ssl);
-}
-
 uint32 SslObject::GetRBioPendingSize()
 {
 	return BIO_pending(_rbio);
