@@ -24,7 +24,7 @@ void Handle_S_LOGIN(const PacketSessionRef& session, const Protocol::S_LOGIN& pk
 	//room은 짝수방(0), 홀수방(1) 만있다고 가정.
 	Protocol::C_ENTER_ROOM enterRoomPkt;
 
-	enterRoomPkt.set_room_id(0);
+	enterRoomPkt.set_room_id(pkt.user_id() % 2); // 짝수방(0), 홀수방(1) 만있다고 가정
 	session->Send(ServerPacketHandler::MakeSendBuffer(enterRoomPkt));
 }
 

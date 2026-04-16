@@ -26,7 +26,7 @@ int main()
 		[](ServiceRef service) {
 			return make_shared<ServerSession>(service);
 		},
-		3
+		5
 	);
 
 	service->Start();
