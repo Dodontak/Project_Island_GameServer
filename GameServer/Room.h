@@ -1,8 +1,9 @@
 #pragma once
 
+#include "JobQueue.h"
 #include "Player.h"
 
-class Room
+class Room : public JobQueue
 {
 public:
 	Room();
@@ -12,9 +13,8 @@ public:
 	void Leave(PlayerRef player);
 	void Broadcast(SendBufferRef sendBuffer);
 private:
-	mutex _m;
 	uint32 _roomId;
 	map<uint64, PlayerRef> _players;
 };
 
-extern Room GRoom[2];
+extern RoomRef GRoom[2];

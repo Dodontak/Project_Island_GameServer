@@ -56,7 +56,7 @@ public:
 	virtual void TLSAccept();
 	virtual void TLSConnect();
 
-	virtual uint8 Decrypt(RecvBuffer& encBuffer, RecvBuffer& decBuffer) { return 0; }
+	virtual uint8 Decrypt(RecvBuffer& encBuffer, RecvBuffer& decBuffer) { return 1; }
 	virtual bool Encrypt(SendBufferRef& decBuffer, SendBufferRef& encBuffer);
 
 	void SetAddr(const NetAddress& address) { _address = address; }

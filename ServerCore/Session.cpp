@@ -87,27 +87,30 @@ void Session::ProcessRecv(int32 numOfBytes)
 
 	encBuffer.OnWrite(numOfBytes);
 
-	// enc의 데이터를 복호화 해서 dec로 이동
-	// encBuffer.OnRead, decBuffer.OnWrite는 내부에서 호출해줌
-	bool repeat = true;
-	while (repeat)
 	{
-		uint8 ret = Decrypt(encBuffer, decBuffer);
-		switch (ret)
+		lock_guard<mutex> lock(_m);
+		// enc의 데이터를 복호화 해서 dec로 이동
+		// encBuffer.OnRead, decBuffer.OnWrite는 내부에서 호출해줌
+		bool repeat = true;
+		while (repeat)
 		{
-		case 0: // 성공. 복호화 할 데이터 더 있을 수 있음. 반복해서 복호화 시도.
-			break;
-		case 1: // 복호화 데이터 부족
-			repeat = false;
-			break;
-		case 2: // 상대가 shutdown. shutdown 호출 가능
-			//TODO shutdown 정상종료
-			repeat = false;
-			break;
-		case 3: // 에러. shutdown 호출 불가능.
-			RegisterDisconnect();
-			repeat = false;
-			break;
+			uint8 ret = Decrypt(encBuffer, decBuffer);
+			switch (ret)
+			{
+			case 0: // 성공. 복호화 할 데이터 더 있을 수 있음. 반복해서 복호화 시도.
+				break;
+			case 1: // 복호화 데이터 부족
+				repeat = false;
+				break;
+			case 2: // 상대가 shutdown. shutdown 호출 가능
+				//TODO shutdown 정상종료
+				repeat = false;
+				break;
+			case 3: // 에러. shutdown 호출 불가능.
+				RegisterDisconnect();
+				repeat = false;
+				break;
+			}
 		}
 	}
 
@@ -127,9 +130,12 @@ void Session::ProcessRecv(int32 numOfBytes)
 void	 Session::Send(SendBufferRef sendBuffer)
 {
 	SendBufferRef encBuffer;
-	bool isSuccess = Encrypt(sendBuffer, encBuffer);
-	if (isSuccess == false)
-		return;
+	{
+		lock_guard<mutex> lock(_m);
+		bool isSuccess = Encrypt(sendBuffer, encBuffer);
+		if (isSuccess == false)
+			return;
+	}
 
 	{
 		lock_guard<mutex> lock(_m);

@@ -13,15 +13,10 @@ using uint64 = unsigned __int64;
 #define USING_SHARED_PTR(name)	using name##Ref = std::shared_ptr<class name>;
 
 USING_SHARED_PTR(Service)
-USING_SHARED_PTR(ServerService)
-USING_SHARED_PTR(ClientService)
 USING_SHARED_PTR(IocpCore)
 USING_SHARED_PTR(IocpObject)
 USING_SHARED_PTR(Session)
 USING_SHARED_PTR(PacketSession)
-USING_SHARED_PTR(GameSession)
-USING_SHARED_PTR(ServerSession)
 USING_SHARED_PTR(Listener)
 USING_SHARED_PTR(SendBuffer)
-USING_SHARED_PTR(Player)
-USING_SHARED_PTR(GameSession)
+USING_SHARED_PTR(Job)

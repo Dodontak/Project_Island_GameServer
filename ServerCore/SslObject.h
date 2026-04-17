@@ -24,7 +24,6 @@ public:
 	SslStatus Read(BYTE* buffer, size_t readSize, size_t* readLen);
 	SslStatus Write(BYTE* buffer, size_t dataLen, size_t* writtenLen);
 
-	uint32 HasSslPending();
 	uint32 GetRBioPendingSize();
 	uint32 GetWBioPendingSize();
 

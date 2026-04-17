@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "Room.h"
+#include "Player.h"
 #include "Session.h"
 #include "ClientPacketHandler.h"
 #include "GameSession.h"
 
-Room GRoom[2];
+RoomRef GRoom[2];
 
 Room::Room()
 {
@@ -16,10 +17,10 @@ Room::~Room() {}
 
 void Room::Enter(PlayerRef player)
 {
-	lock_guard<mutex> lock(_m);
 	_players.insert({ player->_info.id(), player });
 
 	Protocol::S_CHAT pkt;
+	player->_room = static_pointer_cast<Room>(shared_from_this());
 	string msg = player->_info.name() + " Entered Room" + to_string(_roomId);
 	pkt.set_msg(msg);
 
@@ -28,14 +29,11 @@ void Room::Enter(PlayerRef player)
 
 void Room::Leave(PlayerRef player)
 {
-	lock_guard<mutex> lock(_m);
-
+	_players.erase(player->_info.id());
+	
 	Protocol::S_CHAT pkt;
-
 	string msg = "Room " + to_string(_roomId) + " : " + player->_info.name() + " Left Room.";
 	pkt.set_msg(msg);
-
-	_players.erase(player->_info.id());
 	Broadcast(ClientPacketHandler::MakeSendBuffer(pkt));
 }
 
@@ -43,6 +41,9 @@ void Room::Broadcast(SendBufferRef sendBuffer)
 {
 	for (auto& player : _players)
 	{
-		player.second->_owner->Send(sendBuffer);
+		if (auto owner = player.second->_owner.lock())
+		{
+			owner->Send(sendBuffer);
+		}
 	}
 }

@@ -9,6 +9,8 @@
 #include "GameSession.h"
 #include "DBConnectionPool.h"
 
+#include "Room.h"
+
 void WorkerThread(ServiceRef service)
 {
 	while (1)
@@ -20,6 +22,10 @@ void WorkerThread(ServiceRef service)
 int main()
 {
 	cout << "=== Server ===" << endl;
+
+	//Room 테스트용
+	GRoom[0] = make_shared<Room>();
+	GRoom[1] = make_shared<Room>();
 	ClientPacketHandler::Init();
 	//GDBConnectionPool->Init(10, "192.168.0.39", 6379, 10,
 	//	"host=192.168.0.39 user=postgres port=5432 "
@@ -36,7 +42,7 @@ int main()
 	);
 	service->Start();
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		threadManager.Launch([&service]() {
 			WorkerThread(service);

@@ -29,7 +29,6 @@ void Handle_C_LOGIN(const PacketSessionRef& session, const Protocol::C_LOGIN& pk
 	// 임시 userId 전달. gameSession 생성순서대로 1 2 3 4...
 	// 실제로는 jwt 검증하고 userId 확인해야함.
 	response.set_user_id(gameSession->_userId);
-
 	gameSession->Send(ClientPacketHandler::MakeSendBuffer(response));
 }
 
@@ -61,7 +60,9 @@ void Handle_C_ENTER_ROOM(const PacketSessionRef& session, const Protocol::C_ENTE
 	playerInfo.mutable_pos()->CopyFrom(pos);
 
 	PlayerRef player = make_shared<Player>(playerInfo, gameSession);
-	GRoom[pkt.room_id()].Enter(player);
+	gameSession->_player = player;
+	RoomRef room = GRoom[pkt.room_id()];
+	room->DoAsync(&Room::Enter, player);
 	response.set_success(true);
 
 	session->Send(ClientPacketHandler::MakeSendBuffer(response));
@@ -69,9 +70,8 @@ void Handle_C_ENTER_ROOM(const PacketSessionRef& session, const Protocol::C_ENTE
 
 void	Handle_C_CHAT(const PacketSessionRef& session, const Protocol::C_CHAT& pkt)
 {
-	Protocol::S_CHAT response;
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
-
-	response.set_msg(pkt.msg());
-	gameSession->broad_cast_test(ClientPacketHandler::MakeSendBuffer(response));
+	if (gameSession->_player == nullptr)
+		return;
+	gameSession->_player->ChatTest(pkt.msg());
 }

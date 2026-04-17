@@ -42,5 +42,5 @@ void Handle_S_ENTER_ROOM(const PacketSessionRef& session, const Protocol::S_ENTE
 void Handle_S_CHAT(const PacketSessionRef& session, const Protocol::S_CHAT& pkt)
 {
 	ServerSessionRef serverSession = static_pointer_cast<ServerSession>(session);
-	Utils::LockPrint("Player", serverSession->_userId, " recv : ", pkt.msg());
+	Utils::LockPrint(pkt.msg());
 }
