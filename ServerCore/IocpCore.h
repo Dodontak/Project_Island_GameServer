@@ -15,7 +15,7 @@ public:
 	IocpCore();
 	~IocpCore();
 
-	bool Dispatch();
+	bool Dispatch(uint32 timeoutMs);
 
 	bool RegisterHandle(IocpObjectRef iocpObject);
 private:

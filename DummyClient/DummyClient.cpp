@@ -10,7 +10,7 @@ void WorkerThread(ServiceRef service)
 {
 	while (1)
 	{
-		service->GetIocpCore()->Dispatch();
+		service->GetIocpCore()->Dispatch(10);
 	}
 }
 

@@ -84,6 +84,9 @@
     <ClCompile Include="LockQueue.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="GlobalQueue.cpp">
+      <Filter>Job</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Types.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="LockQueue.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalQueue.h">
+      <Filter>Job</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

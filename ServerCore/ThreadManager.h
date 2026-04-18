@@ -14,6 +14,8 @@ public:
 
 	bool IsRunning() { return _running; }
 
+	static void DoGlobalQueueWork();
+
 private:
 	static void InitTLS();
 	static void DestroyTLS();

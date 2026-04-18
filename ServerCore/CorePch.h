@@ -27,3 +27,4 @@ using namespace std;
 #include "SocketUtils.h"
 #include "Utils.h"
 #include "CoreGlobal.h"
+#include "CoreTLS.h"

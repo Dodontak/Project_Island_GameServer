@@ -4,18 +4,25 @@
 #include "Listener.h"
 #include "Service.h"
 #include "ThreadManager.h"
-#include "CoreTLS.h"
 #include "ClientPacketHandler.h"
 #include "GameSession.h"
 #include "DBConnectionPool.h"
 
 #include "Room.h"
 
+enum
+{ //64ms넘어가면 다른 스레드에 일감을 넘김.
+	WORKER_TICK = 64
+};
+
 void WorkerThread(ServiceRef service)
 {
-	while (1)
+	while (true)
 	{
-		service->GetIocpCore()->Dispatch();
+		LEndTickCount = ::GetTickCount64() + WORKER_TICK;
+		service->GetIocpCore()->Dispatch(10);
+
+		ThreadManager::DoGlobalQueueWork();
 	}
 }
 

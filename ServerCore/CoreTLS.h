@@ -1,6 +1,6 @@
 #pragma once
 
-#include "JobQueue.h"
+extern thread_local uint32 LThreadId;
+extern thread_local uint64 LEndTickCount;
 
-extern thread_local int LThreadId;
-extern thread_local JobQueue* LCurrentJobQueue;
+extern thread_local class JobQueue* LCurrentJobQueue;

@@ -14,14 +14,14 @@ IocpCore::~IocpCore()
 	::CloseHandle(_iocpHandle);
 }
 
-bool IocpCore::Dispatch()
+bool IocpCore::Dispatch(uint32 timeoutMs)
 {
 	DWORD numOfBytes = 0;
 	ULONG_PTR completionKey;
 	OVERLAPPED* overlapped = nullptr;
 
 	bool result = GetQueuedCompletionStatus(_iocpHandle, &numOfBytes, &completionKey,
-		&overlapped, INFINITE);
+		&overlapped, timeoutMs);
 
 
 	if (result != 0)
@@ -33,6 +33,8 @@ bool IocpCore::Dispatch()
 	else
 	{
 		int32 errCode = ::WSAGetLastError();
+		if (errCode == WAIT_TIMEOUT)
+			return false;
 		string errStr = Utils::GetErrorMessage(errCode);
 		errStr.pop_back();
 		Utils::LockPrint(errStr);

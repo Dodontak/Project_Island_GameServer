@@ -1,6 +1,7 @@
 #include "pch.h"
-#include "CoreTLS.h"
 #include "ThreadManager.h"
+#include "GlobalQueue.h"
+#include "JobQueue.h"
 
 ThreadManager::ThreadManager() : _running(true)
 {
@@ -28,6 +29,21 @@ void ThreadManager::Join()
 	for (auto& t : _workerThreads)
 	{
 		t.join();
+	}
+}
+
+void ThreadManager::DoGlobalQueueWork()
+{
+	while (true)
+	{
+		uint64 now = ::GetTickCount64();
+		if (now > LEndTickCount)
+			break;
+
+		JobQueueRef jobQueue = GGlobalQueue->Pop();
+		if (jobQueue == nullptr)
+			break;
+		jobQueue->Execute();
 	}
 }
 
