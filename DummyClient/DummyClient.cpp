@@ -26,12 +26,12 @@ int main()
 		[](ServiceRef service) {
 			return make_shared<ServerSession>(service);
 		},
-		20
+		3
 	);
 
 	service->Start();
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		tManager.Launch([service]() {
 			WorkerThread(service);
@@ -39,11 +39,11 @@ int main()
 		);
 	}
 	this_thread::sleep_for(chrono::seconds(1));
-	while (true)
-	{
-		this_thread::sleep_for(chrono::milliseconds(200));
-		Protocol::C_CHAT pkt;
-		pkt.set_msg("Hello Server!");
-		service->broad_cast_test(ServerPacketHandler::MakeSendBuffer(pkt));
-	}
+	//while (true)
+	//{
+	//	this_thread::sleep_for(chrono::milliseconds(200));
+	//	Protocol::C_CHAT pkt;
+	//	pkt.set_msg("Hello Server!");
+	//	service->broad_cast_test(ServerPacketHandler::MakeSendBuffer(pkt));
+	//}
 }

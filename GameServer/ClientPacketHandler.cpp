@@ -4,6 +4,7 @@
 #include "GameSession.h"
 #include "Player.h"
 #include "Room.h"
+#include "JobTimer.h"
 
 function<bool(function<void()>&, PacketSessionRef&, BYTE*, int32)> GPacketHandler[UINT16_MAX];
 
@@ -62,9 +63,11 @@ void Handle_C_ENTER_ROOM(const PacketSessionRef& session, const Protocol::C_ENTE
 	PlayerRef player = make_shared<Player>(playerInfo, gameSession);
 	gameSession->_player = player;
 	RoomRef room = GRoom[pkt.room_id()];
-	room->DoAsync(&Room::Enter, player);
-	response.set_success(true);
 
+	room->DoAsync(&Room::Enter, player);
+
+	response.set_success(true);
+	this_thread::sleep_for(chrono::seconds(1));
 	session->Send(ClientPacketHandler::MakeSendBuffer(response));
 }
 

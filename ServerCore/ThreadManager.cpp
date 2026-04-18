@@ -2,6 +2,7 @@
 #include "ThreadManager.h"
 #include "GlobalQueue.h"
 #include "JobQueue.h"
+#include "JobTimer.h"
 
 ThreadManager::ThreadManager() : _running(true)
 {
@@ -45,6 +46,13 @@ void ThreadManager::DoGlobalQueueWork()
 			break;
 		jobQueue->Execute();
 	}
+}
+
+void ThreadManager::DistributeReservedJobs()
+{
+	const uint64 now = ::GetTickCount64();
+
+	GJobTimer->Distribute(now);
 }
 
 void ThreadManager::InitTLS()

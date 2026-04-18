@@ -23,6 +23,8 @@ void WorkerThread(ServiceRef service)
 		service->GetIocpCore()->Dispatch(10);
 
 		ThreadManager::DoGlobalQueueWork();
+
+		ThreadManager::DistributeReservedJobs();
 	}
 }
 

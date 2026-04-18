@@ -15,6 +15,7 @@ public:
 	bool IsRunning() { return _running; }
 
 	static void DoGlobalQueueWork();
+	static void DistributeReservedJobs();
 
 private:
 	static void InitTLS();
