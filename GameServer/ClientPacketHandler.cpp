@@ -6,9 +6,9 @@
 #include "Room.h"
 #include "JobTimer.h"
 
-function<bool(function<void()>&, PacketSessionRef&, BYTE*, int32)> GPacketHandler[UINT16_MAX];
+PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
-bool	Handle_INVALID(std::function<void()>& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len)
+bool	Handle_INVALID(DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len)
 {
 	return false;
 }
@@ -73,7 +73,7 @@ void Handle_C_ENTER_ROOM(const PacketSessionRef& session, const Protocol::C_ENTE
 
 void	Handle_C_CHAT(const PacketSessionRef& session, const Protocol::C_CHAT& pkt)
 {
-	Utils::LockPrint("recv C_CHAT packet! msg: " + pkt.msg());
+	Utils::LockPrint("message from client:", pkt.msg());
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
 	if (gameSession->_player == nullptr)
 		return;

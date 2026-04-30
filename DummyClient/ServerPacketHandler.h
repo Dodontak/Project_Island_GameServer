@@ -7,11 +7,19 @@
 #include "Session.h"
 #include "SendBuffer.h"
 #include <memory>
+#include <functional>
 #endif
 #include "Protocol.pb.h"
-#include <functional>
 
-extern std::function<bool(std::function<void()>&, PacketSessionRef&, BYTE*, int32)> GPacketHandler[UINT16_MAX];
+#if UE_BUILD_DEBUG + UE_BUILD_DEVELOPMENT + UE_BUILD_TEST + UE_BUILD_SHIPPING >= 1
+using DeferredFunc = TFunction<void()>;
+using PacketHandlerFunc = TFunction<bool(DeferredFunc&, PacketSessionRef&, BYTE*, int32)>;
+#else
+using DeferredFunc = std::function<void()>;
+using PacketHandlerFunc = std::function<bool(DeferredFunc&, PacketSessionRef&, BYTE*, int32)>;
+#endif
+
+extern PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
 enum : uint16
 {
@@ -23,7 +31,7 @@ enum : uint16
 	PKT_S_CHAT = 1005,
 };
 
-bool	Handle_INVALID(std::function<void()>& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len);
+bool	Handle_INVALID(DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len);
 void	Handle_S_LOGIN(const PacketSessionRef& session, const Protocol::S_LOGIN& pkt);
 void	Handle_S_ENTER_ROOM(const PacketSessionRef& session, const Protocol::S_ENTER_ROOM& pkt);
 void	Handle_S_CHAT(const PacketSessionRef& session, const Protocol::S_CHAT& pkt);
@@ -35,18 +43,18 @@ public:
 	{
 		for (int i = 0; i < UINT16_MAX; ++i)
 			GPacketHandler[i] = Handle_INVALID;
-		GPacketHandler[PKT_S_LOGIN] = [](std::function<void()>& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+		GPacketHandler[PKT_S_LOGIN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::S_LOGIN>(outFunc, Handle_S_LOGIN, session, buffer, len);
 		};
-		GPacketHandler[PKT_S_ENTER_ROOM] = [](std::function<void()>& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+		GPacketHandler[PKT_S_ENTER_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::S_ENTER_ROOM>(outFunc, Handle_S_ENTER_ROOM, session, buffer, len);
 		};
-		GPacketHandler[PKT_S_CHAT] = [](std::function<void()>& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+		GPacketHandler[PKT_S_CHAT] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::S_CHAT>(outFunc, Handle_S_CHAT, session, buffer, len);
 		};
 	}
 
-	static bool	PacketHandler(std::function<void()>& outFunc, PacketSessionRef session, BYTE* buffer, int32 len)
+	static bool	PacketHandler(DeferredFunc& outFunc, PacketSessionRef session, BYTE* buffer, int32 len)
 	{
 		PacketHeader*	header = reinterpret_cast<PacketHeader*>(buffer);
 		return GPacketHandler[header->id](outFunc, session, buffer, len);
@@ -57,7 +65,7 @@ public:
 
 private:
 	template<typename PacketType, typename ProcessFunc>
-	static bool	GetCallback(std::function<void()>& outFunc, ProcessFunc func, PacketSessionRef session, BYTE* buffer, int32 len)
+	static bool	GetCallback(DeferredFunc& outFunc, ProcessFunc func, PacketSessionRef session, BYTE* buffer, int32 len)
 	{
 		PacketType	pkt;
 		if (false == pkt.ParseFromArray(buffer + sizeof(PacketHeader), len - sizeof(PacketHeader)))
