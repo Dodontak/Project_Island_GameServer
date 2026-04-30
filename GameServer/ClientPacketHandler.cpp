@@ -73,6 +73,7 @@ void Handle_C_ENTER_ROOM(const PacketSessionRef& session, const Protocol::C_ENTE
 
 void	Handle_C_CHAT(const PacketSessionRef& session, const Protocol::C_CHAT& pkt)
 {
+	Utils::LockPrint("recv C_CHAT packet! msg: " + pkt.msg());
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
 	if (gameSession->_player == nullptr)
 		return;

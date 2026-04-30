@@ -30,11 +30,14 @@ SSL* Service::CreateSSL()
 void Service::broad_cast_test(SendBufferRef sendBuffer)
 {
 	lock_guard<mutex> lock(_m);
+	int n = 0;
 	for (auto iocpObject : _sessions)
 	{
 		SessionRef session = static_pointer_cast<Session>(iocpObject);
 		session->Send(sendBuffer);
+		n++;
 	}
+	Utils::LockPrint("Send Data to ", n, " sessions");
 }
 
 void Service::didconnect_all_test()
