@@ -31,7 +31,6 @@ void WorkerThread(ServiceRef service)
 int main()
 {
 	cout << "=== Server ===" << endl;
-
 	//Room 테스트용
 	GRoom[0] = make_shared<Room>();
 	GRoom[1] = make_shared<Room>();

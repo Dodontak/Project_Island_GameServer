@@ -120,10 +120,10 @@ struct PacketHeader
 	uint16 size;
 };
 
-class PacketSession : public Session
+class PacketSession : public TLSSession
 {
 public:
-	PacketSession(ServiceRef service) : Session(service) {}
+	PacketSession(ServiceRef service) : TLSSession(service) {}
 	virtual ~PacketSession() {}
 
 	virtual uint32 OnRecv(BYTE* buffer, uint32 len) final;

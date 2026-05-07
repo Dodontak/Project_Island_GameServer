@@ -5,10 +5,10 @@
 #else
 #include "Types.h"
 #include "Session.h"
-#include "SendBuffer.h"
 #include <memory>
 #include <functional>
 #endif
+#include "SendBuffer.h"
 #include "Protocol.pb.h"
 
 #if UE_BUILD_DEBUG + UE_BUILD_DEVELOPMENT + UE_BUILD_TEST + UE_BUILD_SHIPPING >= 1
@@ -27,13 +27,20 @@ enum : uint16
 	PKT_S_LOGIN = 1001,
 	PKT_C_ENTER_ROOM = 1002,
 	PKT_S_ENTER_ROOM = 1003,
-	PKT_C_CHAT = 1004,
-	PKT_S_CHAT = 1005,
+	PKT_C_LEAVE_ROOM = 1004,
+	PKT_S_LEAVE_ROOM = 1005,
+	PKT_S_SPAWN = 1006,
+	PKT_S_DESPAWN = 1007,
+	PKT_C_CHAT = 1008,
+	PKT_S_CHAT = 1009,
 };
 
 bool	Handle_INVALID(DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len);
 void	Handle_S_LOGIN(const PacketSessionRef& session, const Protocol::S_LOGIN& pkt);
 void	Handle_S_ENTER_ROOM(const PacketSessionRef& session, const Protocol::S_ENTER_ROOM& pkt);
+void	Handle_S_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::S_LEAVE_ROOM& pkt);
+void	Handle_S_SPAWN(const PacketSessionRef& session, const Protocol::S_SPAWN& pkt);
+void	Handle_S_DESPAWN(const PacketSessionRef& session, const Protocol::S_DESPAWN& pkt);
 void	Handle_S_CHAT(const PacketSessionRef& session, const Protocol::S_CHAT& pkt);
 
 class ServerPacketHandler
@@ -49,6 +56,15 @@ public:
 		GPacketHandler[PKT_S_ENTER_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::S_ENTER_ROOM>(outFunc, Handle_S_ENTER_ROOM, session, buffer, len);
 		};
+		GPacketHandler[PKT_S_LEAVE_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::S_LEAVE_ROOM>(outFunc, Handle_S_LEAVE_ROOM, session, buffer, len);
+		};
+		GPacketHandler[PKT_S_SPAWN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::S_SPAWN>(outFunc, Handle_S_SPAWN, session, buffer, len);
+		};
+		GPacketHandler[PKT_S_DESPAWN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::S_DESPAWN>(outFunc, Handle_S_DESPAWN, session, buffer, len);
+		};
 		GPacketHandler[PKT_S_CHAT] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::S_CHAT>(outFunc, Handle_S_CHAT, session, buffer, len);
 		};
@@ -61,6 +77,7 @@ public:
 	}
 	static SendBufferRef MakeSendBuffer(Protocol::C_LOGIN& pkt) { return MakeSendBuffer(pkt, PKT_C_LOGIN); }
 	static SendBufferRef MakeSendBuffer(Protocol::C_ENTER_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_C_ENTER_ROOM); }
+	static SendBufferRef MakeSendBuffer(Protocol::C_LEAVE_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_C_LEAVE_ROOM); }
 	static SendBufferRef MakeSendBuffer(Protocol::C_CHAT& pkt) { return MakeSendBuffer(pkt, PKT_C_CHAT); }
 
 private:

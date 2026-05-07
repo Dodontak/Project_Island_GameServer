@@ -86,7 +86,6 @@ void Session::ProcessRecv(int32 numOfBytes)
 	RecvBuffer& decBuffer = GetDecRecvBuffer();
 
 	encBuffer.OnWrite(numOfBytes);
-
 	{
 		lock_guard<mutex> lock(_m);
 		// enc의 데이터를 복호화 해서 dec로 이동
@@ -114,7 +113,7 @@ void Session::ProcessRecv(int32 numOfBytes)
 		}
 	}
 
-	int processLen = OnRecv(decBuffer.ReadPos(), decBuffer.DataSize());
+	uint32 processLen = OnRecv(decBuffer.ReadPos(), decBuffer.DataSize());
 
 	decBuffer.OnRead(processLen);
 
@@ -364,7 +363,6 @@ TLSSession::TLSSession(ServiceRef service) : Session(service), _encRecvBuffer(BU
 void TLSSession::TLSAccept()
 {
 	SslStatus status = _ssl.Accept();
-	uint32 pendingDataSize;
 
 	switch (status)
 	{
@@ -395,7 +393,6 @@ void TLSSession::TLSAccept()
 void TLSSession::TLSConnect()
 {
 	SslStatus status = _ssl.Connect();
-	uint32 pendingDataSize;
 
 	switch (status)
 	{

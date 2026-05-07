@@ -5,10 +5,10 @@
 #else
 #include "Types.h"
 #include "Session.h"
-#include "SendBuffer.h"
 #include <memory>
 #include <functional>
 #endif
+#include "SendBuffer.h"
 #include "Protocol.pb.h"
 
 #if UE_BUILD_DEBUG + UE_BUILD_DEVELOPMENT + UE_BUILD_TEST + UE_BUILD_SHIPPING >= 1

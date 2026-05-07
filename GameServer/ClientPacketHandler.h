@@ -5,10 +5,10 @@
 #else
 #include "Types.h"
 #include "Session.h"
-#include "SendBuffer.h"
 #include <memory>
 #include <functional>
 #endif
+#include "SendBuffer.h"
 #include "Protocol.pb.h"
 
 #if UE_BUILD_DEBUG + UE_BUILD_DEVELOPMENT + UE_BUILD_TEST + UE_BUILD_SHIPPING >= 1
@@ -27,13 +27,18 @@ enum : uint16
 	PKT_S_LOGIN = 1001,
 	PKT_C_ENTER_ROOM = 1002,
 	PKT_S_ENTER_ROOM = 1003,
-	PKT_C_CHAT = 1004,
-	PKT_S_CHAT = 1005,
+	PKT_C_LEAVE_ROOM = 1004,
+	PKT_S_LEAVE_ROOM = 1005,
+	PKT_S_SPAWN = 1006,
+	PKT_S_DESPAWN = 1007,
+	PKT_C_CHAT = 1008,
+	PKT_S_CHAT = 1009,
 };
 
 bool	Handle_INVALID(DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len);
 void	Handle_C_LOGIN(const PacketSessionRef& session, const Protocol::C_LOGIN& pkt);
 void	Handle_C_ENTER_ROOM(const PacketSessionRef& session, const Protocol::C_ENTER_ROOM& pkt);
+void	Handle_C_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::C_LEAVE_ROOM& pkt);
 void	Handle_C_CHAT(const PacketSessionRef& session, const Protocol::C_CHAT& pkt);
 
 class ClientPacketHandler
@@ -49,6 +54,9 @@ public:
 		GPacketHandler[PKT_C_ENTER_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::C_ENTER_ROOM>(outFunc, Handle_C_ENTER_ROOM, session, buffer, len);
 		};
+		GPacketHandler[PKT_C_LEAVE_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::C_LEAVE_ROOM>(outFunc, Handle_C_LEAVE_ROOM, session, buffer, len);
+		};
 		GPacketHandler[PKT_C_CHAT] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::C_CHAT>(outFunc, Handle_C_CHAT, session, buffer, len);
 		};
@@ -61,6 +69,9 @@ public:
 	}
 	static SendBufferRef MakeSendBuffer(Protocol::S_LOGIN& pkt) { return MakeSendBuffer(pkt, PKT_S_LOGIN); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_ENTER_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_S_ENTER_ROOM); }
+	static SendBufferRef MakeSendBuffer(Protocol::S_LEAVE_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_S_LEAVE_ROOM); }
+	static SendBufferRef MakeSendBuffer(Protocol::S_SPAWN& pkt) { return MakeSendBuffer(pkt, PKT_S_SPAWN); }
+	static SendBufferRef MakeSendBuffer(Protocol::S_DESPAWN& pkt) { return MakeSendBuffer(pkt, PKT_S_DESPAWN); }
 	static SendBufferRef MakeSendBuffer(Protocol::S_CHAT& pkt) { return MakeSendBuffer(pkt, PKT_S_CHAT); }
 
 private:

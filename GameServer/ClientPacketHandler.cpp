@@ -39,7 +39,7 @@ void Handle_C_ENTER_ROOM(const PacketSessionRef& session, const Protocol::C_ENTE
 
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
 
-	Protocol::Player playerInfo;
+	Protocol::PlayerInfo playerInfo;
 	playerInfo.set_id(gameSession->_userId);
 	playerInfo.set_name("Player" + ::to_string(gameSession->_userId));
 	switch (gameSession->_userId % 4)
@@ -69,6 +69,10 @@ void Handle_C_ENTER_ROOM(const PacketSessionRef& session, const Protocol::C_ENTE
 	response.set_success(true);
 	this_thread::sleep_for(chrono::seconds(1));
 	session->Send(ClientPacketHandler::MakeSendBuffer(response));
+}
+
+void Handle_C_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::C_LEAVE_ROOM& pkt)
+{
 }
 
 void	Handle_C_CHAT(const PacketSessionRef& session, const Protocol::C_CHAT& pkt)
