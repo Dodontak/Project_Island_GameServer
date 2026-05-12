@@ -4,43 +4,101 @@ package Protocol;
 import "Enum.proto";
 import "Struct.proto";
 
-message C_LOGIN {
+// Game Server용 프로토콜
+
+message GC_LOGIN {
 	string jwt = 1;
 }
 
-message S_LOGIN {
+message GS_LOGIN {
 	bool success = 1;
 	uint32 user_id = 2;
 }
 
-message C_ENTER_ROOM {
+message GC_ENTER_ROOM {
 	uint32 room_id = 1;
 }
 
-message S_ENTER_ROOM {
+message GS_ENTER_ROOM {
 	bool success = 1;
 }
 
-message C_LEAVE_ROOM {
+message GC_LEAVE_ROOM {
 }
 
-message S_LEAVE_ROOM {
+message GS_LEAVE_ROOM {
 }
 
-message S_SPAWN {
+message GS_SPAWN {
 	repeated PlayerInfo players = 1;
 }
 
-message S_DESPAWN {
+message GS_DESPAWN {
 	repeated uint64 object_ids = 1;
 }
 
-message C_CHAT {
+message GC_CHAT {
   int32 user_id = 1;
   string msg = 2;
 }
 
-message S_CHAT {
+message GS_CHAT {
   int32 user_id = 1;
   string msg = 2;
+}
+
+// Auth Server용 프로토콜
+
+// 1. 회원가입 요청
+message AC_SIGNUP {
+    string nickname = 1;
+    string password = 2;
+    string email = 3;
+    bool skip_email = 4; 
+}
+// 1. ID/Email중복 여부
+message AS_SIGNUP {
+    bool success = 1;
+    bool skip_email = 2;
+    string temp_id = 3;
+    string reason = 4;
+}
+
+// 2. 이메일 인증 코드 요청
+message AC_VERIFY_MAIL_REQ {
+    string temp_id = 1;
+}
+// 2. 인증코드 발송 성공여부
+message AS_VERIFY_MAIL_REQ {
+    bool success = 1;
+    string temp_id = 2;
+    bool expired = 3;
+    string reason = 4;
+}
+
+// 3. 이메일 인증 확인 요청
+message AC_VERIFY_EMAIL_CODE {
+    string temp_id = 1;
+    string verify_code = 2;
+}
+// 3. 이메일 인증 성공 여부
+message AS_VERIFY_EMAIL_CODE {
+    bool success = 1;
+    bool expired = 2;
+    string nickname = 3;//더미클라 테스트용
+    string reason = 4;
+}
+
+// 4. 로그인 요청
+message AC_LOGIN {
+    string nickname = 1;
+    string password = 2;
+}
+// 4. 로그인 성공 여부
+message AS_LOGIN {
+    bool success = 1;
+    bool is_block = 2;
+    int32 fail_count = 3;
+    string token = 4;
+    string reason = 5;
 }

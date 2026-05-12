@@ -1,8 +1,8 @@
-#include "pch.h"
-#include <windows.h>
 #include "Utils.h"
-#include "Session.h"
+#include <jwt-cpp/jwt.h>
 #include <random>
+
+using namespace std;
 
 mutex Utils::m;
 
@@ -13,30 +13,35 @@ int Utils::ErrorExit(const char* errstr)
 	return 1;
 }
 
-string Utils::GetErrorMessage(DWORD errorCode)
-{
-	LPSTR buffer = nullptr;
-
-	FormatMessageA(
-		FORMAT_MESSAGE_ALLOCATE_BUFFER |
-		FORMAT_MESSAGE_FROM_SYSTEM |
-		FORMAT_MESSAGE_IGNORE_INSERTS,
-		nullptr,
-		errorCode,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		reinterpret_cast<LPSTR>(&buffer),
-		0,
-		nullptr
-	);
-
-	std::string message(buffer ? buffer : "Unknown error");
-	LocalFree(buffer);
-	return message;
-}
-
 int32 Utils::GetRandNum(int32 start, int32 end)
 {
 	::mt19937 rng(random_device{}());
 	::uniform_int_distribution<int32> dist(start, end);
 	return dist(rng);
+}
+
+bool Utils::VerifyAccessToken(const string& token, string& out_user_id, string& out_nickname)
+{
+	// 비밀키는 환경변수에서 가져옴
+	const string SECRET_KEY = "cb1c63a81ccd9488c37de67a6028996ca0d994f1f22d05a84818a8a770e028ab";
+
+	try
+	{
+		auto verifier = jwt::verify()
+			.allow_algorithm(jwt::algorithm::hs256{ SECRET_KEY })
+			.with_issuer("auth_server");    // 발급자 확인
+
+		auto decoded = jwt::decode(token);
+		verifier.verify(decoded);           // 서명 + 만료시간 자동 검증
+
+		out_user_id = decoded.get_payload_claim("user_id").as_string();
+		out_nickname = decoded.get_payload_claim("nickname").as_string();
+		return true;
+	}
+	catch (const exception& e)
+	{
+		cout << "exeption" << endl;
+		// 서명 불일치, 만료, 형식 오류 전부 여기로 떨어짐
+		return false;
+	}
 }

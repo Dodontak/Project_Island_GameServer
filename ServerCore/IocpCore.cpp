@@ -35,9 +35,6 @@ bool IocpCore::Dispatch(uint32 timeoutMs)
 		int32 errCode = ::WSAGetLastError();
 		if (errCode == WAIT_TIMEOUT)
 			return false;
-		string errStr = Utils::GetErrorMessage(errCode);
-		errStr.pop_back();
-		Utils::LockPrint(errStr);
 
 		IocpEvent* iocpEvent = static_cast<IocpEvent*>(overlapped);
 		IocpObjectRef owner = iocpEvent->GetOwner();

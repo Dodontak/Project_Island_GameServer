@@ -13,29 +13,31 @@ bool	Handle_INVALID(DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buff
 	return false;
 }
 
-void Handle_C_LOGIN(const PacketSessionRef& session, const Protocol::C_LOGIN& pkt)
+void Handle_GC_LOGIN(const PacketSessionRef& session, const Protocol::GC_LOGIN& pkt)
 {
-	Protocol::S_LOGIN response;
+	Protocol::GS_LOGIN response;
 
 	string jwt = pkt.jwt();
-	if (jwt != "pass")
+	string userId;
+	string nickname;
+
+	if (false == Utils::VerifyAccessToken(jwt, OUT userId, OUT nickname))
 	{// TODO 인증 실패
 		response.set_success(false);
 		session->Send(ClientPacketHandler::MakeSendBuffer(response));
 		return;
 	}
 	response.set_success(true);
+	response.set_user_id(stoi(userId));
 
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
-	// 임시 userId 전달. gameSession 생성순서대로 1 2 3 4...
-	// 실제로는 jwt 검증하고 userId 확인해야함.
-	response.set_user_id(gameSession->_userId);
+	gameSession->_userId = stoi(userId);
 	gameSession->Send(ClientPacketHandler::MakeSendBuffer(response));
 }
 
-void Handle_C_ENTER_ROOM(const PacketSessionRef& session, const Protocol::C_ENTER_ROOM& pkt)
+void Handle_GC_ENTER_ROOM(const PacketSessionRef& session, const Protocol::GC_ENTER_ROOM& pkt)
 {
-	Protocol::S_ENTER_ROOM response;
+	Protocol::GS_ENTER_ROOM response;
 
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
 
@@ -71,11 +73,11 @@ void Handle_C_ENTER_ROOM(const PacketSessionRef& session, const Protocol::C_ENTE
 	session->Send(ClientPacketHandler::MakeSendBuffer(response));
 }
 
-void Handle_C_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::C_LEAVE_ROOM& pkt)
+void Handle_GC_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::GC_LEAVE_ROOM& pkt)
 {
 }
 
-void	Handle_C_CHAT(const PacketSessionRef& session, const Protocol::C_CHAT& pkt)
+void	Handle_GC_CHAT(const PacketSessionRef& session, const Protocol::GC_CHAT& pkt)
 {
 	Utils::LockPrint("message from client:", pkt.msg());
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);

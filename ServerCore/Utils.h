@@ -2,19 +2,22 @@
 
 #include <mutex>
 #include <random>
+#include <string>
+#include <iostream>
+#include "Types.h"
 
 class Utils
 {
 public:
 	static int ErrorExit(const char* errstr);
-	static string GetErrorMessage(DWORD errorCode);
 	static int32 GetRandNum(int32 start, int32 end);
+	static  bool VerifyAccessToken(const std::string& token, std::string& out_user_id, std::string& out_nickname);
 
 	template<typename... Args>
 	static void LockPrint(Args&&... args)
 	{
-		lock_guard<mutex> lock(m);
-		(cout << ... << args) << endl;
+		std::lock_guard<std::mutex> lock(m);
+		(std::cout << ... << args) << std::endl;
 	}
 
 	template<typename T>
@@ -39,6 +42,6 @@ public:
 	}
 
 private:
-	static mutex m;
+	static std::mutex m;
 };
 

@@ -23,25 +23,37 @@ extern PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
 enum : uint16
 {
-	PKT_C_LOGIN = 1000,
-	PKT_S_LOGIN = 1001,
-	PKT_C_ENTER_ROOM = 1002,
-	PKT_S_ENTER_ROOM = 1003,
-	PKT_C_LEAVE_ROOM = 1004,
-	PKT_S_LEAVE_ROOM = 1005,
-	PKT_S_SPAWN = 1006,
-	PKT_S_DESPAWN = 1007,
-	PKT_C_CHAT = 1008,
-	PKT_S_CHAT = 1009,
+	PKT_GC_LOGIN = 10000,
+	PKT_GS_LOGIN = 10001,
+	PKT_GC_ENTER_ROOM = 10002,
+	PKT_GS_ENTER_ROOM = 10003,
+	PKT_GC_LEAVE_ROOM = 10004,
+	PKT_GS_LEAVE_ROOM = 10005,
+	PKT_GS_SPAWN = 10006,
+	PKT_GS_DESPAWN = 10007,
+	PKT_GC_CHAT = 10008,
+	PKT_GS_CHAT = 10009,
+	PKT_AC_SIGNUP = 20000,
+	PKT_AS_SIGNUP = 20001,
+	PKT_AC_VERIFY_MAIL_REQ = 20002,
+	PKT_AS_VERIFY_MAIL_REQ = 20003,
+	PKT_AC_VERIFY_EMAIL_CODE = 20004,
+	PKT_AS_VERIFY_EMAIL_CODE = 20005,
+	PKT_AC_LOGIN = 20006,
+	PKT_AS_LOGIN = 20007,
 };
 
 bool	Handle_INVALID(DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len);
-void	Handle_S_LOGIN(const PacketSessionRef& session, const Protocol::S_LOGIN& pkt);
-void	Handle_S_ENTER_ROOM(const PacketSessionRef& session, const Protocol::S_ENTER_ROOM& pkt);
-void	Handle_S_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::S_LEAVE_ROOM& pkt);
-void	Handle_S_SPAWN(const PacketSessionRef& session, const Protocol::S_SPAWN& pkt);
-void	Handle_S_DESPAWN(const PacketSessionRef& session, const Protocol::S_DESPAWN& pkt);
-void	Handle_S_CHAT(const PacketSessionRef& session, const Protocol::S_CHAT& pkt);
+void	Handle_GS_LOGIN(const PacketSessionRef& session, const Protocol::GS_LOGIN& pkt);
+void	Handle_GS_ENTER_ROOM(const PacketSessionRef& session, const Protocol::GS_ENTER_ROOM& pkt);
+void	Handle_GS_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::GS_LEAVE_ROOM& pkt);
+void	Handle_GS_SPAWN(const PacketSessionRef& session, const Protocol::GS_SPAWN& pkt);
+void	Handle_GS_DESPAWN(const PacketSessionRef& session, const Protocol::GS_DESPAWN& pkt);
+void	Handle_GS_CHAT(const PacketSessionRef& session, const Protocol::GS_CHAT& pkt);
+void	Handle_AS_SIGNUP(const PacketSessionRef& session, const Protocol::AS_SIGNUP& pkt);
+void	Handle_AS_VERIFY_MAIL_REQ(const PacketSessionRef& session, const Protocol::AS_VERIFY_MAIL_REQ& pkt);
+void	Handle_AS_VERIFY_EMAIL_CODE(const PacketSessionRef& session, const Protocol::AS_VERIFY_EMAIL_CODE& pkt);
+void	Handle_AS_LOGIN(const PacketSessionRef& session, const Protocol::AS_LOGIN& pkt);
 
 class ServerPacketHandler
 {
@@ -50,23 +62,35 @@ public:
 	{
 		for (int i = 0; i < UINT16_MAX; ++i)
 			GPacketHandler[i] = Handle_INVALID;
-		GPacketHandler[PKT_S_LOGIN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
-			return GetCallback<Protocol::S_LOGIN>(outFunc, Handle_S_LOGIN, session, buffer, len);
+		GPacketHandler[PKT_GS_LOGIN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GS_LOGIN>(outFunc, Handle_GS_LOGIN, session, buffer, len);
 		};
-		GPacketHandler[PKT_S_ENTER_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
-			return GetCallback<Protocol::S_ENTER_ROOM>(outFunc, Handle_S_ENTER_ROOM, session, buffer, len);
+		GPacketHandler[PKT_GS_ENTER_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GS_ENTER_ROOM>(outFunc, Handle_GS_ENTER_ROOM, session, buffer, len);
 		};
-		GPacketHandler[PKT_S_LEAVE_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
-			return GetCallback<Protocol::S_LEAVE_ROOM>(outFunc, Handle_S_LEAVE_ROOM, session, buffer, len);
+		GPacketHandler[PKT_GS_LEAVE_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GS_LEAVE_ROOM>(outFunc, Handle_GS_LEAVE_ROOM, session, buffer, len);
 		};
-		GPacketHandler[PKT_S_SPAWN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
-			return GetCallback<Protocol::S_SPAWN>(outFunc, Handle_S_SPAWN, session, buffer, len);
+		GPacketHandler[PKT_GS_SPAWN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GS_SPAWN>(outFunc, Handle_GS_SPAWN, session, buffer, len);
 		};
-		GPacketHandler[PKT_S_DESPAWN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
-			return GetCallback<Protocol::S_DESPAWN>(outFunc, Handle_S_DESPAWN, session, buffer, len);
+		GPacketHandler[PKT_GS_DESPAWN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GS_DESPAWN>(outFunc, Handle_GS_DESPAWN, session, buffer, len);
 		};
-		GPacketHandler[PKT_S_CHAT] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
-			return GetCallback<Protocol::S_CHAT>(outFunc, Handle_S_CHAT, session, buffer, len);
+		GPacketHandler[PKT_GS_CHAT] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GS_CHAT>(outFunc, Handle_GS_CHAT, session, buffer, len);
+		};
+		GPacketHandler[PKT_AS_SIGNUP] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::AS_SIGNUP>(outFunc, Handle_AS_SIGNUP, session, buffer, len);
+		};
+		GPacketHandler[PKT_AS_VERIFY_MAIL_REQ] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::AS_VERIFY_MAIL_REQ>(outFunc, Handle_AS_VERIFY_MAIL_REQ, session, buffer, len);
+		};
+		GPacketHandler[PKT_AS_VERIFY_EMAIL_CODE] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::AS_VERIFY_EMAIL_CODE>(outFunc, Handle_AS_VERIFY_EMAIL_CODE, session, buffer, len);
+		};
+		GPacketHandler[PKT_AS_LOGIN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::AS_LOGIN>(outFunc, Handle_AS_LOGIN, session, buffer, len);
 		};
 	}
 
@@ -75,10 +99,14 @@ public:
 		PacketHeader*	header = reinterpret_cast<PacketHeader*>(buffer);
 		return GPacketHandler[header->id](outFunc, session, buffer, len);
 	}
-	static SendBufferRef MakeSendBuffer(Protocol::C_LOGIN& pkt) { return MakeSendBuffer(pkt, PKT_C_LOGIN); }
-	static SendBufferRef MakeSendBuffer(Protocol::C_ENTER_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_C_ENTER_ROOM); }
-	static SendBufferRef MakeSendBuffer(Protocol::C_LEAVE_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_C_LEAVE_ROOM); }
-	static SendBufferRef MakeSendBuffer(Protocol::C_CHAT& pkt) { return MakeSendBuffer(pkt, PKT_C_CHAT); }
+	static SendBufferRef MakeSendBuffer(Protocol::GC_LOGIN& pkt) { return MakeSendBuffer(pkt, PKT_GC_LOGIN); }
+	static SendBufferRef MakeSendBuffer(Protocol::GC_ENTER_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_GC_ENTER_ROOM); }
+	static SendBufferRef MakeSendBuffer(Protocol::GC_LEAVE_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_GC_LEAVE_ROOM); }
+	static SendBufferRef MakeSendBuffer(Protocol::GC_CHAT& pkt) { return MakeSendBuffer(pkt, PKT_GC_CHAT); }
+	static SendBufferRef MakeSendBuffer(Protocol::AC_SIGNUP& pkt) { return MakeSendBuffer(pkt, PKT_AC_SIGNUP); }
+	static SendBufferRef MakeSendBuffer(Protocol::AC_VERIFY_MAIL_REQ& pkt) { return MakeSendBuffer(pkt, PKT_AC_VERIFY_MAIL_REQ); }
+	static SendBufferRef MakeSendBuffer(Protocol::AC_VERIFY_EMAIL_CODE& pkt) { return MakeSendBuffer(pkt, PKT_AC_VERIFY_EMAIL_CODE); }
+	static SendBufferRef MakeSendBuffer(Protocol::AC_LOGIN& pkt) { return MakeSendBuffer(pkt, PKT_AC_LOGIN); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>

@@ -4,8 +4,8 @@ protoc -I=./ --cpp_out=./ ./Enum.proto
 protoc -I=./ --cpp_out=./ ./Struct.proto
 protoc -I=./ --cpp_out=./ ./Protocol.proto
 
-GenPackets.exe --path=./Protocol.proto --output=ClientPacketHandler --recv=C_ --send=S_
-GenPackets.exe --path=./Protocol.proto --output=ServerPacketHandler --recv=S_ --send=C_
+GenPackets.exe --path=./Protocol.proto --output=ClientPacketHandler --recv=GC_ --send=GS_
+GenPackets.exe --path=./Protocol.proto --output=ServerPacketHandler --recv GS_ AS_ --send GC_ AC_
 
 IF ERRORLEVEL 1 PAUSE
 

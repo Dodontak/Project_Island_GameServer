@@ -15,7 +15,7 @@ void Player::ChatTest(const string& msg)
 {
 	if (RoomRef room = _room.lock())
 	{
-		Protocol::S_CHAT pkt;
+		Protocol::GS_CHAT pkt;
 		string chatMsg = _info.name() + " : " + msg;
 		pkt.set_msg(chatMsg);
 

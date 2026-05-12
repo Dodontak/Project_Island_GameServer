@@ -57,13 +57,13 @@ int main()
 			}
 		);
 	}
-	while (true)
-	{
-		Protocol::S_CHAT pkt;
-		pkt.set_msg("HelloWorld!");
-		auto sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
+	//while (true)
+	//{
+	//	Protocol::GS_CHAT pkt;
+	//	pkt.set_msg("HelloWorld!");
+	//	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(pkt);
 
-		service->broad_cast_test(sendBuffer);
-		this_thread::sleep_for(1s);
-	}
+	//	service->broad_cast_test(sendBuffer);
+	//	this_thread::sleep_for(1s);
+	//}
 }

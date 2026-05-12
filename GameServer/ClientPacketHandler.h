@@ -23,23 +23,23 @@ extern PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
 enum : uint16
 {
-	PKT_C_LOGIN = 1000,
-	PKT_S_LOGIN = 1001,
-	PKT_C_ENTER_ROOM = 1002,
-	PKT_S_ENTER_ROOM = 1003,
-	PKT_C_LEAVE_ROOM = 1004,
-	PKT_S_LEAVE_ROOM = 1005,
-	PKT_S_SPAWN = 1006,
-	PKT_S_DESPAWN = 1007,
-	PKT_C_CHAT = 1008,
-	PKT_S_CHAT = 1009,
+	PKT_GC_LOGIN = 10000,
+	PKT_GS_LOGIN = 10001,
+	PKT_GC_ENTER_ROOM = 10002,
+	PKT_GS_ENTER_ROOM = 10003,
+	PKT_GC_LEAVE_ROOM = 10004,
+	PKT_GS_LEAVE_ROOM = 10005,
+	PKT_GS_SPAWN = 10006,
+	PKT_GS_DESPAWN = 10007,
+	PKT_GC_CHAT = 10008,
+	PKT_GS_CHAT = 10009,
 };
 
 bool	Handle_INVALID(DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len);
-void	Handle_C_LOGIN(const PacketSessionRef& session, const Protocol::C_LOGIN& pkt);
-void	Handle_C_ENTER_ROOM(const PacketSessionRef& session, const Protocol::C_ENTER_ROOM& pkt);
-void	Handle_C_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::C_LEAVE_ROOM& pkt);
-void	Handle_C_CHAT(const PacketSessionRef& session, const Protocol::C_CHAT& pkt);
+void	Handle_GC_LOGIN(const PacketSessionRef& session, const Protocol::GC_LOGIN& pkt);
+void	Handle_GC_ENTER_ROOM(const PacketSessionRef& session, const Protocol::GC_ENTER_ROOM& pkt);
+void	Handle_GC_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::GC_LEAVE_ROOM& pkt);
+void	Handle_GC_CHAT(const PacketSessionRef& session, const Protocol::GC_CHAT& pkt);
 
 class ClientPacketHandler
 {
@@ -48,17 +48,17 @@ public:
 	{
 		for (int i = 0; i < UINT16_MAX; ++i)
 			GPacketHandler[i] = Handle_INVALID;
-		GPacketHandler[PKT_C_LOGIN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
-			return GetCallback<Protocol::C_LOGIN>(outFunc, Handle_C_LOGIN, session, buffer, len);
+		GPacketHandler[PKT_GC_LOGIN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GC_LOGIN>(outFunc, Handle_GC_LOGIN, session, buffer, len);
 		};
-		GPacketHandler[PKT_C_ENTER_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
-			return GetCallback<Protocol::C_ENTER_ROOM>(outFunc, Handle_C_ENTER_ROOM, session, buffer, len);
+		GPacketHandler[PKT_GC_ENTER_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GC_ENTER_ROOM>(outFunc, Handle_GC_ENTER_ROOM, session, buffer, len);
 		};
-		GPacketHandler[PKT_C_LEAVE_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
-			return GetCallback<Protocol::C_LEAVE_ROOM>(outFunc, Handle_C_LEAVE_ROOM, session, buffer, len);
+		GPacketHandler[PKT_GC_LEAVE_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GC_LEAVE_ROOM>(outFunc, Handle_GC_LEAVE_ROOM, session, buffer, len);
 		};
-		GPacketHandler[PKT_C_CHAT] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
-			return GetCallback<Protocol::C_CHAT>(outFunc, Handle_C_CHAT, session, buffer, len);
+		GPacketHandler[PKT_GC_CHAT] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GC_CHAT>(outFunc, Handle_GC_CHAT, session, buffer, len);
 		};
 	}
 
@@ -67,12 +67,12 @@ public:
 		PacketHeader*	header = reinterpret_cast<PacketHeader*>(buffer);
 		return GPacketHandler[header->id](outFunc, session, buffer, len);
 	}
-	static SendBufferRef MakeSendBuffer(Protocol::S_LOGIN& pkt) { return MakeSendBuffer(pkt, PKT_S_LOGIN); }
-	static SendBufferRef MakeSendBuffer(Protocol::S_ENTER_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_S_ENTER_ROOM); }
-	static SendBufferRef MakeSendBuffer(Protocol::S_LEAVE_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_S_LEAVE_ROOM); }
-	static SendBufferRef MakeSendBuffer(Protocol::S_SPAWN& pkt) { return MakeSendBuffer(pkt, PKT_S_SPAWN); }
-	static SendBufferRef MakeSendBuffer(Protocol::S_DESPAWN& pkt) { return MakeSendBuffer(pkt, PKT_S_DESPAWN); }
-	static SendBufferRef MakeSendBuffer(Protocol::S_CHAT& pkt) { return MakeSendBuffer(pkt, PKT_S_CHAT); }
+	static SendBufferRef MakeSendBuffer(Protocol::GS_LOGIN& pkt) { return MakeSendBuffer(pkt, PKT_GS_LOGIN); }
+	static SendBufferRef MakeSendBuffer(Protocol::GS_ENTER_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_GS_ENTER_ROOM); }
+	static SendBufferRef MakeSendBuffer(Protocol::GS_LEAVE_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_GS_LEAVE_ROOM); }
+	static SendBufferRef MakeSendBuffer(Protocol::GS_SPAWN& pkt) { return MakeSendBuffer(pkt, PKT_GS_SPAWN); }
+	static SendBufferRef MakeSendBuffer(Protocol::GS_DESPAWN& pkt) { return MakeSendBuffer(pkt, PKT_GS_DESPAWN); }
+	static SendBufferRef MakeSendBuffer(Protocol::GS_CHAT& pkt) { return MakeSendBuffer(pkt, PKT_GS_CHAT); }
 
 private:
 	template<typename PacketType, typename ProcessFunc>
