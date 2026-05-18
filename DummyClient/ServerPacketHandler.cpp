@@ -28,6 +28,21 @@ void Handle_GS_LOGIN(const PacketSessionRef& session, const Protocol::GS_LOGIN& 
 	session->Send(ServerPacketHandler::MakeSendBuffer(enterRoomPkt));
 }
 
+void Handle_GS_CHARACTER_LIST(const PacketSessionRef& session, const Protocol::GS_CHARACTER_LIST& pkt)
+{
+
+}
+
+void Handle_GS_CHECK_NICKNAME(const PacketSessionRef& session, const Protocol::GS_CHECK_NICKNAME& pkt)
+{
+
+}
+
+void Handle_GS_CREATE_CHARACTER(const PacketSessionRef & session, const Protocol::GS_CREATE_CHARACTER & pkt)
+{
+
+}
+
 void Handle_GS_ENTER_ROOM(const PacketSessionRef& session, const Protocol::GS_ENTER_ROOM& pkt)
 {
 	if (pkt.success() == false)
@@ -40,7 +55,8 @@ void Handle_GS_ENTER_ROOM(const PacketSessionRef& session, const Protocol::GS_EN
 }
 
 void Handle_GS_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::GS_LEAVE_ROOM& pkt)
-{}
+{
+}
 
 void Handle_GS_SPAWN(const PacketSessionRef& session, const Protocol::GS_SPAWN& pkt)
 {}

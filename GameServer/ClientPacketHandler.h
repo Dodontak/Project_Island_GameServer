@@ -25,18 +25,27 @@ enum : uint16
 {
 	PKT_GC_LOGIN = 10000,
 	PKT_GS_LOGIN = 10001,
-	PKT_GC_ENTER_ROOM = 10002,
-	PKT_GS_ENTER_ROOM = 10003,
-	PKT_GC_LEAVE_ROOM = 10004,
-	PKT_GS_LEAVE_ROOM = 10005,
-	PKT_GS_SPAWN = 10006,
-	PKT_GS_DESPAWN = 10007,
-	PKT_GC_CHAT = 10008,
-	PKT_GS_CHAT = 10009,
+	PKT_GC_CHARACTER_LIST = 10002,
+	PKT_GS_CHARACTER_LIST = 10003,
+	PKT_GC_CHECK_NICKNAME = 10004,
+	PKT_GS_CHECK_NICKNAME = 10005,
+	PKT_GC_CREATE_CHARACTER = 10006,
+	PKT_GS_CREATE_CHARACTER = 10007,
+	PKT_GC_ENTER_ROOM = 10008,
+	PKT_GS_ENTER_ROOM = 10009,
+	PKT_GC_LEAVE_ROOM = 10010,
+	PKT_GS_LEAVE_ROOM = 10011,
+	PKT_GS_SPAWN = 10012,
+	PKT_GS_DESPAWN = 10013,
+	PKT_GC_CHAT = 10014,
+	PKT_GS_CHAT = 10015,
 };
 
 bool	Handle_INVALID(DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len);
 void	Handle_GC_LOGIN(const PacketSessionRef& session, const Protocol::GC_LOGIN& pkt);
+void	Handle_GC_CHARACTER_LIST(const PacketSessionRef& session, const Protocol::GC_CHARACTER_LIST& pkt);
+void	Handle_GC_CHECK_NICKNAME(const PacketSessionRef& session, const Protocol::GC_CHECK_NICKNAME& pkt);
+void	Handle_GC_CREATE_CHARACTER(const PacketSessionRef& session, const Protocol::GC_CREATE_CHARACTER& pkt);
 void	Handle_GC_ENTER_ROOM(const PacketSessionRef& session, const Protocol::GC_ENTER_ROOM& pkt);
 void	Handle_GC_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::GC_LEAVE_ROOM& pkt);
 void	Handle_GC_CHAT(const PacketSessionRef& session, const Protocol::GC_CHAT& pkt);
@@ -50,6 +59,15 @@ public:
 			GPacketHandler[i] = Handle_INVALID;
 		GPacketHandler[PKT_GC_LOGIN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::GC_LOGIN>(outFunc, Handle_GC_LOGIN, session, buffer, len);
+		};
+		GPacketHandler[PKT_GC_CHARACTER_LIST] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GC_CHARACTER_LIST>(outFunc, Handle_GC_CHARACTER_LIST, session, buffer, len);
+		};
+		GPacketHandler[PKT_GC_CHECK_NICKNAME] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GC_CHECK_NICKNAME>(outFunc, Handle_GC_CHECK_NICKNAME, session, buffer, len);
+		};
+		GPacketHandler[PKT_GC_CREATE_CHARACTER] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GC_CREATE_CHARACTER>(outFunc, Handle_GC_CREATE_CHARACTER, session, buffer, len);
 		};
 		GPacketHandler[PKT_GC_ENTER_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::GC_ENTER_ROOM>(outFunc, Handle_GC_ENTER_ROOM, session, buffer, len);
@@ -68,6 +86,9 @@ public:
 		return GPacketHandler[header->id](outFunc, session, buffer, len);
 	}
 	static SendBufferRef MakeSendBuffer(Protocol::GS_LOGIN& pkt) { return MakeSendBuffer(pkt, PKT_GS_LOGIN); }
+	static SendBufferRef MakeSendBuffer(Protocol::GS_CHARACTER_LIST& pkt) { return MakeSendBuffer(pkt, PKT_GS_CHARACTER_LIST); }
+	static SendBufferRef MakeSendBuffer(Protocol::GS_CHECK_NICKNAME& pkt) { return MakeSendBuffer(pkt, PKT_GS_CHECK_NICKNAME); }
+	static SendBufferRef MakeSendBuffer(Protocol::GS_CREATE_CHARACTER& pkt) { return MakeSendBuffer(pkt, PKT_GS_CREATE_CHARACTER); }
 	static SendBufferRef MakeSendBuffer(Protocol::GS_ENTER_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_GS_ENTER_ROOM); }
 	static SendBufferRef MakeSendBuffer(Protocol::GS_LEAVE_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_GS_LEAVE_ROOM); }
 	static SendBufferRef MakeSendBuffer(Protocol::GS_SPAWN& pkt) { return MakeSendBuffer(pkt, PKT_GS_SPAWN); }

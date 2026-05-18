@@ -433,9 +433,10 @@ class PlayerInfo final : public ::google::protobuf::Message
   // accessors -------------------------------------------------------
   enum : int {
     kNameFieldNumber = 2,
-    kPosFieldNumber = 4,
+    kPosFieldNumber = 5,
     kIdFieldNumber = 1,
-    kPlayerTypeFieldNumber = 3,
+    kLevelFieldNumber = 3,
+    kPlayerTypeFieldNumber = 4,
   };
   // string name = 2;
   void clear_name() ;
@@ -453,7 +454,7 @@ class PlayerInfo final : public ::google::protobuf::Message
   std::string* _internal_mutable_name();
 
   public:
-  // .Protocol.Position pos = 4;
+  // .Protocol.Position pos = 5;
   bool has_pos() const;
   void clear_pos() ;
   const ::Protocol::Position& pos() const;
@@ -478,7 +479,17 @@ class PlayerInfo final : public ::google::protobuf::Message
   void _internal_set_id(::uint64_t value);
 
   public:
-  // .Protocol.PlayerType playerType = 3;
+  // uint32 level = 3;
+  void clear_level() ;
+  ::uint32_t level() const;
+  void set_level(::uint32_t value);
+
+  private:
+  ::uint32_t _internal_level() const;
+  void _internal_set_level(::uint32_t value);
+
+  public:
+  // .Protocol.PlayerType playerType = 4;
   void clear_playertype() ;
   ::Protocol::PlayerType playertype() const;
   void set_playertype(::Protocol::PlayerType value);
@@ -493,7 +504,7 @@ class PlayerInfo final : public ::google::protobuf::Message
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 4, 1,
+      3, 5, 1,
       32, 2>
       _table_;
 
@@ -516,6 +527,7 @@ class PlayerInfo final : public ::google::protobuf::Message
     ::google::protobuf::internal::ArenaStringPtr name_;
     ::Protocol::Position* pos_;
     ::uint64_t id_;
+    ::uint32_t level_;
     int playertype_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -609,7 +621,29 @@ inline void PlayerInfo::set_allocated_name(std::string* value) {
   // @@protoc_insertion_point(field_set_allocated:Protocol.PlayerInfo.name)
 }
 
-// .Protocol.PlayerType playerType = 3;
+// uint32 level = 3;
+inline void PlayerInfo::clear_level() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.level_ = 0u;
+}
+inline ::uint32_t PlayerInfo::level() const {
+  // @@protoc_insertion_point(field_get:Protocol.PlayerInfo.level)
+  return _internal_level();
+}
+inline void PlayerInfo::set_level(::uint32_t value) {
+  _internal_set_level(value);
+  // @@protoc_insertion_point(field_set:Protocol.PlayerInfo.level)
+}
+inline ::uint32_t PlayerInfo::_internal_level() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.level_;
+}
+inline void PlayerInfo::_internal_set_level(::uint32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.level_ = value;
+}
+
+// .Protocol.PlayerType playerType = 4;
 inline void PlayerInfo::clear_playertype() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.playertype_ = 0;
@@ -631,7 +665,7 @@ inline void PlayerInfo::_internal_set_playertype(::Protocol::PlayerType value) {
   _impl_.playertype_ = value;
 }
 
-// .Protocol.Position pos = 4;
+// .Protocol.Position pos = 5;
 inline bool PlayerInfo::has_pos() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.pos_ != nullptr);

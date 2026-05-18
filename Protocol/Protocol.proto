@@ -13,6 +13,35 @@ message GC_LOGIN {
 message GS_LOGIN {
 	bool success = 1;
 	uint32 user_id = 2;
+    string reason = 3;
+}
+
+message GC_CHARACTER_LIST {
+}
+
+message GS_CHARACTER_LIST {
+    bool success = 1;
+    repeated PlayerInfo characters = 2;
+    string reason = 3;
+}
+
+message GC_CHECK_NICKNAME {
+    string nickname = 1;
+}
+
+message GS_CHECK_NICKNAME {
+    bool success = 1;
+    string reason = 2;
+}
+
+message GC_CREATE_CHARACTER {
+    string nickname = 1;
+    PlayerType type = 2;
+}
+
+message GS_CREATE_CHARACTER {
+    bool success = 1;
+    string reason = 2;
 }
 
 message GC_ENTER_ROOM {

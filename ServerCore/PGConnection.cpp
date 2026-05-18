@@ -69,6 +69,11 @@ int32	PGConnection::GetRowCount()
 	return PQntuples(_result);
 }
 
+bool	PGConnection::IsQuerySuccessed()
+{
+	return PQresultStatus(_result) == PGRES_COMMAND_OK;
+}
+
 string	PGConnection::GetValue(int32 row, int32 col)
 {
 	return PQgetvalue(_result, row, col);

@@ -35,10 +35,10 @@ int main()
 	GRoom[0] = make_shared<Room>();
 	GRoom[1] = make_shared<Room>();
 	ClientPacketHandler::Init();
-	//GDBConnectionPool->Init(10, "192.168.0.39", 6379, 10,
-	//	"host=192.168.0.39 user=postgres port=5432 "
-	//	"dbname=postgres password=password "
-	//	"connect_timeout=3");
+	GDBConnectionPool->Init(10, "192.168.0.39", 6379, 10,
+		"host=192.168.0.39 user=postgres port=5432 "
+		"dbname=postgres password=password "
+		"connect_timeout=3");
 	ThreadManager threadManager;
 	ServiceRef service = make_shared<ServerService>(
 		NetAddress("0.0.0.0", 7777),

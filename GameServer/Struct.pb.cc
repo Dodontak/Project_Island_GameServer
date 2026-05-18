@@ -61,6 +61,7 @@ inline constexpr PlayerInfo::Impl_::Impl_(
             ::_pbi::ConstantInitialized()),
         pos_{nullptr},
         id_{::uint64_t{0u}},
+        level_{0u},
         playertype_{static_cast< ::Protocol::PlayerType >(0)} {}
 
 template <typename>
@@ -100,8 +101,10 @@ const ::uint32_t
         ~0u,  // no sizeof(Split)
         PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.id_),
         PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.name_),
+        PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.level_),
         PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.playertype_),
         PROTOBUF_FIELD_OFFSET(::Protocol::PlayerInfo, _impl_.pos_),
+        ~0u,
         ~0u,
         ~0u,
         ~0u,
@@ -121,8 +124,8 @@ const ::uint32_t
 
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-        {0, 12, -1, sizeof(::Protocol::PlayerInfo)},
-        {16, -1, -1, sizeof(::Protocol::Position)},
+        {0, 13, -1, sizeof(::Protocol::PlayerInfo)},
+        {18, -1, -1, sizeof(::Protocol::Position)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::Protocol::_PlayerInfo_default_instance_._instance,
@@ -130,12 +133,12 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 const char descriptor_table_protodef_Struct_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
-    "\n\014Struct.proto\022\010Protocol\032\nEnum.proto\"q\n\n"
-    "PlayerInfo\022\n\n\002id\030\001 \001(\004\022\014\n\004name\030\002 \001(\t\022(\n\n"
-    "playerType\030\003 \001(\0162\024.Protocol.PlayerType\022\037"
-    "\n\003pos\030\004 \001(\0132\022.Protocol.Position\"+\n\010Posit"
-    "ion\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002b\006pr"
-    "oto3"
+    "\n\014Struct.proto\022\010Protocol\032\nEnum.proto\"\200\001\n"
+    "\nPlayerInfo\022\n\n\002id\030\001 \001(\004\022\014\n\004name\030\002 \001(\t\022\r\n"
+    "\005level\030\003 \001(\r\022(\n\nplayerType\030\004 \001(\0162\024.Proto"
+    "col.PlayerType\022\037\n\003pos\030\005 \001(\0132\022.Protocol.P"
+    "osition\"+\n\010Position\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001("
+    "\002\022\t\n\001z\030\003 \001(\002b\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_Struct_2eproto_deps[1] =
     {
@@ -145,7 +148,7 @@ static ::absl::once_flag descriptor_table_Struct_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_Struct_2eproto = {
     false,
     false,
-    204,
+    220,
     descriptor_table_protodef_Struct_2eproto,
     "Struct.proto",
     &descriptor_table_Struct_2eproto_once,
@@ -276,15 +279,15 @@ const ::google::protobuf::internal::ClassData* PlayerInfo::GetClassData() const 
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 4, 1, 32, 2> PlayerInfo::_table_ = {
+const ::_pbi::TcParseTable<3, 5, 1, 32, 2> PlayerInfo::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_._has_bits_),
     0, // no _extensions_
-    4, 24,  // max_field_number, fast_idx_mask
+    5, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967280,  // skipmap
+    4294967264,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    4,  // num_field_entries
+    5,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     _class_data_.base(),
@@ -294,18 +297,24 @@ const ::_pbi::TcParseTable<2, 4, 1, 32, 2> PlayerInfo::_table_ = {
     ::_pbi::TcParser::GetTable<::Protocol::PlayerInfo>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // .Protocol.Position pos = 4;
-    {::_pbi::TcParser::FastMtS1,
-     {34, 0, 0, PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.pos_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // uint64 id = 1;
     {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(PlayerInfo, _impl_.id_), 63>(),
      {8, 63, 0, PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.id_)}},
     // string name = 2;
     {::_pbi::TcParser::FastUS1,
      {18, 63, 0, PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.name_)}},
-    // .Protocol.PlayerType playerType = 3;
+    // uint32 level = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(PlayerInfo, _impl_.level_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.level_)}},
+    // .Protocol.PlayerType playerType = 4;
     {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(PlayerInfo, _impl_.playertype_), 63>(),
-     {24, 63, 0, PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.playertype_)}},
+     {32, 63, 0, PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.playertype_)}},
+    // .Protocol.Position pos = 5;
+    {::_pbi::TcParser::FastMtS1,
+     {42, 0, 0, PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.pos_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
@@ -315,10 +324,13 @@ const ::_pbi::TcParseTable<2, 4, 1, 32, 2> PlayerInfo::_table_ = {
     // string name = 2;
     {PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.name_), -1, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // .Protocol.PlayerType playerType = 3;
+    // uint32 level = 3;
+    {PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.level_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUInt32)},
+    // .Protocol.PlayerType playerType = 4;
     {PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.playertype_), -1, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
-    // .Protocol.Position pos = 4;
+    // .Protocol.Position pos = 5;
     {PROTOBUF_FIELD_OFFSET(PlayerInfo, _impl_.pos_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
@@ -380,18 +392,25 @@ PROTOBUF_NOINLINE void PlayerInfo::Clear() {
             target = stream->WriteStringMaybeAliased(2, _s, target);
           }
 
-          // .Protocol.PlayerType playerType = 3;
+          // uint32 level = 3;
+          if (this_._internal_level() != 0) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteUInt32ToArray(
+                3, this_._internal_level(), target);
+          }
+
+          // .Protocol.PlayerType playerType = 4;
           if (this_._internal_playertype() != 0) {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteEnumToArray(
-                3, this_._internal_playertype(), target);
+                4, this_._internal_playertype(), target);
           }
 
           cached_has_bits = this_._impl_._has_bits_[0];
-          // .Protocol.Position pos = 4;
+          // .Protocol.Position pos = 5;
           if (cached_has_bits & 0x00000001u) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-                4, *this_._impl_.pos_, this_._impl_.pos_->GetCachedSize(), target,
+                5, *this_._impl_.pos_, this_._impl_.pos_->GetCachedSize(), target,
                 stream);
           }
 
@@ -427,7 +446,7 @@ PROTOBUF_NOINLINE void PlayerInfo::Clear() {
             }
           }
            {
-            // .Protocol.Position pos = 4;
+            // .Protocol.Position pos = 5;
             cached_has_bits = this_._impl_._has_bits_[0];
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 +
@@ -440,7 +459,12 @@ PROTOBUF_NOINLINE void PlayerInfo::Clear() {
               total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(
                   this_._internal_id());
             }
-            // .Protocol.PlayerType playerType = 3;
+            // uint32 level = 3;
+            if (this_._internal_level() != 0) {
+              total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(
+                  this_._internal_level());
+            }
+            // .Protocol.PlayerType playerType = 4;
             if (this_._internal_playertype() != 0) {
               total_size += 1 +
                             ::_pbi::WireFormatLite::EnumSize(this_._internal_playertype());
@@ -474,6 +498,9 @@ void PlayerInfo::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::goog
   }
   if (from._internal_id() != 0) {
     _this->_impl_.id_ = from._impl_.id_;
+  }
+  if (from._internal_level() != 0) {
+    _this->_impl_.level_ = from._impl_.level_;
   }
   if (from._internal_playertype() != 0) {
     _this->_impl_.playertype_ = from._impl_.playertype_;

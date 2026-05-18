@@ -14,7 +14,8 @@ public:
 
 	void		AddValue(const string& val);
 	bool		ExecuteSQL(const string& sql);
-	int32			GetRowCount();
+	bool		IsQuerySuccessed();
+	int32		GetRowCount();
 	string		GetValue(int32 row, int32 col);
 	bool		IsNull(int32 row, int32 col);
 
