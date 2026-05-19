@@ -12,6 +12,7 @@ public:
 	static int ErrorExit(const char* errstr);
 	static int32 GetRandNum(int32 start, int32 end);
 	static  bool VerifyAccessToken(const std::string& token, std::string& out_user_id, std::string& out_nickname);
+	static uint64 GetObjectId();
 
 	template<typename... Args>
 	static void LockPrint(Args&&... args)

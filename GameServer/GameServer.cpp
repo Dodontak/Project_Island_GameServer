@@ -32,8 +32,7 @@ int main()
 {
 	cout << "=== Server ===" << endl;
 	//Room 테스트용
-	GRoom[0] = make_shared<Room>();
-	GRoom[1] = make_shared<Room>();
+	GRoom = make_shared<Room>();
 	ClientPacketHandler::Init();
 	GDBConnectionPool->Init(10, "192.168.0.39", 6379, 10,
 		"host=192.168.0.39 user=postgres port=5432 "

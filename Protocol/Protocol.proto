@@ -45,11 +45,14 @@ message GS_CREATE_CHARACTER {
 }
 
 message GC_ENTER_ROOM {
-	uint32 room_id = 1;
+    int32 character_index = 1;
+    int32 room_id = 2;
 }
 
 message GS_ENTER_ROOM {
 	bool success = 1;
+    PlayerInfo character_info = 2;
+    string reason = 3;
 }
 
 message GC_LEAVE_ROOM {

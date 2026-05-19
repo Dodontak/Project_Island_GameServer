@@ -45,3 +45,10 @@ bool Utils::VerifyAccessToken(const string& token, string& out_user_id, string& 
 		return false;
 	}
 }
+
+uint64 Utils::GetObjectId()
+{
+	static atomic<uint64> atomic_id = 0;
+	uint64 id = atomic_id.fetch_add(1);
+	return id;
+}

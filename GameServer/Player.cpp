@@ -13,7 +13,7 @@ Player::~Player() {}
 
 void Player::ChatTest(const string& msg)
 {
-	if (RoomRef room = _room.lock())
+	if (RoomRef room = _room.load().lock())
 	{
 		Protocol::GS_CHAT pkt;
 		string chatMsg = _info.name() + " : " + msg;

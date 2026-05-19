@@ -3,16 +3,15 @@
 
 class Room;
 
-class Player
+class Player : public enable_shared_from_this<Player>
 {
 public:
 	Player(const Protocol::PlayerInfo& player, GameSessionRef owner);
-	~Player();
+	virtual ~Player();
 
 	void ChatTest(const string& msg);
 
 	Protocol::PlayerInfo _info;
 	weak_ptr<GameSession> _owner;
-	weak_ptr<Room> _room;
+	atomic<weak_ptr<Room>> _room;
 };
-

@@ -198,42 +198,55 @@ void Handle_GC_ENTER_ROOM(const PacketSessionRef& session, const Protocol::GC_EN
 	Protocol::GS_ENTER_ROOM response;
 	Utils::LockPrint("Handle_GC_ENTER_ROOM");
 
+	string pgGetCharacterListQuery = "SELECT nickname, level, job_type FROM game.characters WHERE user_id = $1";
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
 
-	Protocol::PlayerInfo playerInfo;
-	playerInfo.set_id(gameSession->_userId);
-	playerInfo.set_name("Player" + ::to_string(gameSession->_userId));
-	switch (gameSession->_userId % 4)
+	PGConnection* pg = GDBConnectionPool->PopPG();
+	pg->AddValue(::to_string(gameSession->_userId));
+	if (false == pg->ExecuteSQL(pgGetCharacterListQuery))
 	{
-	case 0:
-		playerInfo.set_playertype(Protocol::PlayerType::PLAYER_TYPE_ARCHER);
-		break;
-	case 1:
-		playerInfo.set_playertype(Protocol::PlayerType::PLAYER_TYPE_KNIGHT);
-		break;
-	case 2:
-		playerInfo.set_playertype(Protocol::PlayerType::PLAYER_TYPE_MAGE);
-		break;
+		Utils::LockPrint("Failed to execute SQL query:", pgGetCharacterListQuery);
+		pg->Clear();
+		GDBConnectionPool->Push(&pg);
+		response.set_success(false);
+		response.set_reason("500 DB Fail");
+		session->Send(ClientPacketHandler::MakeSendBuffer(response));
+		return;
 	}
-	Protocol::Position pos;
-	pos.set_x(Utils::GetRandNum(0, 1000));
-	pos.set_y(Utils::GetRandNum(0, 1000));
-	pos.set_x(100);
-	playerInfo.mutable_pos()->CopyFrom(pos);
 
-	PlayerRef player = make_shared<Player>(playerInfo, gameSession);
-	gameSession->_player = player;
-	RoomRef room = GRoom[pkt.room_id()];
+	int32 rowCount = pg->GetRowCount();
+	if (rowCount < pkt.character_index())
+	{
+		response.set_success(false);
+		response.set_reason("Character not found");
+		pg->Clear();
+		GDBConnectionPool->Push(&pg);
+		session->Send(ClientPacketHandler::MakeSendBuffer(response));
+		return;
+	}
 
-	room->DoAsync(&Room::Enter, player);
+	Protocol::PlayerInfo characterInfo;
+	Protocol::Position position;
+	characterInfo.set_id(Utils::GetObjectId());
+	characterInfo.set_name(pg->GetValue(pkt.character_index(), 0));
+	characterInfo.set_level(stoi(pg->GetValue(pkt.character_index(), 1)));
+	characterInfo.set_playertype((Protocol::PlayerType)stoi(pg->GetValue(pkt.character_index(), 2)));
+	position.set_x(Utils::GetRandom(0, 1000));
+	position.set_y(Utils::GetRandom(0, 1000));
+	position.set_z(100);
+	characterInfo.mutable_pos()->CopyFrom(position);
+	response.mutable_character_info()->CopyFrom(characterInfo);
+
+	PlayerRef player = make_shared<Player>(characterInfo, gameSession);
+	GRoom->Enter(player);
 
 	response.set_success(true);
-	this_thread::sleep_for(chrono::seconds(1));
 	session->Send(ClientPacketHandler::MakeSendBuffer(response));
 }
 
 void Handle_GC_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::GC_LEAVE_ROOM& pkt)
-{}
+{
+}
 
 void	Handle_GC_CHAT(const PacketSessionRef& session, const Protocol::GC_CHAT& pkt)
 {

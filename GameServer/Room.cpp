@@ -5,7 +5,7 @@
 #include "ClientPacketHandler.h"
 #include "GameSession.h"
 
-RoomRef GRoom[2];
+RoomRef GRoom;
 
 Room::Room()
 {
@@ -17,14 +17,8 @@ Room::~Room() {}
 
 void Room::Enter(PlayerRef player)
 {
-	_players.insert({ player->_info.id(), player });
-
-	Protocol::GS_CHAT pkt;
-	player->_room = static_pointer_cast<Room>(shared_from_this());
-	string msg = player->_info.name() + " Entered Room" + to_string(_roomId);
-	pkt.set_msg(msg);
-
-	Broadcast(ClientPacketHandler::MakeSendBuffer(pkt));
+	_players.insert(pair<uint64, PlayerRef>(player->_info.id(), player));
+	player->_room.store(static_pointer_cast<Room>(shared_from_this()));
 }
 
 void Room::Leave(PlayerRef player)
