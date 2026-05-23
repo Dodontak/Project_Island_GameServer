@@ -4,10 +4,7 @@
 #include "GameSession.h"
 #include "ClientPacketHandler.h"
 
-Player::Player(const Protocol::PlayerInfo& player, GameSessionRef owner) : _owner(owner)
-{
-	_info.CopyFrom(player);
-}
+Player::Player(GameSessionRef session) : _owner(session) {}
 
 Player::~Player() {}
 

@@ -92,6 +92,7 @@ class TLSSession : public Session
 {
 public:
 	TLSSession(ServiceRef service);
+	virtual ~TLSSession();
 
 	virtual void TLSAccept() final;
 	virtual void TLSConnect() final;
@@ -124,7 +125,7 @@ class PacketSession : public TLSSession
 {
 public:
 	PacketSession(ServiceRef service) : TLSSession(service) {}
-	virtual ~PacketSession() {}
+	virtual ~PacketSession();
 
 	virtual uint32 OnRecv(BYTE* buffer, uint32 len) final;
 	virtual void OnRecvPacket(BYTE* buffer, uint32 size) abstract;

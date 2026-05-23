@@ -35,10 +35,12 @@ enum : uint16
 	PKT_GS_ENTER_ROOM = 10009,
 	PKT_GC_LEAVE_ROOM = 10010,
 	PKT_GS_LEAVE_ROOM = 10011,
-	PKT_GS_SPAWN = 10012,
-	PKT_GS_DESPAWN = 10013,
-	PKT_GC_CHAT = 10014,
-	PKT_GS_CHAT = 10015,
+	PKT_GC_LEAVE_GAME = 10012,
+	PKT_GS_LEAVE_GAME = 10013,
+	PKT_GS_SPAWN = 10014,
+	PKT_GS_DESPAWN = 10015,
+	PKT_GC_CHAT = 10016,
+	PKT_GS_CHAT = 10017,
 	PKT_AC_SIGNUP = 20000,
 	PKT_AS_SIGNUP = 20001,
 	PKT_AC_VERIFY_MAIL_REQ = 20002,
@@ -56,6 +58,7 @@ void	Handle_GS_CHECK_NICKNAME(const PacketSessionRef& session, const Protocol::G
 void	Handle_GS_CREATE_CHARACTER(const PacketSessionRef& session, const Protocol::GS_CREATE_CHARACTER& pkt);
 void	Handle_GS_ENTER_ROOM(const PacketSessionRef& session, const Protocol::GS_ENTER_ROOM& pkt);
 void	Handle_GS_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::GS_LEAVE_ROOM& pkt);
+void	Handle_GS_LEAVE_GAME(const PacketSessionRef& session, const Protocol::GS_LEAVE_GAME& pkt);
 void	Handle_GS_SPAWN(const PacketSessionRef& session, const Protocol::GS_SPAWN& pkt);
 void	Handle_GS_DESPAWN(const PacketSessionRef& session, const Protocol::GS_DESPAWN& pkt);
 void	Handle_GS_CHAT(const PacketSessionRef& session, const Protocol::GS_CHAT& pkt);
@@ -88,6 +91,9 @@ public:
 		};
 		GPacketHandler[PKT_GS_LEAVE_ROOM] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::GS_LEAVE_ROOM>(outFunc, Handle_GS_LEAVE_ROOM, session, buffer, len);
+		};
+		GPacketHandler[PKT_GS_LEAVE_GAME] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GS_LEAVE_GAME>(outFunc, Handle_GS_LEAVE_GAME, session, buffer, len);
 		};
 		GPacketHandler[PKT_GS_SPAWN] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::GS_SPAWN>(outFunc, Handle_GS_SPAWN, session, buffer, len);
@@ -123,6 +129,7 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::GC_CREATE_CHARACTER& pkt) { return MakeSendBuffer(pkt, PKT_GC_CREATE_CHARACTER); }
 	static SendBufferRef MakeSendBuffer(Protocol::GC_ENTER_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_GC_ENTER_ROOM); }
 	static SendBufferRef MakeSendBuffer(Protocol::GC_LEAVE_ROOM& pkt) { return MakeSendBuffer(pkt, PKT_GC_LEAVE_ROOM); }
+	static SendBufferRef MakeSendBuffer(Protocol::GC_LEAVE_GAME& pkt) { return MakeSendBuffer(pkt, PKT_GC_LEAVE_GAME); }
 	static SendBufferRef MakeSendBuffer(Protocol::GC_CHAT& pkt) { return MakeSendBuffer(pkt, PKT_GC_CHAT); }
 	static SendBufferRef MakeSendBuffer(Protocol::AC_SIGNUP& pkt) { return MakeSendBuffer(pkt, PKT_AC_SIGNUP); }
 	static SendBufferRef MakeSendBuffer(Protocol::AC_VERIFY_MAIL_REQ& pkt) { return MakeSendBuffer(pkt, PKT_AC_VERIFY_MAIL_REQ); }

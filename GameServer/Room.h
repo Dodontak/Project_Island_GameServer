@@ -9,8 +9,10 @@ public:
 	Room();
 	~Room();
 
-	void Enter(PlayerRef player);
+	void Enter(PlayerRef player, int32 characterIndex, int32 roomId);
 	void Leave(PlayerRef player);
+
+	void LoadObjects(PlayerRef player);
 	void Broadcast(SendBufferRef sendBuffer);
 private:
 	uint32 _roomId;

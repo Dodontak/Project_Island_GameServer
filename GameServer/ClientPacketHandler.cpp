@@ -195,57 +195,32 @@ void Handle_GC_CREATE_CHARACTER(const PacketSessionRef& session, const Protocol:
 
 void Handle_GC_ENTER_ROOM(const PacketSessionRef& session, const Protocol::GC_ENTER_ROOM& pkt)
 {
-	Protocol::GS_ENTER_ROOM response;
 	Utils::LockPrint("Handle_GC_ENTER_ROOM");
 
-	string pgGetCharacterListQuery = "SELECT nickname, level, job_type FROM game.characters WHERE user_id = $1";
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+	PlayerRef player = make_shared<Player>(gameSession);
+	gameSession->_player = player;
+	
+	GRoom->DoAsync(&Room::Enter, player, pkt.character_index(), pkt.room_id());
+}
 
-	PGConnection* pg = GDBConnectionPool->PopPG();
-	pg->AddValue(::to_string(gameSession->_userId));
-	if (false == pg->ExecuteSQL(pgGetCharacterListQuery))
-	{
-		Utils::LockPrint("Failed to execute SQL query:", pgGetCharacterListQuery);
-		pg->Clear();
-		GDBConnectionPool->Push(&pg);
-		response.set_success(false);
-		response.set_reason("500 DB Fail");
-		session->Send(ClientPacketHandler::MakeSendBuffer(response));
-		return;
-	}
-
-	int32 rowCount = pg->GetRowCount();
-	if (rowCount < pkt.character_index())
-	{
-		response.set_success(false);
-		response.set_reason("Character not found");
-		pg->Clear();
-		GDBConnectionPool->Push(&pg);
-		session->Send(ClientPacketHandler::MakeSendBuffer(response));
-		return;
-	}
-
-	Protocol::PlayerInfo characterInfo;
-	Protocol::Position position;
-	characterInfo.set_id(Utils::GetObjectId());
-	characterInfo.set_name(pg->GetValue(pkt.character_index(), 0));
-	characterInfo.set_level(stoi(pg->GetValue(pkt.character_index(), 1)));
-	characterInfo.set_playertype((Protocol::PlayerType)stoi(pg->GetValue(pkt.character_index(), 2)));
-	position.set_x(Utils::GetRandom(0, 1000));
-	position.set_y(Utils::GetRandom(0, 1000));
-	position.set_z(100);
-	characterInfo.mutable_pos()->CopyFrom(position);
-	response.mutable_character_info()->CopyFrom(characterInfo);
-
-	PlayerRef player = make_shared<Player>(characterInfo, gameSession);
-	GRoom->Enter(player);
-
-	response.set_success(true);
-	session->Send(ClientPacketHandler::MakeSendBuffer(response));
+void Handle_GC_LEAVE_GAME(const PacketSessionRef& session, const Protocol::GC_LEAVE_GAME& pkt)
+{
+	Utils::LockPrint("Handle_GC_LEAVE_GAME");
 }
 
 void Handle_GC_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::GC_LEAVE_ROOM& pkt)
 {
+	Utils::LockPrint("Handle_GC_LEAVE_ROOM");
+	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+
+	PlayerRef player = gameSession->_player;
+	if (player == nullptr)
+		return;
+	RoomRef room = player->_room.load().lock();
+	if (room == nullptr)
+		return;
+	room->DoAsync(&Room::Leave, player);
 }
 
 void	Handle_GC_CHAT(const PacketSessionRef& session, const Protocol::GC_CHAT& pkt)

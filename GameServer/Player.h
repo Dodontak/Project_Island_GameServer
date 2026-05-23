@@ -6,7 +6,7 @@ class Room;
 class Player : public enable_shared_from_this<Player>
 {
 public:
-	Player(const Protocol::PlayerInfo& player, GameSessionRef owner);
+	Player(GameSessionRef session);
 	virtual ~Player();
 
 	void ChatTest(const string& msg);

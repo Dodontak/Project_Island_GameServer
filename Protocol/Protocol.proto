@@ -61,6 +61,12 @@ message GC_LEAVE_ROOM {
 message GS_LEAVE_ROOM {
 }
 
+message GC_LEAVE_GAME {
+}
+
+message GS_LEAVE_GAME {
+}
+
 message GS_SPAWN {
 	repeated PlayerInfo players = 1;
 }

@@ -5,7 +5,7 @@ class GameSession : public PacketSession
 {
 public:
 	GameSession(ServiceRef service);
-	~GameSession() {}
+	virtual ~GameSession();
 
 	virtual void OnRecvPacket(BYTE* buffer, uint32 size) override;
 public:

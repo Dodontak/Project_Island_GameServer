@@ -133,7 +133,10 @@ void	 Session::Send(SendBufferRef sendBuffer)
 		lock_guard<mutex> lock(_m);
 		bool isSuccess = Encrypt(sendBuffer, encBuffer);
 		if (isSuccess == false)
+		{
+			Utils::LockPrint("Encrypt Failed");
 			return;
+		}
 	}
 
 	{
@@ -360,6 +363,10 @@ TLSSession::TLSSession(ServiceRef service) : Session(service), _encRecvBuffer(BU
 		_ssl.Init(service->GetSSLContext());
 }
 
+TLSSession::~TLSSession()
+{
+}
+
 void TLSSession::TLSAccept()
 {
 	SslStatus status = _ssl.Accept();
@@ -517,6 +524,10 @@ void TLSSession::HandshakeSend()
 			RegisterSend();
 		}
 	}
+}
+
+PacketSession::~PacketSession()
+{
 }
 
 /*----------------------------------------------------------------------------*\

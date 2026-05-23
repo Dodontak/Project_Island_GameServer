@@ -72,6 +72,24 @@ struct GS_LEAVE_ROOMDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GS_LEAVE_ROOMDefaultTypeInternal _GS_LEAVE_ROOM_default_instance_;
+              template <typename>
+PROTOBUF_CONSTEXPR GS_LEAVE_GAME::GS_LEAVE_GAME(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::internal::ZeroFieldsBase(_class_data_.base()){}
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::internal::ZeroFieldsBase() {
+}
+#endif  // PROTOBUF_CUSTOM_VTABLE
+struct GS_LEAVE_GAMEDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR GS_LEAVE_GAMEDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~GS_LEAVE_GAMEDefaultTypeInternal() {}
+  union {
+    GS_LEAVE_GAME _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GS_LEAVE_GAMEDefaultTypeInternal _GS_LEAVE_GAME_default_instance_;
 
 inline constexpr GS_DESPAWN::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -227,6 +245,24 @@ struct GC_LEAVE_ROOMDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GC_LEAVE_ROOMDefaultTypeInternal _GC_LEAVE_ROOM_default_instance_;
+              template <typename>
+PROTOBUF_CONSTEXPR GC_LEAVE_GAME::GC_LEAVE_GAME(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::internal::ZeroFieldsBase(_class_data_.base()){}
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::internal::ZeroFieldsBase() {
+}
+#endif  // PROTOBUF_CUSTOM_VTABLE
+struct GC_LEAVE_GAMEDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR GC_LEAVE_GAMEDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~GC_LEAVE_GAMEDefaultTypeInternal() {}
+  union {
+    GC_LEAVE_GAME _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GC_LEAVE_GAMEDefaultTypeInternal _GC_LEAVE_GAME_default_instance_;
 
 inline constexpr GC_ENTER_ROOM::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -814,6 +850,22 @@ const ::uint32_t
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
         ~0u,  // no _has_bits_
+        PROTOBUF_FIELD_OFFSET(::Protocol::GC_LEAVE_GAME, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        ~0u,  // no _has_bits_
+        PROTOBUF_FIELD_OFFSET(::Protocol::GS_LEAVE_GAME, _internal_metadata_),
+        ~0u,  // no _extensions_
+        ~0u,  // no _oneof_case_
+        ~0u,  // no _weak_field_map_
+        ~0u,  // no _inlined_string_donated_
+        ~0u,  // no _split_
+        ~0u,  // no sizeof(Split)
+        ~0u,  // no _has_bits_
         PROTOBUF_FIELD_OFFSET(::Protocol::GS_SPAWN, _internal_metadata_),
         ~0u,  // no _extensions_
         ~0u,  // no _oneof_case_
@@ -957,18 +1009,20 @@ static const ::_pbi::MigrationSchema
         {88, 99, -1, sizeof(::Protocol::GS_ENTER_ROOM)},
         {102, -1, -1, sizeof(::Protocol::GC_LEAVE_ROOM)},
         {110, -1, -1, sizeof(::Protocol::GS_LEAVE_ROOM)},
-        {118, -1, -1, sizeof(::Protocol::GS_SPAWN)},
-        {127, -1, -1, sizeof(::Protocol::GS_DESPAWN)},
-        {136, -1, -1, sizeof(::Protocol::GC_CHAT)},
-        {146, -1, -1, sizeof(::Protocol::GS_CHAT)},
-        {156, -1, -1, sizeof(::Protocol::AC_SIGNUP)},
-        {168, -1, -1, sizeof(::Protocol::AS_SIGNUP)},
-        {180, -1, -1, sizeof(::Protocol::AC_VERIFY_MAIL_REQ)},
-        {189, -1, -1, sizeof(::Protocol::AS_VERIFY_MAIL_REQ)},
-        {201, -1, -1, sizeof(::Protocol::AC_VERIFY_EMAIL_CODE)},
-        {211, -1, -1, sizeof(::Protocol::AS_VERIFY_EMAIL_CODE)},
-        {223, -1, -1, sizeof(::Protocol::AC_LOGIN)},
-        {233, -1, -1, sizeof(::Protocol::AS_LOGIN)},
+        {118, -1, -1, sizeof(::Protocol::GC_LEAVE_GAME)},
+        {126, -1, -1, sizeof(::Protocol::GS_LEAVE_GAME)},
+        {134, -1, -1, sizeof(::Protocol::GS_SPAWN)},
+        {143, -1, -1, sizeof(::Protocol::GS_DESPAWN)},
+        {152, -1, -1, sizeof(::Protocol::GC_CHAT)},
+        {162, -1, -1, sizeof(::Protocol::GS_CHAT)},
+        {172, -1, -1, sizeof(::Protocol::AC_SIGNUP)},
+        {184, -1, -1, sizeof(::Protocol::AS_SIGNUP)},
+        {196, -1, -1, sizeof(::Protocol::AC_VERIFY_MAIL_REQ)},
+        {205, -1, -1, sizeof(::Protocol::AS_VERIFY_MAIL_REQ)},
+        {217, -1, -1, sizeof(::Protocol::AC_VERIFY_EMAIL_CODE)},
+        {227, -1, -1, sizeof(::Protocol::AS_VERIFY_EMAIL_CODE)},
+        {239, -1, -1, sizeof(::Protocol::AC_LOGIN)},
+        {249, -1, -1, sizeof(::Protocol::AS_LOGIN)},
 };
 static const ::_pb::Message* const file_default_instances[] = {
     &::Protocol::_GC_LOGIN_default_instance_._instance,
@@ -983,6 +1037,8 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::Protocol::_GS_ENTER_ROOM_default_instance_._instance,
     &::Protocol::_GC_LEAVE_ROOM_default_instance_._instance,
     &::Protocol::_GS_LEAVE_ROOM_default_instance_._instance,
+    &::Protocol::_GC_LEAVE_GAME_default_instance_._instance,
+    &::Protocol::_GS_LEAVE_GAME_default_instance_._instance,
     &::Protocol::_GS_SPAWN_default_instance_._instance,
     &::Protocol::_GS_DESPAWN_default_instance_._instance,
     &::Protocol::_GC_CHAT_default_instance_._instance,
@@ -1014,27 +1070,27 @@ const char descriptor_table_protodef_Protocol_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     " \001(\005\022\017\n\007room_id\030\002 \001(\005\"^\n\rGS_ENTER_ROOM\022\017"
     "\n\007success\030\001 \001(\010\022,\n\016character_info\030\002 \001(\0132"
     "\024.Protocol.PlayerInfo\022\016\n\006reason\030\003 \001(\t\"\017\n"
-    "\rGC_LEAVE_ROOM\"\017\n\rGS_LEAVE_ROOM\"1\n\010GS_SP"
-    "AWN\022%\n\007players\030\001 \003(\0132\024.Protocol.PlayerIn"
-    "fo\" \n\nGS_DESPAWN\022\022\n\nobject_ids\030\001 \003(\004\"\'\n\007"
-    "GC_CHAT\022\017\n\007user_id\030\001 \001(\005\022\013\n\003msg\030\002 \001(\t\"\'\n"
-    "\007GS_CHAT\022\017\n\007user_id\030\001 \001(\005\022\013\n\003msg\030\002 \001(\t\"R"
-    "\n\tAC_SIGNUP\022\020\n\010nickname\030\001 \001(\t\022\020\n\010passwor"
-    "d\030\002 \001(\t\022\r\n\005email\030\003 \001(\t\022\022\n\nskip_email\030\004 \001"
-    "(\010\"Q\n\tAS_SIGNUP\022\017\n\007success\030\001 \001(\010\022\022\n\nskip"
-    "_email\030\002 \001(\010\022\017\n\007temp_id\030\003 \001(\t\022\016\n\006reason\030"
-    "\004 \001(\t\"%\n\022AC_VERIFY_MAIL_REQ\022\017\n\007temp_id\030\001"
-    " \001(\t\"W\n\022AS_VERIFY_MAIL_REQ\022\017\n\007success\030\001 "
-    "\001(\010\022\017\n\007temp_id\030\002 \001(\t\022\017\n\007expired\030\003 \001(\010\022\016\n"
-    "\006reason\030\004 \001(\t\"<\n\024AC_VERIFY_EMAIL_CODE\022\017\n"
-    "\007temp_id\030\001 \001(\t\022\023\n\013verify_code\030\002 \001(\t\"Z\n\024A"
-    "S_VERIFY_EMAIL_CODE\022\017\n\007success\030\001 \001(\010\022\017\n\007"
-    "expired\030\002 \001(\010\022\020\n\010nickname\030\003 \001(\t\022\016\n\006reaso"
-    "n\030\004 \001(\t\".\n\010AC_LOGIN\022\020\n\010nickname\030\001 \001(\t\022\020\n"
-    "\010password\030\002 \001(\t\"`\n\010AS_LOGIN\022\017\n\007success\030\001"
-    " \001(\010\022\020\n\010is_block\030\002 \001(\010\022\022\n\nfail_count\030\003 \001"
-    "(\005\022\r\n\005token\030\004 \001(\t\022\016\n\006reason\030\005 \001(\tb\006proto"
-    "3"
+    "\rGC_LEAVE_ROOM\"\017\n\rGS_LEAVE_ROOM\"\017\n\rGC_LE"
+    "AVE_GAME\"\017\n\rGS_LEAVE_GAME\"1\n\010GS_SPAWN\022%\n"
+    "\007players\030\001 \003(\0132\024.Protocol.PlayerInfo\" \n\n"
+    "GS_DESPAWN\022\022\n\nobject_ids\030\001 \003(\004\"\'\n\007GC_CHA"
+    "T\022\017\n\007user_id\030\001 \001(\005\022\013\n\003msg\030\002 \001(\t\"\'\n\007GS_CH"
+    "AT\022\017\n\007user_id\030\001 \001(\005\022\013\n\003msg\030\002 \001(\t\"R\n\tAC_S"
+    "IGNUP\022\020\n\010nickname\030\001 \001(\t\022\020\n\010password\030\002 \001("
+    "\t\022\r\n\005email\030\003 \001(\t\022\022\n\nskip_email\030\004 \001(\010\"Q\n\t"
+    "AS_SIGNUP\022\017\n\007success\030\001 \001(\010\022\022\n\nskip_email"
+    "\030\002 \001(\010\022\017\n\007temp_id\030\003 \001(\t\022\016\n\006reason\030\004 \001(\t\""
+    "%\n\022AC_VERIFY_MAIL_REQ\022\017\n\007temp_id\030\001 \001(\t\"W"
+    "\n\022AS_VERIFY_MAIL_REQ\022\017\n\007success\030\001 \001(\010\022\017\n"
+    "\007temp_id\030\002 \001(\t\022\017\n\007expired\030\003 \001(\010\022\016\n\006reaso"
+    "n\030\004 \001(\t\"<\n\024AC_VERIFY_EMAIL_CODE\022\017\n\007temp_"
+    "id\030\001 \001(\t\022\023\n\013verify_code\030\002 \001(\t\"Z\n\024AS_VERI"
+    "FY_EMAIL_CODE\022\017\n\007success\030\001 \001(\010\022\017\n\007expire"
+    "d\030\002 \001(\010\022\020\n\010nickname\030\003 \001(\t\022\016\n\006reason\030\004 \001("
+    "\t\".\n\010AC_LOGIN\022\020\n\010nickname\030\001 \001(\t\022\020\n\010passw"
+    "ord\030\002 \001(\t\"`\n\010AS_LOGIN\022\017\n\007success\030\001 \001(\010\022\020"
+    "\n\010is_block\030\002 \001(\010\022\022\n\nfail_count\030\003 \001(\005\022\r\n\005"
+    "token\030\004 \001(\t\022\016\n\006reason\030\005 \001(\tb\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_deps[2] =
     {
@@ -1045,13 +1101,13 @@ static ::absl::once_flag descriptor_table_Protocol_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
     false,
     false,
-    1441,
+    1475,
     descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
     &descriptor_table_Protocol_2eproto_once,
     descriptor_table_Protocol_2eproto_deps,
     2,
-    24,
+    26,
     schemas,
     file_default_instances,
     TableStruct_Protocol_2eproto::offsets,
@@ -3764,6 +3820,212 @@ const ::_pbi::TcParseTable<0, 0, 0, 0, 2> GS_LEAVE_ROOM::_table_ = {
 
 
 ::google::protobuf::Metadata GS_LEAVE_ROOM::GetMetadata() const {
+  return ::google::protobuf::internal::ZeroFieldsBase::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class GC_LEAVE_GAME::_Internal {
+ public:
+};
+
+GC_LEAVE_GAME::GC_LEAVE_GAME(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::internal::ZeroFieldsBase(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::internal::ZeroFieldsBase(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  // @@protoc_insertion_point(arena_constructor:Protocol.GC_LEAVE_GAME)
+}
+GC_LEAVE_GAME::GC_LEAVE_GAME(
+    ::google::protobuf::Arena* arena,
+    const GC_LEAVE_GAME& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::internal::ZeroFieldsBase(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::internal::ZeroFieldsBase(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  GC_LEAVE_GAME* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+
+  // @@protoc_insertion_point(copy_constructor:Protocol.GC_LEAVE_GAME)
+}
+
+inline void* GC_LEAVE_GAME::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) GC_LEAVE_GAME(arena);
+}
+constexpr auto GC_LEAVE_GAME::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(GC_LEAVE_GAME),
+                                            alignof(GC_LEAVE_GAME));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull GC_LEAVE_GAME::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_GC_LEAVE_GAME_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &GC_LEAVE_GAME::MergeImpl,
+        ::google::protobuf::internal::ZeroFieldsBase::GetNewImpl<GC_LEAVE_GAME>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &GC_LEAVE_GAME::SharedDtor,
+        ::google::protobuf::internal::ZeroFieldsBase::GetClearImpl<GC_LEAVE_GAME>(), &GC_LEAVE_GAME::ByteSizeLong,
+            &GC_LEAVE_GAME::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(GC_LEAVE_GAME, _impl_._cached_size_),
+        false,
+    },
+    &GC_LEAVE_GAME::kDescriptorMethods,
+    &descriptor_table_Protocol_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* GC_LEAVE_GAME::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 0, 0, 0, 2> GC_LEAVE_GAME::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    0, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967295,  // skipmap
+    offsetof(decltype(_table_), field_names),  // no field_entries
+    0,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::Protocol::GC_LEAVE_GAME>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+  }}, {{
+    65535, 65535
+  }},
+  // no field_entries, or aux_entries
+  {{
+  }},
+};
+
+
+
+
+
+
+
+
+::google::protobuf::Metadata GC_LEAVE_GAME::GetMetadata() const {
+  return ::google::protobuf::internal::ZeroFieldsBase::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class GS_LEAVE_GAME::_Internal {
+ public:
+};
+
+GS_LEAVE_GAME::GS_LEAVE_GAME(::google::protobuf::Arena* arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::internal::ZeroFieldsBase(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::internal::ZeroFieldsBase(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  // @@protoc_insertion_point(arena_constructor:Protocol.GS_LEAVE_GAME)
+}
+GS_LEAVE_GAME::GS_LEAVE_GAME(
+    ::google::protobuf::Arena* arena,
+    const GS_LEAVE_GAME& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::internal::ZeroFieldsBase(arena, _class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::internal::ZeroFieldsBase(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  GS_LEAVE_GAME* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+
+  // @@protoc_insertion_point(copy_constructor:Protocol.GS_LEAVE_GAME)
+}
+
+inline void* GS_LEAVE_GAME::PlacementNew_(const void*, void* mem,
+                                        ::google::protobuf::Arena* arena) {
+  return ::new (mem) GS_LEAVE_GAME(arena);
+}
+constexpr auto GS_LEAVE_GAME::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(GS_LEAVE_GAME),
+                                            alignof(GS_LEAVE_GAME));
+}
+PROTOBUF_CONSTINIT
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::google::protobuf::internal::ClassDataFull GS_LEAVE_GAME::_class_data_ = {
+    ::google::protobuf::internal::ClassData{
+        &_GS_LEAVE_GAME_default_instance_._instance,
+        &_table_.header,
+        nullptr,  // OnDemandRegisterArenaDtor
+        nullptr,  // IsInitialized
+        &GS_LEAVE_GAME::MergeImpl,
+        ::google::protobuf::internal::ZeroFieldsBase::GetNewImpl<GS_LEAVE_GAME>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+        &GS_LEAVE_GAME::SharedDtor,
+        ::google::protobuf::internal::ZeroFieldsBase::GetClearImpl<GS_LEAVE_GAME>(), &GS_LEAVE_GAME::ByteSizeLong,
+            &GS_LEAVE_GAME::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+        PROTOBUF_FIELD_OFFSET(GS_LEAVE_GAME, _impl_._cached_size_),
+        false,
+    },
+    &GS_LEAVE_GAME::kDescriptorMethods,
+    &descriptor_table_Protocol_2eproto,
+    nullptr,  // tracker
+};
+const ::google::protobuf::internal::ClassData* GS_LEAVE_GAME::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(_class_data_.tc_table);
+  return _class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 0, 0, 0, 2> GS_LEAVE_GAME::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    0, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967295,  // skipmap
+    offsetof(decltype(_table_), field_names),  // no field_entries
+    0,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    _class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::Protocol::GS_LEAVE_GAME>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+  }}, {{
+    65535, 65535
+  }},
+  // no field_entries, or aux_entries
+  {{
+  }},
+};
+
+
+
+
+
+
+
+
+::google::protobuf::Metadata GS_LEAVE_GAME::GetMetadata() const {
   return ::google::protobuf::internal::ZeroFieldsBase::GetMetadataImpl(GetClassData()->full());
 }
 // ===================================================================

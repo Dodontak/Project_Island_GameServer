@@ -94,6 +94,9 @@ extern GC_CREATE_CHARACTERDefaultTypeInternal _GC_CREATE_CHARACTER_default_insta
 class GC_ENTER_ROOM;
 struct GC_ENTER_ROOMDefaultTypeInternal;
 extern GC_ENTER_ROOMDefaultTypeInternal _GC_ENTER_ROOM_default_instance_;
+class GC_LEAVE_GAME;
+struct GC_LEAVE_GAMEDefaultTypeInternal;
+extern GC_LEAVE_GAMEDefaultTypeInternal _GC_LEAVE_GAME_default_instance_;
 class GC_LEAVE_ROOM;
 struct GC_LEAVE_ROOMDefaultTypeInternal;
 extern GC_LEAVE_ROOMDefaultTypeInternal _GC_LEAVE_ROOM_default_instance_;
@@ -118,6 +121,9 @@ extern GS_DESPAWNDefaultTypeInternal _GS_DESPAWN_default_instance_;
 class GS_ENTER_ROOM;
 struct GS_ENTER_ROOMDefaultTypeInternal;
 extern GS_ENTER_ROOMDefaultTypeInternal _GS_ENTER_ROOM_default_instance_;
+class GS_LEAVE_GAME;
+struct GS_LEAVE_GAMEDefaultTypeInternal;
+extern GS_LEAVE_GAMEDefaultTypeInternal _GS_LEAVE_GAME_default_instance_;
 class GS_LEAVE_ROOM;
 struct GS_LEAVE_ROOMDefaultTypeInternal;
 extern GS_LEAVE_ROOMDefaultTypeInternal _GS_LEAVE_ROOM_default_instance_;
@@ -505,6 +511,151 @@ class GS_LEAVE_ROOM final : public ::google::protobuf::internal::ZeroFieldsBase
 };
 // -------------------------------------------------------------------
 
+class GS_LEAVE_GAME final : public ::google::protobuf::internal::ZeroFieldsBase
+/* @@protoc_insertion_point(class_definition:Protocol.GS_LEAVE_GAME) */ {
+ public:
+  inline GS_LEAVE_GAME() : GS_LEAVE_GAME(nullptr) {}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(GS_LEAVE_GAME* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(GS_LEAVE_GAME));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR GS_LEAVE_GAME(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline GS_LEAVE_GAME(const GS_LEAVE_GAME& from) : GS_LEAVE_GAME(nullptr, from) {}
+  inline GS_LEAVE_GAME(GS_LEAVE_GAME&& from) noexcept
+      : GS_LEAVE_GAME(nullptr, std::move(from)) {}
+  inline GS_LEAVE_GAME& operator=(const GS_LEAVE_GAME& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GS_LEAVE_GAME& operator=(GS_LEAVE_GAME&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GS_LEAVE_GAME& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GS_LEAVE_GAME* internal_default_instance() {
+    return reinterpret_cast<const GS_LEAVE_GAME*>(
+        &_GS_LEAVE_GAME_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 13;
+  friend void swap(GS_LEAVE_GAME& a, GS_LEAVE_GAME& b) { a.Swap(&b); }
+  inline void Swap(GS_LEAVE_GAME* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GS_LEAVE_GAME* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GS_LEAVE_GAME* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::internal::ZeroFieldsBase::DefaultConstruct<GS_LEAVE_GAME>(arena);
+  }
+  using ::google::protobuf::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const GS_LEAVE_GAME& from) {
+    ::google::protobuf::internal::ZeroFieldsBase::CopyImpl(*this, from);
+  }
+  using ::google::protobuf::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const GS_LEAVE_GAME& from) {
+    ::google::protobuf::internal::ZeroFieldsBase::MergeImpl(*this, from);
+  }
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "Protocol.GS_LEAVE_GAME"; }
+
+ protected:
+  explicit GS_LEAVE_GAME(::google::protobuf::Arena* arena);
+  GS_LEAVE_GAME(::google::protobuf::Arena* arena, const GS_LEAVE_GAME& from);
+  GS_LEAVE_GAME(::google::protobuf::Arena* arena, GS_LEAVE_GAME&& from) noexcept
+      : GS_LEAVE_GAME(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  // @@protoc_insertion_point(class_scope:Protocol.GS_LEAVE_GAME)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      0, 0, 0,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const GS_LEAVE_GAME& from_msg);
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
 class GS_DESPAWN final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:Protocol.GS_DESPAWN) */ {
  public:
@@ -564,7 +715,7 @@ class GS_DESPAWN final : public ::google::protobuf::Message
     return reinterpret_cast<const GS_DESPAWN*>(
         &_GS_DESPAWN_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 13;
+  static constexpr int kIndexInFileMessages = 15;
   friend void swap(GS_DESPAWN& a, GS_DESPAWN& b) { a.Swap(&b); }
   inline void Swap(GS_DESPAWN* other) {
     if (other == this) return;
@@ -1179,7 +1330,7 @@ class GS_CHAT final : public ::google::protobuf::Message
     return reinterpret_cast<const GS_CHAT*>(
         &_GS_CHAT_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 15;
+  static constexpr int kIndexInFileMessages = 17;
   friend void swap(GS_CHAT& a, GS_CHAT& b) { a.Swap(&b); }
   inline void Swap(GS_CHAT* other) {
     if (other == this) return;
@@ -1663,6 +1814,151 @@ class GC_LEAVE_ROOM final : public ::google::protobuf::internal::ZeroFieldsBase
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
                           const GC_LEAVE_ROOM& from_msg);
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  friend struct ::TableStruct_Protocol_2eproto;
+};
+// -------------------------------------------------------------------
+
+class GC_LEAVE_GAME final : public ::google::protobuf::internal::ZeroFieldsBase
+/* @@protoc_insertion_point(class_definition:Protocol.GC_LEAVE_GAME) */ {
+ public:
+  inline GC_LEAVE_GAME() : GC_LEAVE_GAME(nullptr) {}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(GC_LEAVE_GAME* msg, std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(GC_LEAVE_GAME));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR GC_LEAVE_GAME(
+      ::google::protobuf::internal::ConstantInitialized);
+
+  inline GC_LEAVE_GAME(const GC_LEAVE_GAME& from) : GC_LEAVE_GAME(nullptr, from) {}
+  inline GC_LEAVE_GAME(GC_LEAVE_GAME&& from) noexcept
+      : GC_LEAVE_GAME(nullptr, std::move(from)) {}
+  inline GC_LEAVE_GAME& operator=(const GC_LEAVE_GAME& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GC_LEAVE_GAME& operator=(GC_LEAVE_GAME&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GC_LEAVE_GAME& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GC_LEAVE_GAME* internal_default_instance() {
+    return reinterpret_cast<const GC_LEAVE_GAME*>(
+        &_GC_LEAVE_GAME_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 12;
+  friend void swap(GC_LEAVE_GAME& a, GC_LEAVE_GAME& b) { a.Swap(&b); }
+  inline void Swap(GC_LEAVE_GAME* other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GC_LEAVE_GAME* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GC_LEAVE_GAME* New(::google::protobuf::Arena* arena = nullptr) const {
+    return ::google::protobuf::internal::ZeroFieldsBase::DefaultConstruct<GC_LEAVE_GAME>(arena);
+  }
+  using ::google::protobuf::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const GC_LEAVE_GAME& from) {
+    ::google::protobuf::internal::ZeroFieldsBase::CopyImpl(*this, from);
+  }
+  using ::google::protobuf::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const GC_LEAVE_GAME& from) {
+    ::google::protobuf::internal::ZeroFieldsBase::MergeImpl(*this, from);
+  }
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+ private:
+  template <typename T>
+  friend ::absl::string_view(
+      ::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "Protocol.GC_LEAVE_GAME"; }
+
+ protected:
+  explicit GC_LEAVE_GAME(::google::protobuf::Arena* arena);
+  GC_LEAVE_GAME(::google::protobuf::Arena* arena, const GC_LEAVE_GAME& from);
+  GC_LEAVE_GAME(::google::protobuf::Arena* arena, GC_LEAVE_GAME&& from) noexcept
+      : GC_LEAVE_GAME(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* GetClassData() const PROTOBUF_FINAL;
+  static void* PlacementNew_(const void*, void* mem,
+                             ::google::protobuf::Arena* arena);
+  static constexpr auto InternalNewImpl_();
+  static const ::google::protobuf::internal::ClassDataFull _class_data_;
+
+ public:
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  // @@protoc_insertion_point(class_scope:Protocol.GC_LEAVE_GAME)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<
+      0, 0, 0,
+      0, 2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(
+        ::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena);
+    inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
+                          ::google::protobuf::Arena* arena, const Impl_& from,
+                          const GC_LEAVE_GAME& from_msg);
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   friend struct ::TableStruct_Protocol_2eproto;
@@ -2334,7 +2630,7 @@ class GC_CHAT final : public ::google::protobuf::Message
     return reinterpret_cast<const GC_CHAT*>(
         &_GC_CHAT_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 14;
+  static constexpr int kIndexInFileMessages = 16;
   friend void swap(GC_CHAT& a, GC_CHAT& b) { a.Swap(&b); }
   inline void Swap(GC_CHAT* other) {
     if (other == this) return;
@@ -2687,7 +2983,7 @@ class AS_VERIFY_MAIL_REQ final : public ::google::protobuf::Message
     return reinterpret_cast<const AS_VERIFY_MAIL_REQ*>(
         &_AS_VERIFY_MAIL_REQ_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 19;
+  static constexpr int kIndexInFileMessages = 21;
   friend void swap(AS_VERIFY_MAIL_REQ& a, AS_VERIFY_MAIL_REQ& b) { a.Swap(&b); }
   inline void Swap(AS_VERIFY_MAIL_REQ* other) {
     if (other == this) return;
@@ -2925,7 +3221,7 @@ class AS_VERIFY_EMAIL_CODE final : public ::google::protobuf::Message
     return reinterpret_cast<const AS_VERIFY_EMAIL_CODE*>(
         &_AS_VERIFY_EMAIL_CODE_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 21;
+  static constexpr int kIndexInFileMessages = 23;
   friend void swap(AS_VERIFY_EMAIL_CODE& a, AS_VERIFY_EMAIL_CODE& b) { a.Swap(&b); }
   inline void Swap(AS_VERIFY_EMAIL_CODE* other) {
     if (other == this) return;
@@ -3163,7 +3459,7 @@ class AS_SIGNUP final : public ::google::protobuf::Message
     return reinterpret_cast<const AS_SIGNUP*>(
         &_AS_SIGNUP_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 17;
+  static constexpr int kIndexInFileMessages = 19;
   friend void swap(AS_SIGNUP& a, AS_SIGNUP& b) { a.Swap(&b); }
   inline void Swap(AS_SIGNUP* other) {
     if (other == this) return;
@@ -3401,7 +3697,7 @@ class AS_LOGIN final : public ::google::protobuf::Message
     return reinterpret_cast<const AS_LOGIN*>(
         &_AS_LOGIN_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 23;
+  static constexpr int kIndexInFileMessages = 25;
   friend void swap(AS_LOGIN& a, AS_LOGIN& b) { a.Swap(&b); }
   inline void Swap(AS_LOGIN* other) {
     if (other == this) return;
@@ -3651,7 +3947,7 @@ class AC_VERIFY_MAIL_REQ final : public ::google::protobuf::Message
     return reinterpret_cast<const AC_VERIFY_MAIL_REQ*>(
         &_AC_VERIFY_MAIL_REQ_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 18;
+  static constexpr int kIndexInFileMessages = 20;
   friend void swap(AC_VERIFY_MAIL_REQ& a, AC_VERIFY_MAIL_REQ& b) { a.Swap(&b); }
   inline void Swap(AC_VERIFY_MAIL_REQ* other) {
     if (other == this) return;
@@ -3847,7 +4143,7 @@ class AC_VERIFY_EMAIL_CODE final : public ::google::protobuf::Message
     return reinterpret_cast<const AC_VERIFY_EMAIL_CODE*>(
         &_AC_VERIFY_EMAIL_CODE_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 20;
+  static constexpr int kIndexInFileMessages = 22;
   friend void swap(AC_VERIFY_EMAIL_CODE& a, AC_VERIFY_EMAIL_CODE& b) { a.Swap(&b); }
   inline void Swap(AC_VERIFY_EMAIL_CODE* other) {
     if (other == this) return;
@@ -4061,7 +4357,7 @@ class AC_SIGNUP final : public ::google::protobuf::Message
     return reinterpret_cast<const AC_SIGNUP*>(
         &_AC_SIGNUP_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 16;
+  static constexpr int kIndexInFileMessages = 18;
   friend void swap(AC_SIGNUP& a, AC_SIGNUP& b) { a.Swap(&b); }
   inline void Swap(AC_SIGNUP* other) {
     if (other == this) return;
@@ -4305,7 +4601,7 @@ class AC_LOGIN final : public ::google::protobuf::Message
     return reinterpret_cast<const AC_LOGIN*>(
         &_AC_LOGIN_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 22;
+  static constexpr int kIndexInFileMessages = 24;
   friend void swap(AC_LOGIN& a, AC_LOGIN& b) { a.Swap(&b); }
   inline void Swap(AC_LOGIN* other) {
     if (other == this) return;
@@ -4519,7 +4815,7 @@ class GS_SPAWN final : public ::google::protobuf::Message
     return reinterpret_cast<const GS_SPAWN*>(
         &_GS_SPAWN_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 12;
+  static constexpr int kIndexInFileMessages = 14;
   friend void swap(GS_SPAWN& a, GS_SPAWN& b) { a.Swap(&b); }
   inline void Swap(GS_SPAWN* other) {
     if (other == this) return;
@@ -5886,6 +6182,14 @@ inline void GS_ENTER_ROOM::set_allocated_reason(std::string* value) {
 // -------------------------------------------------------------------
 
 // GS_LEAVE_ROOM
+
+// -------------------------------------------------------------------
+
+// GC_LEAVE_GAME
+
+// -------------------------------------------------------------------
+
+// GS_LEAVE_GAME
 
 // -------------------------------------------------------------------
 
