@@ -39,8 +39,10 @@ enum : uint16
 	PKT_GS_LEAVE_GAME = 10013,
 	PKT_GS_SPAWN = 10014,
 	PKT_GS_DESPAWN = 10015,
-	PKT_GC_CHAT = 10016,
-	PKT_GS_CHAT = 10017,
+	PKT_GC_MOVE = 10016,
+	PKT_GS_MOVE = 10017,
+	PKT_GC_CHAT = 10018,
+	PKT_GS_CHAT = 10019,
 };
 
 bool	Handle_INVALID(DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len);
@@ -51,6 +53,7 @@ void	Handle_GC_CREATE_CHARACTER(const PacketSessionRef& session, const Protocol:
 void	Handle_GC_ENTER_ROOM(const PacketSessionRef& session, const Protocol::GC_ENTER_ROOM& pkt);
 void	Handle_GC_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::GC_LEAVE_ROOM& pkt);
 void	Handle_GC_LEAVE_GAME(const PacketSessionRef& session, const Protocol::GC_LEAVE_GAME& pkt);
+void	Handle_GC_MOVE(const PacketSessionRef& session, const Protocol::GC_MOVE& pkt);
 void	Handle_GC_CHAT(const PacketSessionRef& session, const Protocol::GC_CHAT& pkt);
 
 class ClientPacketHandler
@@ -81,6 +84,9 @@ public:
 		GPacketHandler[PKT_GC_LEAVE_GAME] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::GC_LEAVE_GAME>(outFunc, Handle_GC_LEAVE_GAME, session, buffer, len);
 		};
+		GPacketHandler[PKT_GC_MOVE] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
+			return GetCallback<Protocol::GC_MOVE>(outFunc, Handle_GC_MOVE, session, buffer, len);
+		};
 		GPacketHandler[PKT_GC_CHAT] = [](DeferredFunc& outFunc, PacketSessionRef& session, BYTE* buffer, int32 len) {
 			return GetCallback<Protocol::GC_CHAT>(outFunc, Handle_GC_CHAT, session, buffer, len);
 		};
@@ -100,6 +106,7 @@ public:
 	static SendBufferRef MakeSendBuffer(Protocol::GS_LEAVE_GAME& pkt) { return MakeSendBuffer(pkt, PKT_GS_LEAVE_GAME); }
 	static SendBufferRef MakeSendBuffer(Protocol::GS_SPAWN& pkt) { return MakeSendBuffer(pkt, PKT_GS_SPAWN); }
 	static SendBufferRef MakeSendBuffer(Protocol::GS_DESPAWN& pkt) { return MakeSendBuffer(pkt, PKT_GS_DESPAWN); }
+	static SendBufferRef MakeSendBuffer(Protocol::GS_MOVE& pkt) { return MakeSendBuffer(pkt, PKT_GS_MOVE); }
 	static SendBufferRef MakeSendBuffer(Protocol::GS_CHAT& pkt) { return MakeSendBuffer(pkt, PKT_GS_CHAT); }
 
 private:

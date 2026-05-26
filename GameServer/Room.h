@@ -9,6 +9,8 @@ public:
 	Room();
 	~Room();
 
+	void Move(uint64 objectId, const Protocol::GC_MOVE& dest);
+
 	void Enter(PlayerRef player, int32 characterIndex, int32 roomId);
 	void Leave(PlayerRef player);
 

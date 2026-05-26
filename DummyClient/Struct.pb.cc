@@ -31,6 +31,9 @@ inline constexpr Position::Impl_::Impl_(
       : x_{0},
         y_{0},
         z_{0},
+        pitch_{0},
+        yaw_{0},
+        roll_{0},
         _cached_size_{0} {}
 
 template <typename>
@@ -120,6 +123,9 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::Protocol::Position, _impl_.x_),
         PROTOBUF_FIELD_OFFSET(::Protocol::Position, _impl_.y_),
         PROTOBUF_FIELD_OFFSET(::Protocol::Position, _impl_.z_),
+        PROTOBUF_FIELD_OFFSET(::Protocol::Position, _impl_.pitch_),
+        PROTOBUF_FIELD_OFFSET(::Protocol::Position, _impl_.yaw_),
+        PROTOBUF_FIELD_OFFSET(::Protocol::Position, _impl_.roll_),
 };
 
 static const ::_pbi::MigrationSchema
@@ -137,8 +143,9 @@ const char descriptor_table_protodef_Struct_2eproto[] ABSL_ATTRIBUTE_SECTION_VAR
     "\nPlayerInfo\022\n\n\002id\030\001 \001(\004\022\014\n\004name\030\002 \001(\t\022\r\n"
     "\005level\030\003 \001(\r\022(\n\nplayerType\030\004 \001(\0162\024.Proto"
     "col.PlayerType\022\037\n\003pos\030\005 \001(\0132\022.Protocol.P"
-    "osition\"+\n\010Position\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001("
-    "\002\022\t\n\001z\030\003 \001(\002b\006proto3"
+    "osition\"U\n\010Position\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001("
+    "\002\022\t\n\001z\030\003 \001(\002\022\r\n\005pitch\030\004 \001(\002\022\013\n\003yaw\030\005 \001(\002"
+    "\022\014\n\004roll\030\006 \001(\002b\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_Struct_2eproto_deps[1] =
     {
@@ -148,7 +155,7 @@ static ::absl::once_flag descriptor_table_Struct_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_Struct_2eproto = {
     false,
     false,
-    220,
+    262,
     descriptor_table_protodef_Struct_2eproto,
     "Struct.proto",
     &descriptor_table_Struct_2eproto_once,
@@ -565,9 +572,9 @@ inline void Position::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, x_),
            0,
-           offsetof(Impl_, z_) -
+           offsetof(Impl_, roll_) -
                offsetof(Impl_, x_) +
-               sizeof(Impl_::z_));
+               sizeof(Impl_::roll_));
 }
 Position::~Position() {
   // @@protoc_insertion_point(destructor:Protocol.Position)
@@ -616,15 +623,15 @@ const ::google::protobuf::internal::ClassData* Position::GetClassData() const {
   return _class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 0, 0, 2> Position::_table_ = {
+const ::_pbi::TcParseTable<3, 6, 0, 0, 2> Position::_table_ = {
   {
     0,  // no _has_bits_
     0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
+    6, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
+    4294967232,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
+    6,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     _class_data_.base(),
@@ -644,6 +651,16 @@ const ::_pbi::TcParseTable<2, 3, 0, 0, 2> Position::_table_ = {
     // float z = 3;
     {::_pbi::TcParser::FastF32S1,
      {29, 63, 0, PROTOBUF_FIELD_OFFSET(Position, _impl_.z_)}},
+    // float pitch = 4;
+    {::_pbi::TcParser::FastF32S1,
+     {37, 63, 0, PROTOBUF_FIELD_OFFSET(Position, _impl_.pitch_)}},
+    // float yaw = 5;
+    {::_pbi::TcParser::FastF32S1,
+     {45, 63, 0, PROTOBUF_FIELD_OFFSET(Position, _impl_.yaw_)}},
+    // float roll = 6;
+    {::_pbi::TcParser::FastF32S1,
+     {53, 63, 0, PROTOBUF_FIELD_OFFSET(Position, _impl_.roll_)}},
+    {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
@@ -655,6 +672,15 @@ const ::_pbi::TcParseTable<2, 3, 0, 0, 2> Position::_table_ = {
     (0 | ::_fl::kFcSingular | ::_fl::kFloat)},
     // float z = 3;
     {PROTOBUF_FIELD_OFFSET(Position, _impl_.z_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kFloat)},
+    // float pitch = 4;
+    {PROTOBUF_FIELD_OFFSET(Position, _impl_.pitch_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kFloat)},
+    // float yaw = 5;
+    {PROTOBUF_FIELD_OFFSET(Position, _impl_.yaw_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kFloat)},
+    // float roll = 6;
+    {PROTOBUF_FIELD_OFFSET(Position, _impl_.roll_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kFloat)},
   }},
   // no aux_entries
@@ -670,8 +696,8 @@ PROTOBUF_NOINLINE void Position::Clear() {
   (void) cached_has_bits;
 
   ::memset(&_impl_.x_, 0, static_cast<::size_t>(
-      reinterpret_cast<char*>(&_impl_.z_) -
-      reinterpret_cast<char*>(&_impl_.x_)) + sizeof(_impl_.z_));
+      reinterpret_cast<char*>(&_impl_.roll_) -
+      reinterpret_cast<char*>(&_impl_.x_)) + sizeof(_impl_.roll_));
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
@@ -711,6 +737,27 @@ PROTOBUF_NOINLINE void Position::Clear() {
                 3, this_._internal_z(), target);
           }
 
+          // float pitch = 4;
+          if (::absl::bit_cast<::uint32_t>(this_._internal_pitch()) != 0) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                4, this_._internal_pitch(), target);
+          }
+
+          // float yaw = 5;
+          if (::absl::bit_cast<::uint32_t>(this_._internal_yaw()) != 0) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                5, this_._internal_yaw(), target);
+          }
+
+          // float roll = 6;
+          if (::absl::bit_cast<::uint32_t>(this_._internal_roll()) != 0) {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteFloatToArray(
+                6, this_._internal_roll(), target);
+          }
+
           if (PROTOBUF_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
             target =
                 ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -748,6 +795,18 @@ PROTOBUF_NOINLINE void Position::Clear() {
             if (::absl::bit_cast<::uint32_t>(this_._internal_z()) != 0) {
               total_size += 5;
             }
+            // float pitch = 4;
+            if (::absl::bit_cast<::uint32_t>(this_._internal_pitch()) != 0) {
+              total_size += 5;
+            }
+            // float yaw = 5;
+            if (::absl::bit_cast<::uint32_t>(this_._internal_yaw()) != 0) {
+              total_size += 5;
+            }
+            // float roll = 6;
+            if (::absl::bit_cast<::uint32_t>(this_._internal_roll()) != 0) {
+              total_size += 5;
+            }
           }
           return this_.MaybeComputeUnknownFieldsSize(total_size,
                                                      &this_._impl_._cached_size_);
@@ -770,6 +829,15 @@ void Position::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
   if (::absl::bit_cast<::uint32_t>(from._internal_z()) != 0) {
     _this->_impl_.z_ = from._impl_.z_;
   }
+  if (::absl::bit_cast<::uint32_t>(from._internal_pitch()) != 0) {
+    _this->_impl_.pitch_ = from._impl_.pitch_;
+  }
+  if (::absl::bit_cast<::uint32_t>(from._internal_yaw()) != 0) {
+    _this->_impl_.yaw_ = from._impl_.yaw_;
+  }
+  if (::absl::bit_cast<::uint32_t>(from._internal_roll()) != 0) {
+    _this->_impl_.roll_ = from._impl_.roll_;
+  }
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -785,8 +853,8 @@ void Position::InternalSwap(Position* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Position, _impl_.z_)
-      + sizeof(Position::_impl_.z_)
+      PROTOBUF_FIELD_OFFSET(Position, _impl_.roll_)
+      + sizeof(Position::_impl_.roll_)
       - PROTOBUF_FIELD_OFFSET(Position, _impl_.x_)>(
           reinterpret_cast<char*>(&_impl_.x_),
           reinterpret_cast<char*>(&other->_impl_.x_));

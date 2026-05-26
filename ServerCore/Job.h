@@ -7,10 +7,10 @@ class Job
 public:
 	Job(function<void()>&& callback) : _callback(move(callback)) {}
 
-	template<typename T, typename Ret, typename... Args>
-	Job(shared_ptr<T> owner, Ret(T::* memFunc)(Args...), Args&&... args)
+	template<typename T, typename Ret, typename... Args, typename... ActualArgs>
+	Job(shared_ptr<T> owner, Ret(T::* memFunc)(Args...), ActualArgs&&... args)
 	{
-		_callback = [owner, memFunc, args...]()
+		_callback = [owner, memFunc, ...args = std::forward<ActualArgs>(args)]()
 			{
 				(owner.get()->*memFunc)(args...);
 			};

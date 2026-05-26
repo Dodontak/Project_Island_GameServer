@@ -75,6 +75,17 @@ message GS_DESPAWN {
 	repeated uint64 object_ids = 1;
 }
 
+message GC_MOVE {
+    Position dest = 1;
+    float speed = 2;
+}
+
+message GS_MOVE {
+    int64 object_id = 1;
+    Position dest = 2;
+    float speed = 3;
+}
+
 message GC_CHAT {
   int32 user_id = 1;
   string msg = 2;

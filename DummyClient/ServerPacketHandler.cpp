@@ -58,10 +58,16 @@ void Handle_GS_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::GS_LE
 {
 }
 
+void Handle_GS_LEAVE_GAME(const PacketSessionRef& session, const Protocol::GS_LEAVE_GAME& pkt)
+{}
+
 void Handle_GS_SPAWN(const PacketSessionRef& session, const Protocol::GS_SPAWN& pkt)
 {}
 
 void Handle_GS_DESPAWN(const PacketSessionRef& session, const Protocol::GS_DESPAWN& pkt)
+{}
+
+void Handle_GS_MOVE(const PacketSessionRef & session, const Protocol::GS_MOVE & pkt)
 {}
 
 void Handle_GS_CHAT(const PacketSessionRef& session, const Protocol::GS_CHAT& pkt)

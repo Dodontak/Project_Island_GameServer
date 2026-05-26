@@ -221,6 +221,9 @@ class Position final : public ::google::protobuf::Message
     kXFieldNumber = 1,
     kYFieldNumber = 2,
     kZFieldNumber = 3,
+    kPitchFieldNumber = 4,
+    kYawFieldNumber = 5,
+    kRollFieldNumber = 6,
   };
   // float x = 1;
   void clear_x() ;
@@ -252,12 +255,42 @@ class Position final : public ::google::protobuf::Message
   void _internal_set_z(float value);
 
   public:
+  // float pitch = 4;
+  void clear_pitch() ;
+  float pitch() const;
+  void set_pitch(float value);
+
+  private:
+  float _internal_pitch() const;
+  void _internal_set_pitch(float value);
+
+  public:
+  // float yaw = 5;
+  void clear_yaw() ;
+  float yaw() const;
+  void set_yaw(float value);
+
+  private:
+  float _internal_yaw() const;
+  void _internal_set_yaw(float value);
+
+  public:
+  // float roll = 6;
+  void clear_roll() ;
+  float roll() const;
+  void set_roll(float value);
+
+  private:
+  float _internal_roll() const;
+  void _internal_set_roll(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:Protocol.Position)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
   static const ::google::protobuf::internal::TcParseTable<
-      2, 3, 0,
+      3, 6, 0,
       0, 2>
       _table_;
 
@@ -278,6 +311,9 @@ class Position final : public ::google::protobuf::Message
     float x_;
     float y_;
     float z_;
+    float pitch_;
+    float yaw_;
+    float roll_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -829,6 +865,72 @@ inline float Position::_internal_z() const {
 inline void Position::_internal_set_z(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.z_ = value;
+}
+
+// float pitch = 4;
+inline void Position::clear_pitch() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pitch_ = 0;
+}
+inline float Position::pitch() const {
+  // @@protoc_insertion_point(field_get:Protocol.Position.pitch)
+  return _internal_pitch();
+}
+inline void Position::set_pitch(float value) {
+  _internal_set_pitch(value);
+  // @@protoc_insertion_point(field_set:Protocol.Position.pitch)
+}
+inline float Position::_internal_pitch() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.pitch_;
+}
+inline void Position::_internal_set_pitch(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pitch_ = value;
+}
+
+// float yaw = 5;
+inline void Position::clear_yaw() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.yaw_ = 0;
+}
+inline float Position::yaw() const {
+  // @@protoc_insertion_point(field_get:Protocol.Position.yaw)
+  return _internal_yaw();
+}
+inline void Position::set_yaw(float value) {
+  _internal_set_yaw(value);
+  // @@protoc_insertion_point(field_set:Protocol.Position.yaw)
+}
+inline float Position::_internal_yaw() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.yaw_;
+}
+inline void Position::_internal_set_yaw(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.yaw_ = value;
+}
+
+// float roll = 6;
+inline void Position::clear_roll() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.roll_ = 0;
+}
+inline float Position::roll() const {
+  // @@protoc_insertion_point(field_get:Protocol.Position.roll)
+  return _internal_roll();
+}
+inline void Position::set_roll(float value) {
+  _internal_set_roll(value);
+  // @@protoc_insertion_point(field_set:Protocol.Position.roll)
+}
+inline float Position::_internal_roll() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.roll_;
+}
+inline void Position::_internal_set_roll(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.roll_ = value;
 }
 
 #ifdef __GNUC__

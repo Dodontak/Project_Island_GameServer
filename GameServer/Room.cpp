@@ -16,6 +16,22 @@ Room::Room()
 
 Room::~Room() {}
 
+//플레이어(objectId)가 해당 Room에서 dest 위치로 이동했다는 사실을 Room의 다른 플레이어들에게 알림
+void Room::Move(uint64 objectId, const Protocol::GC_MOVE& destPkt)
+{
+	Protocol::GS_MOVE movePkt;
+
+	if (_players.find(objectId) == _players.end())
+		return;
+
+	//TODO 유효한 위치인지 확인
+
+	movePkt.set_object_id(objectId);
+	movePkt.mutable_dest()->CopyFrom(destPkt.dest());
+	movePkt.set_speed(destPkt.speed());
+	Broadcast(ClientPacketHandler::MakeSendBuffer(movePkt));
+}
+
 void Room::Enter(PlayerRef player, int32 characterIndex, int32 roomId)
 {
 	//TODO DB쿼리때문에 렉 심하면 비동기로 바꿔야할 듯
@@ -43,10 +59,10 @@ void Room::Enter(PlayerRef player, int32 characterIndex, int32 roomId)
 	int32 rowCount = pg->GetRowCount();
 	if (rowCount < characterIndex)
 	{
-		response.set_success(false);
-		response.set_reason("Character not found");
 		pg->Clear();
 		GDBConnectionPool->Push(&pg);
+		response.set_success(false);
+		response.set_reason("Character not found");
 		gameSession->Send(ClientPacketHandler::MakeSendBuffer(response));
 		return;
 	}
@@ -61,7 +77,13 @@ void Room::Enter(PlayerRef player, int32 characterIndex, int32 roomId)
 	position.set_x(Utils::GetRandom(0, 1000));
 	position.set_y(Utils::GetRandom(0, 1000));
 	position.set_z(100);
+	position.set_pitch(0);
+	position.set_yaw(0);
+	position.set_roll(0);
 	characterInfo.mutable_pos()->CopyFrom(position);
+
+	pg->Clear();
+	GDBConnectionPool->Push(&pg);
 
 	//입장
 	player->_info.CopyFrom(characterInfo);

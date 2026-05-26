@@ -132,11 +132,11 @@ void Handle_GC_CREATE_CHARACTER(const PacketSessionRef& session, const Protocol:
 	bool nicknameExists = (pg->GetValue(0, 0) == "t");
 	if (nicknameExists)
 	{
+		pg->Clear();
+		GDBConnectionPool->Push(&pg);
 		response.set_success(false);
 		response.set_reason("Nickname already exists");
 		session->Send(ClientPacketHandler::MakeSendBuffer(response));
-		pg->Clear();
-		GDBConnectionPool->Push(&pg);
 		return;
 	}
 	pg->Clear();
@@ -208,6 +208,22 @@ void Handle_GC_LEAVE_GAME(const PacketSessionRef& session, const Protocol::GC_LE
 {
 	Utils::LockPrint("Handle_GC_LEAVE_GAME");
 }
+
+void	Handle_GC_MOVE(const PacketSessionRef& session, const Protocol::GC_MOVE& pkt)
+{
+	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+	if (gameSession == nullptr)
+		return;
+	if (gameSession->_player == nullptr)
+		return;
+	PlayerRef player = gameSession->_player;
+	if (player == nullptr)
+		return;
+	RoomRef room = player->_room.load().lock();
+	
+	room->DoAsync(&Room::Move, player->_info.id(), pkt);
+}
+
 
 void Handle_GC_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::GC_LEAVE_ROOM& pkt)
 {
