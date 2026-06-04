@@ -1,17 +1,24 @@
 #pragma once
-#include "Protocol.pb.h"
+#include "Struct.pb.h"
+#include "Creature.h"
 
 class Room;
 
-class Player : public enable_shared_from_this<Player>
+class Player : public Creature
 {
 public:
 	Player(GameSessionRef session);
-	virtual ~Player();
+	virtual ~Player() override;
 
+	virtual void OnEnterGame() override;
+	virtual void OnLeaveGame() override;
+	virtual void Update() override;
+
+public:
 	void ChatTest(const string& msg);
 
-	Protocol::PlayerInfo _info;
+	shared_ptr<GameSession> GetOwner() { return _owner.lock(); }
+
+protected:
 	weak_ptr<GameSession> _owner;
-	atomic<weak_ptr<Room>> _room;
 };

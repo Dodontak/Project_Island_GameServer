@@ -55,6 +55,76 @@ namespace protobuf {
 }  // namespace google
 
 namespace Protocol {
+enum ObjectType : int {
+  OBJECT_TYPE_NONE = 0,
+  OBJECT_TYPE_CREATURE = 1,
+  OBJECT_TYPE_PROJECTILE = 2,
+  OBJECT_TYPE_ENV = 3,
+  ObjectType_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::min(),
+  ObjectType_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::max(),
+};
+
+bool ObjectType_IsValid(int value);
+extern const uint32_t ObjectType_internal_data_[];
+constexpr ObjectType ObjectType_MIN = static_cast<ObjectType>(0);
+constexpr ObjectType ObjectType_MAX = static_cast<ObjectType>(3);
+constexpr int ObjectType_ARRAYSIZE = 3 + 1;
+const ::google::protobuf::EnumDescriptor*
+ObjectType_descriptor();
+template <typename T>
+const std::string& ObjectType_Name(T value) {
+  static_assert(std::is_same<T, ObjectType>::value ||
+                    std::is_integral<T>::value,
+                "Incorrect type passed to ObjectType_Name().");
+  return ObjectType_Name(static_cast<ObjectType>(value));
+}
+template <>
+inline const std::string& ObjectType_Name(ObjectType value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<ObjectType_descriptor,
+                                                 0, 3>(
+      static_cast<int>(value));
+}
+inline bool ObjectType_Parse(absl::string_view name, ObjectType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<ObjectType>(
+      ObjectType_descriptor(), name, value);
+}
+enum CreatureType : int {
+  CREATURE_TYPE_NONE = 0,
+  CREATURE_TYPE_PLAYER = 1,
+  CREATURE_TYPE_MONSTER = 2,
+  CREATURE_TYPE_NPC = 3,
+  CreatureType_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::min(),
+  CreatureType_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::max(),
+};
+
+bool CreatureType_IsValid(int value);
+extern const uint32_t CreatureType_internal_data_[];
+constexpr CreatureType CreatureType_MIN = static_cast<CreatureType>(0);
+constexpr CreatureType CreatureType_MAX = static_cast<CreatureType>(3);
+constexpr int CreatureType_ARRAYSIZE = 3 + 1;
+const ::google::protobuf::EnumDescriptor*
+CreatureType_descriptor();
+template <typename T>
+const std::string& CreatureType_Name(T value) {
+  static_assert(std::is_same<T, CreatureType>::value ||
+                    std::is_integral<T>::value,
+                "Incorrect type passed to CreatureType_Name().");
+  return CreatureType_Name(static_cast<CreatureType>(value));
+}
+template <>
+inline const std::string& CreatureType_Name(CreatureType value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<CreatureType_descriptor,
+                                                 0, 3>(
+      static_cast<int>(value));
+}
+inline bool CreatureType_Parse(absl::string_view name, CreatureType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<CreatureType>(
+      CreatureType_descriptor(), name, value);
+}
 enum PlayerType : int {
   PLAYER_TYPE_NONE = 0,
   PLAYER_TYPE_KNIGHT = 1,
@@ -90,6 +160,77 @@ inline bool PlayerType_Parse(absl::string_view name, PlayerType* value) {
   return ::google::protobuf::internal::ParseNamedEnum<PlayerType>(
       PlayerType_descriptor(), name, value);
 }
+enum MonsterType : int {
+  MONSTER_TYPE_NONE = 0,
+  MONSTER_TYPE_WEREWOLF = 1,
+  MONSTER_TYPE_STONEGOLEM = 2,
+  MONSTER_TYPE_SKELETON = 3,
+  MonsterType_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::min(),
+  MonsterType_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::max(),
+};
+
+bool MonsterType_IsValid(int value);
+extern const uint32_t MonsterType_internal_data_[];
+constexpr MonsterType MonsterType_MIN = static_cast<MonsterType>(0);
+constexpr MonsterType MonsterType_MAX = static_cast<MonsterType>(3);
+constexpr int MonsterType_ARRAYSIZE = 3 + 1;
+const ::google::protobuf::EnumDescriptor*
+MonsterType_descriptor();
+template <typename T>
+const std::string& MonsterType_Name(T value) {
+  static_assert(std::is_same<T, MonsterType>::value ||
+                    std::is_integral<T>::value,
+                "Incorrect type passed to MonsterType_Name().");
+  return MonsterType_Name(static_cast<MonsterType>(value));
+}
+template <>
+inline const std::string& MonsterType_Name(MonsterType value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<MonsterType_descriptor,
+                                                 0, 3>(
+      static_cast<int>(value));
+}
+inline bool MonsterType_Parse(absl::string_view name, MonsterType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<MonsterType>(
+      MonsterType_descriptor(), name, value);
+}
+enum MoveState : int {
+  MOVE_STATE_NONE = 0,
+  MOVE_STATE_IDLE = 1,
+  MOVE_STATE_RUN = 2,
+  MOVE_STATE_JUMP = 3,
+  MOVE_STATE_SKILL = 4,
+  MoveState_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::min(),
+  MoveState_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      std::numeric_limits<::int32_t>::max(),
+};
+
+bool MoveState_IsValid(int value);
+extern const uint32_t MoveState_internal_data_[];
+constexpr MoveState MoveState_MIN = static_cast<MoveState>(0);
+constexpr MoveState MoveState_MAX = static_cast<MoveState>(4);
+constexpr int MoveState_ARRAYSIZE = 4 + 1;
+const ::google::protobuf::EnumDescriptor*
+MoveState_descriptor();
+template <typename T>
+const std::string& MoveState_Name(T value) {
+  static_assert(std::is_same<T, MoveState>::value ||
+                    std::is_integral<T>::value,
+                "Incorrect type passed to MoveState_Name().");
+  return MoveState_Name(static_cast<MoveState>(value));
+}
+template <>
+inline const std::string& MoveState_Name(MoveState value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<MoveState_descriptor,
+                                                 0, 4>(
+      static_cast<int>(value));
+}
+inline bool MoveState_Parse(absl::string_view name, MoveState* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<MoveState>(
+      MoveState_descriptor(), name, value);
+}
 
 // ===================================================================
 
@@ -119,10 +260,34 @@ namespace google {
 namespace protobuf {
 
 template <>
+struct is_proto_enum<::Protocol::ObjectType> : std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor<::Protocol::ObjectType>() {
+  return ::Protocol::ObjectType_descriptor();
+}
+template <>
+struct is_proto_enum<::Protocol::CreatureType> : std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor<::Protocol::CreatureType>() {
+  return ::Protocol::CreatureType_descriptor();
+}
+template <>
 struct is_proto_enum<::Protocol::PlayerType> : std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor<::Protocol::PlayerType>() {
   return ::Protocol::PlayerType_descriptor();
+}
+template <>
+struct is_proto_enum<::Protocol::MonsterType> : std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor<::Protocol::MonsterType>() {
+  return ::Protocol::MonsterType_descriptor();
+}
+template <>
+struct is_proto_enum<::Protocol::MoveState> : std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor<::Protocol::MoveState>() {
+  return ::Protocol::MoveState_descriptor();
 }
 
 }  // namespace protobuf

@@ -26,7 +26,7 @@ namespace _pbi = ::google::protobuf::internal;
 namespace _fl = ::google::protobuf::internal::field_layout;
 namespace Protocol {
 }  // namespace Protocol
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_Enum_2eproto[1];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_Enum_2eproto[5];
 static constexpr const ::_pb::ServiceDescriptor**
     file_level_service_descriptors_Enum_2eproto = nullptr;
 const ::uint32_t TableStruct_Enum_2eproto::offsets[1] = {};
@@ -34,16 +34,28 @@ static constexpr ::_pbi::MigrationSchema* schemas = nullptr;
 static constexpr ::_pb::Message* const* file_default_instances = nullptr;
 const char descriptor_table_protodef_Enum_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
-    "\n\nEnum.proto\022\010Protocol*h\n\nPlayerType\022\024\n\020"
-    "PLAYER_TYPE_NONE\020\000\022\026\n\022PLAYER_TYPE_KNIGHT"
-    "\020\001\022\024\n\020PLAYER_TYPE_MAGE\020\002\022\026\n\022PLAYER_TYPE_"
-    "ARCHER\020\003b\006proto3"
+    "\n\nEnum.proto\022\010Protocol*m\n\nObjectType\022\024\n\020"
+    "OBJECT_TYPE_NONE\020\000\022\030\n\024OBJECT_TYPE_CREATU"
+    "RE\020\001\022\032\n\026OBJECT_TYPE_PROJECTILE\020\002\022\023\n\017OBJE"
+    "CT_TYPE_ENV\020\003*r\n\014CreatureType\022\026\n\022CREATUR"
+    "E_TYPE_NONE\020\000\022\030\n\024CREATURE_TYPE_PLAYER\020\001\022"
+    "\031\n\025CREATURE_TYPE_MONSTER\020\002\022\025\n\021CREATURE_T"
+    "YPE_NPC\020\003*h\n\nPlayerType\022\024\n\020PLAYER_TYPE_N"
+    "ONE\020\000\022\026\n\022PLAYER_TYPE_KNIGHT\020\001\022\024\n\020PLAYER_"
+    "TYPE_MAGE\020\002\022\026\n\022PLAYER_TYPE_ARCHER\020\003*w\n\013M"
+    "onsterType\022\025\n\021MONSTER_TYPE_NONE\020\000\022\031\n\025MON"
+    "STER_TYPE_WEREWOLF\020\001\022\033\n\027MONSTER_TYPE_STO"
+    "NEGOLEM\020\002\022\031\n\025MONSTER_TYPE_SKELETON\020\003*t\n\t"
+    "MoveState\022\023\n\017MOVE_STATE_NONE\020\000\022\023\n\017MOVE_S"
+    "TATE_IDLE\020\001\022\022\n\016MOVE_STATE_RUN\020\002\022\023\n\017MOVE_"
+    "STATE_JUMP\020\003\022\024\n\020MOVE_STATE_SKILL\020\004b\006prot"
+    "o3"
 };
 static ::absl::once_flag descriptor_table_Enum_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto = {
     false,
     false,
-    136,
+    602,
     descriptor_table_protodef_Enum_2eproto,
     "Enum.proto",
     &descriptor_table_Enum_2eproto_once,
@@ -57,14 +69,50 @@ PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_Enum_2eproto =
     file_level_service_descriptors_Enum_2eproto,
 };
 namespace Protocol {
-const ::google::protobuf::EnumDescriptor* PlayerType_descriptor() {
+const ::google::protobuf::EnumDescriptor* ObjectType_descriptor() {
   ::google::protobuf::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
   return file_level_enum_descriptors_Enum_2eproto[0];
+}
+PROTOBUF_CONSTINIT const uint32_t ObjectType_internal_data_[] = {
+    262144u, 0u, };
+bool ObjectType_IsValid(int value) {
+  return 0 <= value && value <= 3;
+}
+const ::google::protobuf::EnumDescriptor* CreatureType_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
+  return file_level_enum_descriptors_Enum_2eproto[1];
+}
+PROTOBUF_CONSTINIT const uint32_t CreatureType_internal_data_[] = {
+    262144u, 0u, };
+bool CreatureType_IsValid(int value) {
+  return 0 <= value && value <= 3;
+}
+const ::google::protobuf::EnumDescriptor* PlayerType_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
+  return file_level_enum_descriptors_Enum_2eproto[2];
 }
 PROTOBUF_CONSTINIT const uint32_t PlayerType_internal_data_[] = {
     262144u, 0u, };
 bool PlayerType_IsValid(int value) {
   return 0 <= value && value <= 3;
+}
+const ::google::protobuf::EnumDescriptor* MonsterType_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
+  return file_level_enum_descriptors_Enum_2eproto[3];
+}
+PROTOBUF_CONSTINIT const uint32_t MonsterType_internal_data_[] = {
+    262144u, 0u, };
+bool MonsterType_IsValid(int value) {
+  return 0 <= value && value <= 3;
+}
+const ::google::protobuf::EnumDescriptor* MoveState_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_Enum_2eproto);
+  return file_level_enum_descriptors_Enum_2eproto[4];
+}
+PROTOBUF_CONSTINIT const uint32_t MoveState_internal_data_[] = {
+    327680u, 0u, };
+bool MoveState_IsValid(int value) {
+  return 0 <= value && value <= 4;
 }
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Protocol

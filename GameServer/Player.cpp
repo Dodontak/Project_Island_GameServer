@@ -4,16 +4,32 @@
 #include "GameSession.h"
 #include "ClientPacketHandler.h"
 
-Player::Player(GameSessionRef session) : _owner(session) {}
+Player::Player(GameSessionRef session) : _owner(session)
+{
+}
 
-Player::~Player() {}
+Player::~Player()
+{
+}
+
+void Player::OnEnterGame()
+{
+}
+
+void Player::OnLeaveGame()
+{
+}
+
+void Player::Update()
+{
+}
 
 void Player::ChatTest(const string& msg)
 {
 	if (RoomRef room = _room.load().lock())
 	{
 		Protocol::GS_CHAT pkt;
-		string chatMsg = _info.name() + " : " + msg;
+		string chatMsg = GetName() + " : " + msg;
 		pkt.set_msg(chatMsg);
 
 		room->DoAsync(&Room::Broadcast, ClientPacketHandler::MakeSendBuffer(pkt));

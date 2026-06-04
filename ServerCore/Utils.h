@@ -13,6 +13,7 @@ public:
 	static int32 GetRandNum(int32 start, int32 end);
 	static  bool VerifyAccessToken(const std::string& token, std::string& out_user_id, std::string& out_nickname);
 	static uint64 GetObjectId();
+	static uint32 GetTemplateId(uint8 a = 0, uint8 b = 0, uint8 c = 0, uint8 d = 0);
 
 	template<typename... Args>
 	static void LockPrint(Args&&... args)

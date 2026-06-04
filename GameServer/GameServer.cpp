@@ -7,8 +7,8 @@
 #include "ClientPacketHandler.h"
 #include "GameSession.h"
 #include "DBConnectionPool.h"
-
 #include "Room.h"
+#include "Monster.h"
 
 enum
 { //64ms넘어가면 다른 스레드에 일감을 넘김.
@@ -56,6 +56,13 @@ int main()
 			}
 		);
 	}
+	
+	MonsterRef monster = make_shared<Monster>(Protocol::MonsterType::MONSTER_TYPE_SKELETON);
+	monster->SetPosition(900, 900, 200);
+	monster->SetObjectId(Utils::GetObjectId());
+	GRoom->AddObject(static_pointer_cast<Object>(monster));
+
+	GRoom->DoAsync(&Room::Update);
 	//while (true)
 	//{
 	//	Protocol::GS_CHAT pkt;

@@ -52,3 +52,10 @@ uint64 Utils::GetObjectId()
 	uint64 id = atomic_id.fetch_add(1);
 	return id;
 }
+
+uint32 Utils::GetTemplateId(uint8 a, uint8 b, uint8 c, uint8 d)
+{
+	uint32 templateId = (static_cast<uint32>(a) << 24) | (static_cast<uint32>(b) << 16)
+		| (static_cast<uint32>(c) << 8) | static_cast<uint32>(d);
+	return templateId;
+}

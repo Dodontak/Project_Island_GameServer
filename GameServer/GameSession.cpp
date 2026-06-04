@@ -16,7 +16,7 @@ GameSession::~GameSession()
 {
 	if (_player)
 	{
-		if (RoomRef room = _player->_room.load().lock())
+		if (RoomRef room = _player->GetRoom())
 		{
 			room->Leave(_player);
 		}

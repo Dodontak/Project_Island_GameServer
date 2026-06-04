@@ -60,11 +60,12 @@ void Handle_GC_CHARACTER_LIST(const PacketSessionRef& session, const Protocol::G
 	uint16 characterCount = pg->GetRowCount();
 	for (int i = 0; i < characterCount; ++i)
 	{
-		Protocol::PlayerInfo* character = new Protocol::PlayerInfo();
+		Protocol::ObjectInfo* character = response.add_characters();
 		character->set_name(pg->GetValue(i, 0));
 		character->set_level(stoi(pg->GetValue(i, 1)));
-		character->set_playertype((Protocol::PlayerType)stoi(pg->GetValue(i, 2)));
-		response.mutable_characters()->AddAllocated(character);
+		uint32 templateId = Utils::GetTemplateId(0, Protocol::ObjectType::OBJECT_TYPE_CREATURE,
+			Protocol::CreatureType::CREATURE_TYPE_PLAYER, stoi(pg->GetValue(i, 2)));
+		character->set_template_id(templateId);
 	}
 	pg->Clear();
 	GDBConnectionPool->Push(&pg);
@@ -200,7 +201,7 @@ void Handle_GC_ENTER_ROOM(const PacketSessionRef& session, const Protocol::GC_EN
 	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
 	PlayerRef player = make_shared<Player>(gameSession);
 	gameSession->_player = player;
-	
+
 	GRoom->DoAsync(&Room::Enter, player, pkt.character_index(), pkt.room_id());
 }
 
@@ -219,9 +220,9 @@ void	Handle_GC_MOVE(const PacketSessionRef& session, const Protocol::GC_MOVE& pk
 	PlayerRef player = gameSession->_player;
 	if (player == nullptr)
 		return;
-	RoomRef room = player->_room.load().lock();
-	
-	room->DoAsync(&Room::Move, player->_info.id(), pkt);
+	RoomRef room = player->GetRoom();
+
+	room->DoAsync(&Room::Move, player->GetObjectId(), pkt.dest(), pkt.speed());
 }
 
 
@@ -233,7 +234,7 @@ void Handle_GC_LEAVE_ROOM(const PacketSessionRef& session, const Protocol::GC_LE
 	PlayerRef player = gameSession->_player;
 	if (player == nullptr)
 		return;
-	RoomRef room = player->_room.load().lock();
+	RoomRef room = player->GetRoom();
 	if (room == nullptr)
 		return;
 	room->DoAsync(&Room::Leave, player);

@@ -5336,25 +5336,25 @@ class GS_SPAWN final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kPlayersFieldNumber = 1,
+    kObjectsFieldNumber = 1,
   };
-  // repeated .Protocol.PlayerInfo players = 1;
-  int players_size() const;
+  // repeated .Protocol.ObjectInfo objects = 1;
+  int objects_size() const;
   private:
-  int _internal_players_size() const;
+  int _internal_objects_size() const;
 
   public:
-  void clear_players() ;
-  ::Protocol::PlayerInfo* mutable_players(int index);
-  ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>* mutable_players();
+  void clear_objects() ;
+  ::Protocol::ObjectInfo* mutable_objects(int index);
+  ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>* mutable_objects();
 
   private:
-  const ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>& _internal_players() const;
-  ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>* _internal_mutable_players();
+  const ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>& _internal_objects() const;
+  ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>* _internal_mutable_objects();
   public:
-  const ::Protocol::PlayerInfo& players(int index) const;
-  ::Protocol::PlayerInfo* add_players();
-  const ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>& players() const;
+  const ::Protocol::ObjectInfo& objects(int index) const;
+  ::Protocol::ObjectInfo* add_objects();
+  const ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>& objects() const;
   // @@protoc_insertion_point(class_scope:Protocol.GS_SPAWN)
  private:
   class _Internal;
@@ -5378,7 +5378,7 @@ class GS_SPAWN final : public ::google::protobuf::Message
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
                           const GS_SPAWN& from_msg);
-    ::google::protobuf::RepeatedPtrField< ::Protocol::PlayerInfo > players_;
+    ::google::protobuf::RepeatedPtrField< ::Protocol::ObjectInfo > objects_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -5553,19 +5553,19 @@ class GS_ENTER_ROOM final : public ::google::protobuf::Message
   std::string* _internal_mutable_reason();
 
   public:
-  // .Protocol.PlayerInfo character_info = 2;
+  // .Protocol.ObjectInfo character_info = 2;
   bool has_character_info() const;
   void clear_character_info() ;
-  const ::Protocol::PlayerInfo& character_info() const;
-  PROTOBUF_NODISCARD ::Protocol::PlayerInfo* release_character_info();
-  ::Protocol::PlayerInfo* mutable_character_info();
-  void set_allocated_character_info(::Protocol::PlayerInfo* value);
-  void unsafe_arena_set_allocated_character_info(::Protocol::PlayerInfo* value);
-  ::Protocol::PlayerInfo* unsafe_arena_release_character_info();
+  const ::Protocol::ObjectInfo& character_info() const;
+  PROTOBUF_NODISCARD ::Protocol::ObjectInfo* release_character_info();
+  ::Protocol::ObjectInfo* mutable_character_info();
+  void set_allocated_character_info(::Protocol::ObjectInfo* value);
+  void unsafe_arena_set_allocated_character_info(::Protocol::ObjectInfo* value);
+  ::Protocol::ObjectInfo* unsafe_arena_release_character_info();
 
   private:
-  const ::Protocol::PlayerInfo& _internal_character_info() const;
-  ::Protocol::PlayerInfo* _internal_mutable_character_info();
+  const ::Protocol::ObjectInfo& _internal_character_info() const;
+  ::Protocol::ObjectInfo* _internal_mutable_character_info();
 
   public:
   // bool success = 1;
@@ -5604,7 +5604,7 @@ class GS_ENTER_ROOM final : public ::google::protobuf::Message
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::internal::ArenaStringPtr reason_;
-    ::Protocol::PlayerInfo* character_info_;
+    ::Protocol::ObjectInfo* character_info_;
     bool success_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -5763,23 +5763,23 @@ class GS_CHARACTER_LIST final : public ::google::protobuf::Message
     kReasonFieldNumber = 3,
     kSuccessFieldNumber = 1,
   };
-  // repeated .Protocol.PlayerInfo characters = 2;
+  // repeated .Protocol.ObjectInfo characters = 2;
   int characters_size() const;
   private:
   int _internal_characters_size() const;
 
   public:
   void clear_characters() ;
-  ::Protocol::PlayerInfo* mutable_characters(int index);
-  ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>* mutable_characters();
+  ::Protocol::ObjectInfo* mutable_characters(int index);
+  ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>* mutable_characters();
 
   private:
-  const ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>& _internal_characters() const;
-  ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>* _internal_mutable_characters();
+  const ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>& _internal_characters() const;
+  ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>* _internal_mutable_characters();
   public:
-  const ::Protocol::PlayerInfo& characters(int index) const;
-  ::Protocol::PlayerInfo* add_characters();
-  const ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>& characters() const;
+  const ::Protocol::ObjectInfo& characters(int index) const;
+  ::Protocol::ObjectInfo* add_characters();
+  const ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>& characters() const;
   // string reason = 3;
   void clear_reason() ;
   const std::string& reason() const;
@@ -5829,7 +5829,7 @@ class GS_CHARACTER_LIST final : public ::google::protobuf::Message
     inline explicit Impl_(::google::protobuf::internal::InternalVisibility visibility,
                           ::google::protobuf::Arena* arena, const Impl_& from,
                           const GS_CHARACTER_LIST& from_msg);
-    ::google::protobuf::RepeatedPtrField< ::Protocol::PlayerInfo > characters_;
+    ::google::protobuf::RepeatedPtrField< ::Protocol::ObjectInfo > characters_;
     ::google::protobuf::internal::ArenaStringPtr reason_;
     bool success_;
     ::google::protobuf::internal::CachedSize _cached_size_;
@@ -6029,46 +6029,46 @@ inline void GS_CHARACTER_LIST::_internal_set_success(bool value) {
   _impl_.success_ = value;
 }
 
-// repeated .Protocol.PlayerInfo characters = 2;
+// repeated .Protocol.ObjectInfo characters = 2;
 inline int GS_CHARACTER_LIST::_internal_characters_size() const {
   return _internal_characters().size();
 }
 inline int GS_CHARACTER_LIST::characters_size() const {
   return _internal_characters_size();
 }
-inline ::Protocol::PlayerInfo* GS_CHARACTER_LIST::mutable_characters(int index)
+inline ::Protocol::ObjectInfo* GS_CHARACTER_LIST::mutable_characters(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_mutable:Protocol.GS_CHARACTER_LIST.characters)
   return _internal_mutable_characters()->Mutable(index);
 }
-inline ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>* GS_CHARACTER_LIST::mutable_characters()
+inline ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>* GS_CHARACTER_LIST::mutable_characters()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_mutable_list:Protocol.GS_CHARACTER_LIST.characters)
   ::google::protobuf::internal::TSanWrite(&_impl_);
   return _internal_mutable_characters();
 }
-inline const ::Protocol::PlayerInfo& GS_CHARACTER_LIST::characters(int index) const
+inline const ::Protocol::ObjectInfo& GS_CHARACTER_LIST::characters(int index) const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:Protocol.GS_CHARACTER_LIST.characters)
   return _internal_characters().Get(index);
 }
-inline ::Protocol::PlayerInfo* GS_CHARACTER_LIST::add_characters() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::Protocol::ObjectInfo* GS_CHARACTER_LIST::add_characters() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  ::Protocol::PlayerInfo* _add = _internal_mutable_characters()->Add();
+  ::Protocol::ObjectInfo* _add = _internal_mutable_characters()->Add();
   // @@protoc_insertion_point(field_add:Protocol.GS_CHARACTER_LIST.characters)
   return _add;
 }
-inline const ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>& GS_CHARACTER_LIST::characters() const
+inline const ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>& GS_CHARACTER_LIST::characters() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_list:Protocol.GS_CHARACTER_LIST.characters)
   return _internal_characters();
 }
-inline const ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>&
+inline const ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>&
 GS_CHARACTER_LIST::_internal_characters() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return _impl_.characters_;
 }
-inline ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>*
+inline ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>*
 GS_CHARACTER_LIST::_internal_mutable_characters() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.characters_;
@@ -6470,27 +6470,27 @@ inline void GS_ENTER_ROOM::_internal_set_success(bool value) {
   _impl_.success_ = value;
 }
 
-// .Protocol.PlayerInfo character_info = 2;
+// .Protocol.ObjectInfo character_info = 2;
 inline bool GS_ENTER_ROOM::has_character_info() const {
   bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || _impl_.character_info_ != nullptr);
   return value;
 }
-inline const ::Protocol::PlayerInfo& GS_ENTER_ROOM::_internal_character_info() const {
+inline const ::Protocol::ObjectInfo& GS_ENTER_ROOM::_internal_character_info() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  const ::Protocol::PlayerInfo* p = _impl_.character_info_;
-  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::PlayerInfo&>(::Protocol::_PlayerInfo_default_instance_);
+  const ::Protocol::ObjectInfo* p = _impl_.character_info_;
+  return p != nullptr ? *p : reinterpret_cast<const ::Protocol::ObjectInfo&>(::Protocol::_ObjectInfo_default_instance_);
 }
-inline const ::Protocol::PlayerInfo& GS_ENTER_ROOM::character_info() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline const ::Protocol::ObjectInfo& GS_ENTER_ROOM::character_info() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
   // @@protoc_insertion_point(field_get:Protocol.GS_ENTER_ROOM.character_info)
   return _internal_character_info();
 }
-inline void GS_ENTER_ROOM::unsafe_arena_set_allocated_character_info(::Protocol::PlayerInfo* value) {
+inline void GS_ENTER_ROOM::unsafe_arena_set_allocated_character_info(::Protocol::ObjectInfo* value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (GetArena() == nullptr) {
     delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.character_info_);
   }
-  _impl_.character_info_ = reinterpret_cast<::Protocol::PlayerInfo*>(value);
+  _impl_.character_info_ = reinterpret_cast<::Protocol::ObjectInfo*>(value);
   if (value != nullptr) {
     _impl_._has_bits_[0] |= 0x00000001u;
   } else {
@@ -6498,11 +6498,11 @@ inline void GS_ENTER_ROOM::unsafe_arena_set_allocated_character_info(::Protocol:
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:Protocol.GS_ENTER_ROOM.character_info)
 }
-inline ::Protocol::PlayerInfo* GS_ENTER_ROOM::release_character_info() {
+inline ::Protocol::ObjectInfo* GS_ENTER_ROOM::release_character_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
   _impl_._has_bits_[0] &= ~0x00000001u;
-  ::Protocol::PlayerInfo* released = _impl_.character_info_;
+  ::Protocol::ObjectInfo* released = _impl_.character_info_;
   _impl_.character_info_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
     auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
@@ -6517,30 +6517,30 @@ inline ::Protocol::PlayerInfo* GS_ENTER_ROOM::release_character_info() {
   }
   return released;
 }
-inline ::Protocol::PlayerInfo* GS_ENTER_ROOM::unsafe_arena_release_character_info() {
+inline ::Protocol::ObjectInfo* GS_ENTER_ROOM::unsafe_arena_release_character_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:Protocol.GS_ENTER_ROOM.character_info)
 
   _impl_._has_bits_[0] &= ~0x00000001u;
-  ::Protocol::PlayerInfo* temp = _impl_.character_info_;
+  ::Protocol::ObjectInfo* temp = _impl_.character_info_;
   _impl_.character_info_ = nullptr;
   return temp;
 }
-inline ::Protocol::PlayerInfo* GS_ENTER_ROOM::_internal_mutable_character_info() {
+inline ::Protocol::ObjectInfo* GS_ENTER_ROOM::_internal_mutable_character_info() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.character_info_ == nullptr) {
-    auto* p = ::google::protobuf::Message::DefaultConstruct<::Protocol::PlayerInfo>(GetArena());
-    _impl_.character_info_ = reinterpret_cast<::Protocol::PlayerInfo*>(p);
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::Protocol::ObjectInfo>(GetArena());
+    _impl_.character_info_ = reinterpret_cast<::Protocol::ObjectInfo*>(p);
   }
   return _impl_.character_info_;
 }
-inline ::Protocol::PlayerInfo* GS_ENTER_ROOM::mutable_character_info() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::Protocol::ObjectInfo* GS_ENTER_ROOM::mutable_character_info() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   _impl_._has_bits_[0] |= 0x00000001u;
-  ::Protocol::PlayerInfo* _msg = _internal_mutable_character_info();
+  ::Protocol::ObjectInfo* _msg = _internal_mutable_character_info();
   // @@protoc_insertion_point(field_mutable:Protocol.GS_ENTER_ROOM.character_info)
   return _msg;
 }
-inline void GS_ENTER_ROOM::set_allocated_character_info(::Protocol::PlayerInfo* value) {
+inline void GS_ENTER_ROOM::set_allocated_character_info(::Protocol::ObjectInfo* value) {
   ::google::protobuf::Arena* message_arena = GetArena();
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (message_arena == nullptr) {
@@ -6557,7 +6557,7 @@ inline void GS_ENTER_ROOM::set_allocated_character_info(::Protocol::PlayerInfo* 
     _impl_._has_bits_[0] &= ~0x00000001u;
   }
 
-  _impl_.character_info_ = reinterpret_cast<::Protocol::PlayerInfo*>(value);
+  _impl_.character_info_ = reinterpret_cast<::Protocol::ObjectInfo*>(value);
   // @@protoc_insertion_point(field_set_allocated:Protocol.GS_ENTER_ROOM.character_info)
 }
 
@@ -6629,49 +6629,49 @@ inline void GS_ENTER_ROOM::set_allocated_reason(std::string* value) {
 
 // GS_SPAWN
 
-// repeated .Protocol.PlayerInfo players = 1;
-inline int GS_SPAWN::_internal_players_size() const {
-  return _internal_players().size();
+// repeated .Protocol.ObjectInfo objects = 1;
+inline int GS_SPAWN::_internal_objects_size() const {
+  return _internal_objects().size();
 }
-inline int GS_SPAWN::players_size() const {
-  return _internal_players_size();
+inline int GS_SPAWN::objects_size() const {
+  return _internal_objects_size();
 }
-inline ::Protocol::PlayerInfo* GS_SPAWN::mutable_players(int index)
+inline ::Protocol::ObjectInfo* GS_SPAWN::mutable_objects(int index)
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable:Protocol.GS_SPAWN.players)
-  return _internal_mutable_players()->Mutable(index);
+  // @@protoc_insertion_point(field_mutable:Protocol.GS_SPAWN.objects)
+  return _internal_mutable_objects()->Mutable(index);
 }
-inline ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>* GS_SPAWN::mutable_players()
+inline ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>* GS_SPAWN::mutable_objects()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_mutable_list:Protocol.GS_SPAWN.players)
+  // @@protoc_insertion_point(field_mutable_list:Protocol.GS_SPAWN.objects)
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _internal_mutable_players();
+  return _internal_mutable_objects();
 }
-inline const ::Protocol::PlayerInfo& GS_SPAWN::players(int index) const
+inline const ::Protocol::ObjectInfo& GS_SPAWN::objects(int index) const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:Protocol.GS_SPAWN.players)
-  return _internal_players().Get(index);
+  // @@protoc_insertion_point(field_get:Protocol.GS_SPAWN.objects)
+  return _internal_objects().Get(index);
 }
-inline ::Protocol::PlayerInfo* GS_SPAWN::add_players() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+inline ::Protocol::ObjectInfo* GS_SPAWN::add_objects() ABSL_ATTRIBUTE_LIFETIME_BOUND {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  ::Protocol::PlayerInfo* _add = _internal_mutable_players()->Add();
-  // @@protoc_insertion_point(field_add:Protocol.GS_SPAWN.players)
+  ::Protocol::ObjectInfo* _add = _internal_mutable_objects()->Add();
+  // @@protoc_insertion_point(field_add:Protocol.GS_SPAWN.objects)
   return _add;
 }
-inline const ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>& GS_SPAWN::players() const
+inline const ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>& GS_SPAWN::objects() const
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_list:Protocol.GS_SPAWN.players)
-  return _internal_players();
+  // @@protoc_insertion_point(field_list:Protocol.GS_SPAWN.objects)
+  return _internal_objects();
 }
-inline const ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>&
-GS_SPAWN::_internal_players() const {
+inline const ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>&
+GS_SPAWN::_internal_objects() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.players_;
+  return _impl_.objects_;
 }
-inline ::google::protobuf::RepeatedPtrField<::Protocol::PlayerInfo>*
-GS_SPAWN::_internal_mutable_players() {
+inline ::google::protobuf::RepeatedPtrField<::Protocol::ObjectInfo>*
+GS_SPAWN::_internal_mutable_objects() {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return &_impl_.players_;
+  return &_impl_.objects_;
 }
 
 // -------------------------------------------------------------------

@@ -696,7 +696,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 
 inline constexpr GS_SPAWN::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
-      : players_{},
+      : objects_{},
         _cached_size_{0} {}
 
 template <typename>
@@ -926,7 +926,7 @@ const ::uint32_t
         ~0u,  // no _inlined_string_donated_
         ~0u,  // no _split_
         ~0u,  // no sizeof(Split)
-        PROTOBUF_FIELD_OFFSET(::Protocol::GS_SPAWN, _impl_.players_),
+        PROTOBUF_FIELD_OFFSET(::Protocol::GS_SPAWN, _impl_.objects_),
         ~0u,  // no _has_bits_
         PROTOBUF_FIELD_OFFSET(::Protocol::GS_DESPAWN, _internal_metadata_),
         ~0u,  // no _extensions_
@@ -1142,7 +1142,7 @@ const char descriptor_table_protodef_Protocol_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\010GS_LOGIN\022\017\n\007success\030\001 \001(\010\022\017\n\007user_id\030\002 "
     "\001(\r\022\016\n\006reason\030\003 \001(\t\"\023\n\021GC_CHARACTER_LIST"
     "\"^\n\021GS_CHARACTER_LIST\022\017\n\007success\030\001 \001(\010\022("
-    "\n\ncharacters\030\002 \003(\0132\024.Protocol.PlayerInfo"
+    "\n\ncharacters\030\002 \003(\0132\024.Protocol.ObjectInfo"
     "\022\016\n\006reason\030\003 \001(\t\"%\n\021GC_CHECK_NICKNAME\022\020\n"
     "\010nickname\030\001 \001(\t\"4\n\021GS_CHECK_NICKNAME\022\017\n\007"
     "success\030\001 \001(\010\022\016\n\006reason\030\002 \001(\t\"K\n\023GC_CREA"
@@ -1152,10 +1152,10 @@ const char descriptor_table_protodef_Protocol_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "(\t\"9\n\rGC_ENTER_ROOM\022\027\n\017character_index\030\001"
     " \001(\005\022\017\n\007room_id\030\002 \001(\005\"^\n\rGS_ENTER_ROOM\022\017"
     "\n\007success\030\001 \001(\010\022,\n\016character_info\030\002 \001(\0132"
-    "\024.Protocol.PlayerInfo\022\016\n\006reason\030\003 \001(\t\"\017\n"
+    "\024.Protocol.ObjectInfo\022\016\n\006reason\030\003 \001(\t\"\017\n"
     "\rGC_LEAVE_ROOM\"\017\n\rGS_LEAVE_ROOM\"\017\n\rGC_LE"
     "AVE_GAME\"\017\n\rGS_LEAVE_GAME\"1\n\010GS_SPAWN\022%\n"
-    "\007players\030\001 \003(\0132\024.Protocol.PlayerInfo\" \n\n"
+    "\007objects\030\001 \003(\0132\024.Protocol.ObjectInfo\" \n\n"
     "GS_DESPAWN\022\022\n\nobject_ids\030\001 \003(\004\":\n\007GC_MOV"
     "E\022 \n\004dest\030\001 \001(\0132\022.Protocol.Position\022\r\n\005s"
     "peed\030\002 \001(\002\"M\n\007GS_MOVE\022\021\n\tobject_id\030\001 \001(\003"
@@ -1968,7 +1968,7 @@ const ::_pbi::TcParseTable<2, 3, 1, 41, 2> GS_CHARACTER_LIST::_table_ = {
     // bool success = 1;
     {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(GS_CHARACTER_LIST, _impl_.success_), 63>(),
      {8, 63, 0, PROTOBUF_FIELD_OFFSET(GS_CHARACTER_LIST, _impl_.success_)}},
-    // repeated .Protocol.PlayerInfo characters = 2;
+    // repeated .Protocol.ObjectInfo characters = 2;
     {::_pbi::TcParser::FastMtR1,
      {18, 63, 0, PROTOBUF_FIELD_OFFSET(GS_CHARACTER_LIST, _impl_.characters_)}},
     // string reason = 3;
@@ -1980,14 +1980,14 @@ const ::_pbi::TcParseTable<2, 3, 1, 41, 2> GS_CHARACTER_LIST::_table_ = {
     // bool success = 1;
     {PROTOBUF_FIELD_OFFSET(GS_CHARACTER_LIST, _impl_.success_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kBool)},
-    // repeated .Protocol.PlayerInfo characters = 2;
+    // repeated .Protocol.ObjectInfo characters = 2;
     {PROTOBUF_FIELD_OFFSET(GS_CHARACTER_LIST, _impl_.characters_), 0, 0,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
     // string reason = 3;
     {PROTOBUF_FIELD_OFFSET(GS_CHARACTER_LIST, _impl_.reason_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
   }}, {{
-    {::_pbi::TcParser::GetTable<::Protocol::PlayerInfo>()},
+    {::_pbi::TcParser::GetTable<::Protocol::ObjectInfo>()},
   }}, {{
     "\32\0\0\6\0\0\0\0"
     "Protocol.GS_CHARACTER_LIST"
@@ -2030,7 +2030,7 @@ PROTOBUF_NOINLINE void GS_CHARACTER_LIST::Clear() {
                 1, this_._internal_success(), target);
           }
 
-          // repeated .Protocol.PlayerInfo characters = 2;
+          // repeated .Protocol.ObjectInfo characters = 2;
           for (unsigned i = 0, n = static_cast<unsigned>(
                                    this_._internal_characters_size());
                i < n; i++) {
@@ -2074,7 +2074,7 @@ PROTOBUF_NOINLINE void GS_CHARACTER_LIST::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
            {
-            // repeated .Protocol.PlayerInfo characters = 2;
+            // repeated .Protocol.ObjectInfo characters = 2;
             {
               total_size += 1UL * this_._internal_characters_size();
               for (const auto& msg : this_._internal_characters()) {
@@ -3423,7 +3423,7 @@ GS_ENTER_ROOM::GS_ENTER_ROOM(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
   ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.character_info_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::Protocol::PlayerInfo>(
+  _impl_.character_info_ = (cached_has_bits & 0x00000001u) ? ::google::protobuf::Message::CopyConstruct<::Protocol::ObjectInfo>(
                               arena, *from._impl_.character_info_)
                         : nullptr;
   _impl_.success_ = from._impl_.success_;
@@ -3516,7 +3516,7 @@ const ::_pbi::TcParseTable<2, 3, 1, 37, 2> GS_ENTER_ROOM::_table_ = {
     // bool success = 1;
     {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(GS_ENTER_ROOM, _impl_.success_), 63>(),
      {8, 63, 0, PROTOBUF_FIELD_OFFSET(GS_ENTER_ROOM, _impl_.success_)}},
-    // .Protocol.PlayerInfo character_info = 2;
+    // .Protocol.ObjectInfo character_info = 2;
     {::_pbi::TcParser::FastMtS1,
      {18, 0, 0, PROTOBUF_FIELD_OFFSET(GS_ENTER_ROOM, _impl_.character_info_)}},
     // string reason = 3;
@@ -3528,14 +3528,14 @@ const ::_pbi::TcParseTable<2, 3, 1, 37, 2> GS_ENTER_ROOM::_table_ = {
     // bool success = 1;
     {PROTOBUF_FIELD_OFFSET(GS_ENTER_ROOM, _impl_.success_), -1, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kBool)},
-    // .Protocol.PlayerInfo character_info = 2;
+    // .Protocol.ObjectInfo character_info = 2;
     {PROTOBUF_FIELD_OFFSET(GS_ENTER_ROOM, _impl_.character_info_), _Internal::kHasBitsOffset + 0, 0,
     (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // string reason = 3;
     {PROTOBUF_FIELD_OFFSET(GS_ENTER_ROOM, _impl_.reason_), -1, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
   }}, {{
-    {::_pbi::TcParser::GetTable<::Protocol::PlayerInfo>()},
+    {::_pbi::TcParser::GetTable<::Protocol::ObjectInfo>()},
   }}, {{
     "\26\0\0\6\0\0\0\0"
     "Protocol.GS_ENTER_ROOM"
@@ -3584,7 +3584,7 @@ PROTOBUF_NOINLINE void GS_ENTER_ROOM::Clear() {
           }
 
           cached_has_bits = this_._impl_._has_bits_[0];
-          // .Protocol.PlayerInfo character_info = 2;
+          // .Protocol.ObjectInfo character_info = 2;
           if (cached_has_bits & 0x00000001u) {
             target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
                 2, *this_._impl_.character_info_, this_._impl_.character_info_->GetCachedSize(), target,
@@ -3631,7 +3631,7 @@ PROTOBUF_NOINLINE void GS_ENTER_ROOM::Clear() {
             }
           }
            {
-            // .Protocol.PlayerInfo character_info = 2;
+            // .Protocol.ObjectInfo character_info = 2;
             cached_has_bits = this_._impl_._has_bits_[0];
             if (cached_has_bits & 0x00000001u) {
               total_size += 1 +
@@ -3665,7 +3665,7 @@ void GS_ENTER_ROOM::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::g
     ABSL_DCHECK(from._impl_.character_info_ != nullptr);
     if (_this->_impl_.character_info_ == nullptr) {
       _this->_impl_.character_info_ =
-          ::google::protobuf::Message::CopyConstruct<::Protocol::PlayerInfo>(arena, *from._impl_.character_info_);
+          ::google::protobuf::Message::CopyConstruct<::Protocol::ObjectInfo>(arena, *from._impl_.character_info_);
     } else {
       _this->_impl_.character_info_->MergeFrom(*from._impl_.character_info_);
     }
@@ -4121,9 +4121,9 @@ class GS_SPAWN::_Internal {
  public:
 };
 
-void GS_SPAWN::clear_players() {
+void GS_SPAWN::clear_objects() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.players_.Clear();
+  _impl_.objects_.Clear();
 }
 GS_SPAWN::GS_SPAWN(::google::protobuf::Arena* arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
@@ -4137,7 +4137,7 @@ GS_SPAWN::GS_SPAWN(::google::protobuf::Arena* arena)
 inline PROTOBUF_NDEBUG_INLINE GS_SPAWN::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility, ::google::protobuf::Arena* arena,
     const Impl_& from, const ::Protocol::GS_SPAWN& from_msg)
-      : players_{visibility, arena, from.players_},
+      : objects_{visibility, arena, from.objects_},
         _cached_size_{0} {}
 
 GS_SPAWN::GS_SPAWN(
@@ -4159,7 +4159,7 @@ GS_SPAWN::GS_SPAWN(
 inline PROTOBUF_NDEBUG_INLINE GS_SPAWN::Impl_::Impl_(
     ::google::protobuf::internal::InternalVisibility visibility,
     ::google::protobuf::Arena* arena)
-      : players_{visibility, arena},
+      : objects_{visibility, arena},
         _cached_size_{0} {}
 
 inline void GS_SPAWN::SharedCtor(::_pb::Arena* arena) {
@@ -4182,8 +4182,8 @@ inline void* GS_SPAWN::PlacementNew_(const void*, void* mem,
 }
 constexpr auto GS_SPAWN::InternalNewImpl_() {
   constexpr auto arena_bits = ::google::protobuf::internal::EncodePlacementArenaOffsets({
-      PROTOBUF_FIELD_OFFSET(GS_SPAWN, _impl_.players_) +
-          decltype(GS_SPAWN::_impl_.players_)::
+      PROTOBUF_FIELD_OFFSET(GS_SPAWN, _impl_.objects_) +
+          decltype(GS_SPAWN::_impl_.objects_)::
               InternalGetArenaOffset(
                   ::google::protobuf::Message::internal_visibility()),
   });
@@ -4242,17 +4242,17 @@ const ::_pbi::TcParseTable<0, 1, 1, 0, 2> GS_SPAWN::_table_ = {
     ::_pbi::TcParser::GetTable<::Protocol::GS_SPAWN>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // repeated .Protocol.PlayerInfo players = 1;
+    // repeated .Protocol.ObjectInfo objects = 1;
     {::_pbi::TcParser::FastMtR1,
-     {10, 63, 0, PROTOBUF_FIELD_OFFSET(GS_SPAWN, _impl_.players_)}},
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(GS_SPAWN, _impl_.objects_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // repeated .Protocol.PlayerInfo players = 1;
-    {PROTOBUF_FIELD_OFFSET(GS_SPAWN, _impl_.players_), 0, 0,
+    // repeated .Protocol.ObjectInfo objects = 1;
+    {PROTOBUF_FIELD_OFFSET(GS_SPAWN, _impl_.objects_), 0, 0,
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
-    {::_pbi::TcParser::GetTable<::Protocol::PlayerInfo>()},
+    {::_pbi::TcParser::GetTable<::Protocol::ObjectInfo>()},
   }}, {{
   }},
 };
@@ -4264,7 +4264,7 @@ PROTOBUF_NOINLINE void GS_SPAWN::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.players_.Clear();
+  _impl_.objects_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
 
@@ -4283,11 +4283,11 @@ PROTOBUF_NOINLINE void GS_SPAWN::Clear() {
           ::uint32_t cached_has_bits = 0;
           (void)cached_has_bits;
 
-          // repeated .Protocol.PlayerInfo players = 1;
+          // repeated .Protocol.ObjectInfo objects = 1;
           for (unsigned i = 0, n = static_cast<unsigned>(
-                                   this_._internal_players_size());
+                                   this_._internal_objects_size());
                i < n; i++) {
-            const auto& repfield = this_._internal_players().Get(i);
+            const auto& repfield = this_._internal_objects().Get(i);
             target =
                 ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
                     1, repfield, repfield.GetCachedSize(),
@@ -4319,10 +4319,10 @@ PROTOBUF_NOINLINE void GS_SPAWN::Clear() {
 
           ::_pbi::Prefetch5LinesFrom7Lines(&this_);
            {
-            // repeated .Protocol.PlayerInfo players = 1;
+            // repeated .Protocol.ObjectInfo objects = 1;
             {
-              total_size += 1UL * this_._internal_players_size();
-              for (const auto& msg : this_._internal_players()) {
+              total_size += 1UL * this_._internal_objects_size();
+              for (const auto& msg : this_._internal_objects()) {
                 total_size += ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
               }
             }
@@ -4339,8 +4339,8 @@ void GS_SPAWN::MergeImpl(::google::protobuf::MessageLite& to_msg, const ::google
   ::uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  _this->_internal_mutable_players()->MergeFrom(
-      from._internal_players());
+  _this->_internal_mutable_objects()->MergeFrom(
+      from._internal_objects());
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -4355,7 +4355,7 @@ void GS_SPAWN::CopyFrom(const GS_SPAWN& from) {
 void GS_SPAWN::InternalSwap(GS_SPAWN* PROTOBUF_RESTRICT other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  _impl_.players_.InternalSwap(&other->_impl_.players_);
+  _impl_.objects_.InternalSwap(&other->_impl_.objects_);
 }
 
 ::google::protobuf::Metadata GS_SPAWN::GetMetadata() const {
