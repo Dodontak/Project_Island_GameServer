@@ -9,6 +9,7 @@
 #include "DBConnectionPool.h"
 #include "Room.h"
 #include "Monster.h"
+#include "Navigation.h"
 
 enum
 { //64ms넘어가면 다른 스레드에 일감을 넘김.
@@ -31,6 +32,21 @@ void WorkerThread(ServiceRef service)
 int main()
 {
 	cout << "=== Server ===" << endl;
+	Navigation navigation;
+	cout << navigation.Build() << endl;
+	float start[3] = { -44.0f, 457.0f, -790.0f };
+	float end[3] = { 0.0f, 0.0f, 0.0f };
+
+	std::vector<float> path;
+	if (navigation.FindPath(start, end, path))
+	{
+		cout << "경로 waypoint 수: " << path.size() / 3 << endl;
+		for (int i = 0; i < path.size() / 3; ++i)
+		{
+			cout << i << ": " << path[i * 3] << " " << path[i * 3 + 1] << " " << path[i * 3 + 2] << endl;
+		}
+	}
+
 	//Room 테스트용
 	GRoom = make_shared<Room>();
 	ClientPacketHandler::Init();
@@ -56,7 +72,7 @@ int main()
 			}
 		);
 	}
-	
+
 	MonsterRef monster = make_shared<Monster>(Protocol::MonsterType::MONSTER_TYPE_SKELETON);
 	monster->SetPosition(900, 900, 200);
 	monster->SetObjectId(Utils::GetObjectId());

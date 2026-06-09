@@ -71,25 +71,25 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(solutiondir)Libraries\Include;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
+    <IncludePath>$(solutiondir)NavMesh\Detour;$(solutiondir)NavMesh;$(solutiondir)NavMesh\Recast;$(solutiondir)Libraries\Include;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
     <ExternalIncludePath>C:\vcpkg\installed\x64-windows-static\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(solutiondir)Libraries\Include;$(SolutionDir)Protobuf;$(SolutionDir)Libraries\Include;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
+    <IncludePath>$(solutiondir)NavMesh\Detour;$(solutiondir)NavMesh;$(solutiondir)NavMesh\Recast;$(solutiondir)Libraries\Include;$(SolutionDir)Protobuf;$(SolutionDir)Libraries\Include;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libraries\$(Configuration);$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
     <ExternalIncludePath>C:\vcpkg\installed\x64-windows-static\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(solutiondir)Libraries\Include;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
+    <IncludePath>$(solutiondir)NavMesh\Detour;$(solutiondir)NavMesh;$(solutiondir)NavMesh\Recast;$(solutiondir)Libraries\Include;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
     <ExternalIncludePath>C:\vcpkg\installed\x64-windows-static\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(solutiondir)Libraries\Include;$(SolutionDir)Protobuf;$(SolutionDir)Libraries\Include;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
+    <IncludePath>$(solutiondir)NavMesh\Detour;$(solutiondir)NavMesh;$(solutiondir)NavMesh\Recast;$(solutiondir)Libraries\Include;$(SolutionDir)Protobuf;$(SolutionDir)Libraries\Include;$(SolutionDir)ServerCore\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Libraries\$(Configuration);$(SolutionDir)Libraries\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Binary\$(Configuration)\</OutDir>
     <ExternalIncludePath>C:\vcpkg\installed\x64-windows-static\include;$(ExternalIncludePath)</ExternalIncludePath>
@@ -118,6 +118,7 @@
       <DisableSpecificWarnings>4251;4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(ProjectDir)Recast;$(ProjectDir)Detour;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,6 +143,7 @@
       <DisableSpecificWarnings>4251;4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(ProjectDir)Recast;$(ProjectDir)Detour;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,6 +166,7 @@
       <DisableSpecificWarnings>4251;4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(ProjectDir)Recast;$(ProjectDir)Detour;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -188,6 +191,7 @@
       <DisableSpecificWarnings>4251;4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(ProjectDir)Recast;$(ProjectDir)Detour;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -248,6 +252,11 @@
     <ClInclude Include="Protocol.pb.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="Struct.pb.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NavMesh\NavMesh.vcxproj">
+      <Project>{7518af64-baf4-40ef-8543-b98ec528825c}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

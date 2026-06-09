@@ -33,5 +33,6 @@
   <Project Path="GameServer/GameServer.vcxproj" Id="b2d7ef04-e4e8-4efe-bf0b-c06f1c80947e">
     <BuildDependency Project="ServerCore/ServerCore.vcxproj" />
   </Project>
+  <Project Path="NavMesh/NavMesh.vcxproj" Id="7518af64-baf4-40ef-8543-b98ec528825c" />
   <Project Path="ServerCore/ServerCore.vcxproj" Id="72ba9031-c7a6-466a-916a-a4de514066d4" />
 </Solution>
